@@ -403,10 +403,10 @@ function qiblaFrom(lat,lon){let p1=lat*Math.PI/180,p2=KAABA.lat*Math.PI/180,dl=(
 function tiltHeading(a,b,g){const r=Math.PI/180,x=b*r,y=g*r,z=a*r,cY=Math.cos(y),cZ=Math.cos(z),sX=Math.sin(x),sY=Math.sin(y),sZ=Math.sin(z),Vx=-cZ*sY-sZ*sX*cY,Vy=-sZ*sY+cZ*sX*cY;let h=Math.atan(Vx/Vy);if(Vy<0)h+=Math.PI;else if(Vx<0)h+=2*Math.PI;return h*180/Math.PI}
 function setHeading(h){if(unw===null)unw=h;else{let d=((h-(((unw%360)+360)%360)+540)%360)-180;unw+=d*0.25}
  $('dial').style.transform='rotate('+(-unw)+'deg)';$('qEmoji').style.transform='translateX(-50%) rotate('+(unw-qiblaDeg)+'deg)';
- let hn=((unw%360)+360)%360,diff=((qiblaDeg-hn+540)%360)-180,ok=hasQ&&Math.abs(diff)<5;$('dial').parentNode.classList.toggle('ok',ok);
+ let hn=((unw%360)+360)%360;$('qDeg').textContent=$('qDeg').textContent.split(' | ')[0]+' | اتجاهك: '+Math.round(hn)+'°';let diff=((qiblaDeg-hn+540)%360)-180,ok=hasQ&&Math.abs(diff)<5;$('dial').parentNode.classList.toggle('ok',ok);
  $('qStatus').textContent=!hasQ?'حدد مدينتك أو فعّل الموقع الأول عشان نعرف القبلة':ok?'✅ إنت في اتجاه القبلة':'لف لحد ما 🕋 يوصل لفوق عند السهم ▼ (خلي الموبايل مفرود)';
  if(ok&&Date.now()-lastVib>3000){lastVib=Date.now();try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}}}
-function onOri(e){let h=null;if(e.webkitCompassHeading!=null)h=e.webkitCompassHeading;else if(e.alpha!=null&&(e.absolute||e.type==='deviceorientationabsolute')){gotAbs=true;h=(e.beta!=null&&e.gamma!=null)?tiltHeading(e.alpha,e.beta,e.gamma):360-e.alpha}
+function onOri(e){let h=null;if(e.webkitCompassHeading!=null)h=e.webkitCompassHeading;else if(e.alpha!=null&&(e.absolute||e.type==='deviceorientationabsolute')){gotAbs=true;h=(e.beta!=null&&e.gamma!=null&&Math.abs(e.beta)>65)?tiltHeading(e.alpha,e.beta,e.gamma):(360-e.alpha+360)%360}
  if(h==null||isNaN(h))return;gotAbs=true;setHeading(h)}
 $('compassBtn').onclick=async()=>{try{if(typeof DeviceOrientationEvent!=='undefined'&&DeviceOrientationEvent.requestPermission){if(await DeviceOrientationEvent.requestPermission()!=='granted')return $('qStatus').textContent='لازم تسمح بالوصول للحساسات'}
  $('qStatus').textContent='جاري قراءة الحساس... حرّك الموبايل على شكل رقم 8 للمعايرة';window.addEventListener('deviceorientationabsolute',onOri,true);window.addEventListener('deviceorientation',onOri,true);$('compassBtn').style.display='none';
