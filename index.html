@@ -8,33 +8,49 @@
 <meta name="mobile-web-app-capable" content="yes">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#0f2027,#203a43,#2c5364);min-height:100vh;color:#fff;user-select:none}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));min-height:100vh;color:var(--tx);user-select:none}
 .app{max-width:480px;margin:auto;padding:16px 16px 105px}
 header{text-align:center;padding:12px 0 8px}
 header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .page{display:none}.page.active{display:block}
-.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;margin-bottom:14px}
+.card{background:rgba(var(--fg),.07);border:1px solid rgba(var(--fg),.08);border-radius:18px;padding:16px;margin-bottom:14px}
 .card h3{font-size:15px;margin-bottom:12px;color:#ffd700}
 .points-hero{margin:10px 0 14px;text-align:center;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,215,0,.04));border:1px solid rgba(255,215,0,.3);border-radius:20px;padding:14px}
 .trophy{font-size:26px}.points-hero .val{font-size:38px;font-weight:800;color:#ffd700}.points-hero .lbl{font-size:13px;opacity:.8}
-.lvl-row{display:flex;align-items:center;gap:10px;margin-top:10px}.lvl-badge{background:linear-gradient(135deg,#ffd700,#b8860b);color:#1b2b33;font-weight:800;padding:6px 14px;border-radius:999px;white-space:nowrap}.lvl-bar{flex:1;height:10px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}.lvl-fill{height:100%;background:linear-gradient(90deg,#ffd700,#7CFC9A);border-radius:999px}.lvl-next{font-size:11px;opacity:.7;margin-top:6px}
-.date-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.08);border-radius:16px;padding:8px 12px;margin:12px 0 14px}.date-bar button{background:rgba(255,255,255,.12);border:0;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px}.date-info{text-align:center}.date-info .g{font-size:14px;font-weight:600}.date-info .h{font-size:11px;opacity:.7;margin-top:2px}
-.stats,.sum-grid{display:flex;gap:10px;margin-bottom:14px}.stat{flex:1;background:rgba(255,255,255,.08);border-radius:14px;padding:10px;text-align:center}.stat .num{font-size:20px;font-weight:700;color:#7CFC9A}.stat .lbl{font-size:11px;opacity:.7;margin-top:2px}
-.prayer{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.07);border-radius:20px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.06);transition:.2s}.prayer.locked{opacity:.58}.circle{width:60px;height:60px;border-radius:50%;border:3px dashed rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;flex-shrink:0;background:rgba(255,255,255,.05);transition:.15s}.circle.holding{transform:scale(.88);background:rgba(255,255,255,.2)}.circle.filled{border-style:solid}.circle.locked{cursor:not-allowed}.p-info{flex:1}.p-name{font-size:19px;font-weight:700}.p-status{font-size:12px;opacity:.75;margin-top:4px;min-height:18px}.p-pts{font-size:13px;font-weight:700;color:#ffd700;margin-top:2px;min-height:16px}.hint{text-align:center;font-size:12px;opacity:.55;margin:10px 0}
-.trow{display:flex;justify-content:space-between;align-items:center;padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.08);gap:8px}.trow:last-child{border-bottom:0}.pn{font-size:16px;font-weight:600}.pt{font-size:17px;font-weight:700;color:#7CFC9A}.sun .pt{color:#ffb84d}
-.loc-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 14px}.ln{font-size:14px;font-weight:600}.mini-btn,.tog{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 14px;border-radius:999px;font-family:inherit;font-size:13px;cursor:pointer}.tog.on{background:#2e9e4f;border-color:#2e9e4f}
-.sel{background:rgba(0,0,0,.3);color:#fff;border:1.5px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 10px;font-family:inherit;font-size:13px;max-width:210px}.num-in{width:100%;padding:13px;border-radius:12px;border:1.5px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:#fff;font-size:18px;text-align:center;font-family:inherit;outline:none}.seg{display:flex;gap:8px;margin-bottom:12px}.seg button{flex:1;padding:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-family:inherit}.seg button.on{background:#2e7d52;border-color:#2e7d52;font-weight:700}.q-box{background:rgba(255,255,255,.06);border-radius:16px;padding:16px;margin-bottom:12px}.q-box h3{font-size:15px;margin-bottom:10px;color:#ffd700}.q-note{font-size:12px;opacity:.6;margin-top:8px;text-align:center}.pts-preview{text-align:center;margin-top:14px;color:#ffd700;background:rgba(255,215,0,.08);border:1px dashed rgba(255,215,0,.4);border-radius:12px;padding:12px}
+.lvl-row{display:flex;align-items:center;gap:10px;margin-top:10px}.lvl-badge{background:linear-gradient(135deg,#ffd700,#b8860b);color:#1b2b33;font-weight:800;padding:6px 14px;border-radius:999px;white-space:nowrap}.lvl-bar{flex:1;height:10px;background:rgba(var(--fg),.15);border-radius:999px;overflow:hidden}.lvl-fill{height:100%;background:linear-gradient(90deg,#ffd700,var(--ac));border-radius:999px}.lvl-next{font-size:11px;opacity:.7;margin-top:6px}
+.date-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(var(--fg),.08);border-radius:16px;padding:8px 12px;margin:12px 0 14px}.date-bar button{background:rgba(var(--fg),.12);border:0;color:var(--tx);width:36px;height:36px;border-radius:50%;font-size:18px}.date-info{text-align:center}.date-info .g{font-size:14px;font-weight:600}.date-info .h{font-size:11px;opacity:.7;margin-top:2px}
+.stats,.sum-grid{display:flex;gap:10px;margin-bottom:14px}.stat{flex:1;background:rgba(var(--fg),.08);border-radius:14px;padding:10px;text-align:center}.stat .num{font-size:20px;font-weight:700;color:var(--ac)}.stat .lbl{font-size:11px;opacity:.7;margin-top:2px}
+.prayer{display:flex;align-items:center;gap:14px;background:rgba(var(--fg),.07);border-radius:20px;padding:14px;margin-bottom:12px;border:1px solid rgba(var(--fg),.06);transition:.2s}.prayer.locked{opacity:.58}.circle{width:60px;height:60px;border-radius:50%;border:3px dashed rgba(var(--fg),.35);display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;flex-shrink:0;background:rgba(var(--fg),.05);transition:.15s}.circle.holding{transform:scale(.88);background:rgba(var(--fg),.2)}.circle.filled{border-style:solid}.circle.locked{cursor:not-allowed}.p-info{flex:1}.p-name{font-size:19px;font-weight:700}.p-status{font-size:12px;opacity:.75;margin-top:4px;min-height:18px}.p-pts{font-size:13px;font-weight:700;color:#ffd700;margin-top:2px;min-height:16px}.hint{text-align:center;font-size:12px;opacity:.55;margin:10px 0}
+.trow{display:flex;justify-content:space-between;align-items:center;padding:11px 4px;border-bottom:1px solid rgba(var(--fg),.08);gap:8px}.trow:last-child{border-bottom:0}.pn{font-size:16px;font-weight:600}.pt{font-size:17px;font-weight:700;color:var(--ac)}.sun .pt{color:#ffb84d}
+.loc-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 14px}.ln{font-size:14px;font-weight:600}.mini-btn,.tog{background:rgba(var(--fg),.12);border:1px solid rgba(var(--fg),.2);color:var(--tx);padding:8px 14px;border-radius:999px;font-family:inherit;font-size:13px;cursor:pointer}.tog.on{background:var(--ac2);border-color:var(--ac2)}
+.sel{background:rgba(0,0,0,.3);color:var(--tx);border:1.5px solid rgba(var(--fg),.25);border-radius:10px;padding:8px 10px;font-family:inherit;font-size:13px;max-width:210px}.num-in{width:100%;padding:13px;border-radius:12px;border:1.5px solid rgba(var(--fg),.25);background:rgba(0,0,0,.25);color:var(--tx);font-size:18px;text-align:center;font-family:inherit;outline:none}.seg{display:flex;gap:8px;margin-bottom:12px}.seg button{flex:1;padding:10px;border-radius:12px;border:1.5px solid rgba(var(--fg),.2);background:transparent;color:var(--tx);font-family:inherit}.seg button.on{background:var(--ac3);border-color:var(--ac3);font-weight:700}.q-box{background:rgba(var(--fg),.06);border-radius:16px;padding:16px;margin-bottom:12px}.q-box h3{font-size:15px;margin-bottom:10px;color:#ffd700}.q-note{font-size:12px;opacity:.6;margin-top:8px;text-align:center}.pts-preview{text-align:center;margin-top:14px;color:#ffd700;background:rgba(255,215,0,.08);border:1px dashed rgba(255,215,0,.4);border-radius:12px;padding:12px}
 .third-box{background:linear-gradient(135deg,rgba(120,80,255,.18),rgba(120,80,255,.06));border:1px solid rgba(150,120,255,.4);border-radius:16px;padding:14px;text-align:center;margin-bottom:14px}.third-box .tv{font-size:26px;font-weight:800;color:#b9a5ff}.third-box .tl{font-size:13px;opacity:.8}
-.warn-banner{display:none;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.5);border-radius:12px;padding:10px 12px;margin-bottom:14px;font-size:12px;line-height:1.7}.warn-x{background:transparent;border:0;color:#fff}
-.mtable-wrap{max-height:280px;overflow:auto}.mtable{width:100%;border-collapse:collapse;font-size:12px}.mtable th{color:#ffd700;padding:6px 4px;background:#1b2b33;position:sticky;top:0}.mtable td{text-align:center;padding:7px 4px;border-bottom:1px solid rgba(255,255,255,.07)}.mtable tr.today td{background:rgba(124,252,154,.12);color:#7CFC9A;font-weight:700}
-.compass-wrap{text-align:center}.compass{width:250px;height:250px;border-radius:50%;margin:10px auto;position:relative;background:radial-gradient(circle,rgba(255,255,255,.09),rgba(255,255,255,.02));border:2px solid rgba(255,255,255,.25)}.cardn{position:absolute;font-weight:800;color:rgba(255,255,255,.6)}.nN{top:8px;left:50%;transform:translateX(-50%)}.nS{bottom:8px;left:50%;transform:translateX(-50%)}.nE{right:12px;top:50%;transform:translateY(-50%)}.nW{left:12px;top:50%;transform:translateY(-50%)}.q-arrow{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:52px;transition:.4s}.q-deg{font-size:15px;font-weight:700;color:#7CFC9A}.q-status{font-size:12px;opacity:.65;margin-top:6px}
-.bars{display:flex;align-items:flex-end;gap:6px;height:130px;padding-top:8px}.bar-w{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}.bar{width:100%;background:linear-gradient(180deg,#7CFC9A,#2e9e4f);border-radius:6px 6px 2px 2px;min-height:3px}.bar-l{font-size:10px;opacity:.65;margin-top:6px;white-space:nowrap}.bar-v{font-size:10px;color:#ffd700;margin-bottom:3px}
-.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:45;display:flex;background:#16242b;border-top:1px solid rgba(255,255,255,.12);max-width:480px;margin:auto}.tab{flex:1;padding:10px 3px 13px;text-align:center;color:rgba(255,255,255,.55);font-size:11px;border:0;background:transparent;font-family:inherit}.tab .ti{font-size:20px;display:block;margin-bottom:2px}.tab.on{color:#7CFC9A;font-weight:700}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:50}.overlay.open{display:flex}.sheet{background:#1b2b33;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:18px 16px 26px;animation:up .25s ease;max-height:88vh;overflow-y:auto}@keyframes up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}.sheet h2{text-align:center;font-size:18px}.sheet .sub{text-align:center;font-size:13px;opacity:.6;margin:4px 0 14px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:2px solid transparent;border-radius:14px;padding:11px;cursor:pointer;color:#fff;font-family:inherit;font-size:13px;text-align:right}.opt.selected{border-color:#7CFC9A}.opt .ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}.close-row,.frow{display:flex;gap:10px;margin-top:15px}.close-row button,.frow button{flex:1;padding:13px;border:0;border-radius:14px;font-family:inherit;font-weight:700}.btn-clear{background:rgba(255,80,80,.2);color:#ff9a9a}.btn-done,.f-save{background:#2e7d52;color:#fff}.f-back{background:rgba(255,255,255,.12);color:#fff}
-.gear{position:fixed;top:14px;left:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:38px;height:38px;border-radius:50%;font-size:18px;z-index:30}.fab-reset{position:fixed;bottom:75px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px 20px;border-radius:30px;font-family:inherit;z-index:40}
-.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%) translateY(20px);background:#2e7d52;padding:10px 22px;border-radius:30px;font-size:14px;opacity:0;transition:.3s;pointer-events:none;z-index:70;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.gender-ov{position:fixed;inset:0;background:linear-gradient(160deg,#0f2027,#2c5364);display:flex;align-items:center;justify-content:center;z-index:100}.gender-box{text-align:center;padding:24px;max-width:360px;width:100%}.gender-box h1{font-size:24px;margin-bottom:8px}.gender-box p{font-size:14px;opacity:.75;margin-bottom:24px;line-height:1.8}.g-btn{display:block;width:100%;margin-bottom:14px;padding:20px;border-radius:18px;font-family:inherit;font-size:20px;font-weight:700;color:#fff;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2)}
+.warn-banner{display:none;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.5);border-radius:12px;padding:10px 12px;margin-bottom:14px;font-size:12px;line-height:1.7}.warn-x{background:transparent;border:0;color:var(--tx)}
+.mtable-wrap{max-height:280px;overflow:auto}.mtable{width:100%;border-collapse:collapse;font-size:12px}.mtable th{color:#ffd700;padding:6px 4px;background:#1b2b33;position:sticky;top:0}.mtable td{text-align:center;padding:7px 4px;border-bottom:1px solid rgba(var(--fg),.07)}.mtable tr.today td{background:rgba(124,252,154,.12);color:var(--ac);font-weight:700}
+.compass-wrap{text-align:center}.compass{width:250px;height:250px;border-radius:50%;margin:10px auto;position:relative;background:radial-gradient(circle,rgba(var(--fg),.09),rgba(var(--fg),.02));border:2px solid rgba(var(--fg),.25)}.cardn{position:absolute;font-weight:800;color:rgba(var(--fg),.6)}.nN{top:8px;left:50%;transform:translateX(-50%)}.nS{bottom:8px;left:50%;transform:translateX(-50%)}.nE{right:12px;top:50%;transform:translateY(-50%)}.nW{left:12px;top:50%;transform:translateY(-50%)}.q-arrow{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:52px;transition:.4s}.q-deg{font-size:15px;font-weight:700;color:var(--ac)}.q-status{font-size:12px;opacity:.65;margin-top:6px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:130px;padding-top:8px}.bar-w{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}.bar{width:100%;background:linear-gradient(180deg,var(--ac),var(--ac2));border-radius:6px 6px 2px 2px;min-height:3px}.bar-l{font-size:10px;opacity:.65;margin-top:6px;white-space:nowrap}.bar-v{font-size:10px;color:#ffd700;margin-bottom:3px}
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:45;display:flex;background:#16242b;border-top:1px solid rgba(var(--fg),.12);max-width:480px;margin:auto}.tab{flex:1;padding:10px 3px 13px;text-align:center;color:rgba(var(--fg),.55);font-size:11px;border:0;background:transparent;font-family:inherit}.tab .ti{font-size:20px;display:block;margin-bottom:2px}.tab.on{color:var(--ac);font-weight:700}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:50}.overlay.open{display:flex}.sheet{background:#1b2b33;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:18px 16px 26px;animation:up .25s ease;max-height:88vh;overflow-y:auto}@keyframes up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}.sheet h2{text-align:center;font-size:18px}.sheet .sub{text-align:center;font-size:13px;opacity:.6;margin:4px 0 14px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{display:flex;align-items:center;gap:8px;background:rgba(var(--fg),.07);border:2px solid transparent;border-radius:14px;padding:11px;cursor:pointer;color:var(--tx);font-family:inherit;font-size:13px;text-align:right}.opt.selected{border-color:var(--ac)}.opt .ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}.close-row,.frow{display:flex;gap:10px;margin-top:15px}.close-row button,.frow button{flex:1;padding:13px;border:0;border-radius:14px;font-family:inherit;font-weight:700}.btn-clear{background:rgba(255,80,80,.2);color:#ff9a9a}.btn-done,.f-save{background:var(--ac3);color:var(--tx)}.f-back{background:rgba(var(--fg),.12);color:var(--tx)}
+.gear{position:fixed;top:14px;left:14px;background:rgba(var(--fg),.1);border:1px solid rgba(var(--fg),.2);color:var(--tx);width:38px;height:38px;border-radius:50%;font-size:18px;z-index:30}.fab-reset{position:fixed;bottom:75px;left:50%;transform:translateX(-50%);background:rgba(var(--fg),.1);border:1px solid rgba(var(--fg),.2);color:var(--tx);padding:10px 20px;border-radius:30px;font-family:inherit;z-index:40}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ac3);padding:10px 22px;border-radius:30px;font-size:14px;opacity:0;transition:.3s;pointer-events:none;z-index:70;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.gender-ov{position:fixed;inset:0;background:linear-gradient(160deg,var(--bg1),var(--bg3));display:flex;align-items:center;justify-content:center;z-index:100}.gender-box{text-align:center;padding:24px;max-width:360px;width:100%}.gender-box h1{font-size:24px;margin-bottom:8px}.gender-box p{font-size:14px;opacity:.75;margin-bottom:24px;line-height:1.8}.g-btn{display:block;width:100%;margin-bottom:14px;padding:20px;border-radius:18px;font-family:inherit;font-size:20px;font-weight:700;color:var(--tx);background:rgba(var(--fg),.1);border:2px solid rgba(var(--fg),.2)}
+.au-in{display:block;width:100%;margin-bottom:12px;padding:14px;border-radius:14px;border:1px solid rgba(var(--fg),.25);background:rgba(var(--fg),.1);color:var(--tx);font-family:inherit;font-size:16px;text-align:right}.au-in option{color:#000}.au-btn{display:block;width:100%;margin-bottom:14px;padding:16px;border-radius:18px;font-family:inherit;font-size:18px;font-weight:700;color:var(--tx);background:rgba(var(--fg),.14);border:1px solid rgba(var(--fg),.25);cursor:pointer}.au-row{display:flex;gap:10px;margin-bottom:12px}.au-row .au-btn{margin:0;padding:12px;font-size:16px;opacity:.6}.au-row .au-btn.sel{opacity:1;outline:2px solid var(--tx)}.au-err{color:#ff9b9b;font-size:13px;min-height:18px;margin-bottom:8px}.au-link{background:none;border:0;color:var(--tx);opacity:.7;font-family:inherit;font-size:14px;text-decoration:underline;cursor:pointer}.pts-note{font-size:12px;line-height:1.7;background:rgba(255,200,80,.15);border:1px solid rgba(255,200,80,.35);border-radius:12px;padding:8px 12px;margin:0 0 10px}
+#goalList .au-btn{opacity:.6}#goalList .au-btn.sel{opacity:1;outline:2px solid var(--tx);background:rgba(var(--fg),.3)}
+
+:root{--bg1:#0f2027;--bg2:#203a43;--bg3:#2c5364;--ac:#7CFC9A;--ac2:#2e9e4f;--ac3:#2e7d52;--fg:255,255,255;--tx:#fff}
+.xc{background:rgba(var(--fg),.08);border-radius:18px;padding:14px;margin:14px 0}.xr{display:flex;justify-content:space-between;align-items:center;margin-top:10px}.xs{font-size:13px;opacity:.8;margin:6px 0}
+.xb,.thm{background:rgba(var(--fg),.14);color:var(--tx);border:1px solid rgba(var(--fg),.25);border-radius:12px;padding:8px 12px;font-family:inherit;font-size:13px;margin:3px;cursor:pointer}
+.xb.on2,.thm.on2{outline:2px solid var(--ac);background:rgba(var(--fg),.28)}.xl{background:none;border:0;color:var(--ac);font-family:inherit;text-decoration:underline;cursor:pointer}
+.ai{display:block;width:100%;margin:8px 0;padding:12px;border-radius:12px;border:1px solid rgba(var(--fg),.25);background:rgba(var(--fg),.1);color:var(--tx);font-family:inherit;font-size:15px;text-align:right}.ai option{color:#000}
+.thm i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:6px;vertical-align:middle}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 </head>
 <body>
 
@@ -81,6 +97,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 <div class="page" id="page-tracking">
   <header><h1>📋 التتبع</h1><div class="bism">تابع صلواتك ونقاطك اليومية</div></header>
 
+  <div class="pts-note">⚠️ هذه النقاط لا تعني أن هذا هو عدد الحسنات التي سوف تأخذها، إنما هو عدد تقريبي.</div>
   <div class="points-hero">
     <div class="trophy">🏆</div><div class="val" id="totalPts">0</div><div class="lbl">نقاطك اليوم</div>
     <div class="lvl-row"><span class="lvl-badge" id="lvlBadge">المستوى 1</span><div class="lvl-bar"><div class="lvl-fill" id="lvlFill"></div></div></div>
@@ -95,7 +112,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
     <div class="stat"><div class="num" id="homeCount">0</div><div class="lbl">في البيت</div></div>
   </div>
 
-  <div id="prayers"></div>
+  <div id="prayers"></div><div id="extras"></div>
   <div class="hint" id="multHint"></div>
   <div class="hint">اضغط على دائرة الصلاة لاختيار حالتها ✨</div>
 </div>
@@ -145,6 +162,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 
   <div class="card">
     <h3>👤 الحساب</h3>
+    <div class="xc"><div class="trow"><span class="pn" id="accName">—</span><button class="mini-btn" id="logoutBtn">تسجيل الخروج</button></div><div id="useTime" class="xs"></div><input class="ai" id="acName" placeholder="الاسم"><input class="ai" id="acAge" type="number" inputmode="numeric" placeholder="العمر"><select class="ai" id="acGender"><option value="man">ذكر</option><option value="woman">أنثى</option></select><input class="ai" id="acPass" type="password" placeholder="كلمة مرور جديدة (سيبها فاضية لو مش عايز تغيّرها)" autocomplete="new-password"><div class="xs">الأهداف</div><div id="acGoals"></div><div class="au-err" id="acErr"></div><button class="xb" id="acSave" style="width:100%;padding:12px">💾 حفظ بيانات الحساب</button><div class="xs" style="margin-top:14px">🎨 لون البرنامج</div><div id="thmRow"></div></div>
     <div class="trow"><span class="pn">الجنس</span><button class="mini-btn" id="genderChange">تغيير</button></div>
   </div>
 
@@ -175,6 +193,11 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <h1>🕌 أهلًا بيك في رفيقي</h1><p>عشان نحسب نقاطك صح، قولنا:<br>إنت راجل ولا مرأة؟</p>
   <button class="g-btn" data-g="man">🧔 راجل</button><button class="g-btn" data-g="woman">🧕 مرأة</button>
 </div></div>
+<div class="gender-ov" id="authOv" style="display:none;z-index:120;overflow-y:auto"><div class="gender-box">
+ <div id="auHome"><h1>🕌 أهلًا بيك في رفيقي</h1><p>سجّل دخولك أو أنشئ حساب جديد</p><button class="au-btn" id="goIn">تسجيل الدخول</button><button class="au-btn" id="goUp">إنشاء حساب</button></div>
+ <div id="auUp" style="display:none"><h1>إنشاء حساب</h1><br><input class="au-in" id="suName" placeholder="الاسم" autocomplete="username"><input class="au-in" id="suAge" type="number" inputmode="numeric" placeholder="العمر"><div class="au-row"><button class="au-btn" data-sg="man">🧔 ذكر</button><button class="au-btn" data-sg="woman">🧕 أنثى</button></div><p style="margin:4px 0 8px;font-size:14px;opacity:.85">أهدافك (تقدر تختار أكتر من واحد)</p><div id="goalList" style="max-height:230px;overflow-y:auto;margin-bottom:12px"><button type="button" class="au-btn" data-goal="أحافظ على صلواتي" style="margin-bottom:8px;font-size:14px">أحافظ على صلواتي</button><button type="button" class="au-btn" data-goal="أصلي صلواتي في معادها" style="margin-bottom:8px;font-size:14px">أصلي صلواتي في معادها</button><button type="button" class="au-btn" data-goal="أصلي كل الصلوات جماعة" style="margin-bottom:8px;font-size:14px">أصلي كل الصلوات جماعة</button><button type="button" class="au-btn" data-goal="أصلي كل الصلوات في المسجد" style="margin-bottom:8px;font-size:14px">أصلي كل الصلوات في المسجد</button><button type="button" class="au-btn" data-goal="أصلي الفجر كل يوم" style="margin-bottom:8px;font-size:14px">أصلي الفجر كل يوم</button><button type="button" class="au-btn" data-goal="أصلي قيام الليل كل يوم" style="margin-bottom:8px;font-size:14px">أصلي قيام الليل كل يوم</button><button type="button" class="au-btn" data-goal="أقرأ وِرد القرآن كل يوم" style="margin-bottom:8px;font-size:14px">أقرأ وِرد القرآن كل يوم</button><button type="button" class="au-btn" data-goal="أصلي النوافل كل يوم" style="margin-bottom:8px;font-size:14px">أصلي النوافل كل يوم</button><button type="button" class="au-btn" data-goal="أصوم الأيام البيض كل شهر" style="margin-bottom:8px;font-size:14px">أصوم الأيام البيض كل شهر</button><button type="button" class="au-btn" data-goal="أصوم الاثنين والخميس كل شهر" style="margin-bottom:8px;font-size:14px">أصوم الاثنين والخميس كل شهر</button><button type="button" class="au-btn" data-goal="أصوم كل السنن" style="margin-bottom:8px;font-size:14px">أصوم كل السنن</button></div><input class="au-in" id="suPass" type="password" placeholder="كلمة المرور" autocomplete="new-password"><div class="au-err" id="suErr"></div><button class="au-btn" id="suGo">إنشاء الحساب</button><button class="au-link" data-back>رجوع</button></div>
+ <div id="auIn" style="display:none"><h1>تسجيل الدخول</h1><br><input class="au-in" id="siName" placeholder="الاسم" autocomplete="username"><input class="au-in" id="siPass" type="password" placeholder="كلمة المرور" autocomplete="current-password"><div class="au-err" id="siErr"></div><button class="au-btn" id="siGo">دخول</button><button class="au-link" data-back>رجوع</button></div>
+</div></div>
 
 <script>
 const PRAYERS=[{id:'fajr',name:'الفجر'},{id:'dhuhr',name:'الظهر'},{id:'asr',name:'العصر'},{id:'maghrib',name:'المغرب'},{id:'isha',name:'العشاء'}];
@@ -196,7 +219,7 @@ let activePrayer=null,currentOpt=null,pressTimer=null,longPressed=false,editMode
 const getGender=()=>localStorage.getItem('gender'),setGender=g=>localStorage.setItem('gender',g);
 const dayKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const loadDay=()=>{try{return JSON.parse(localStorage.getItem('prayers_'+dayKey(currentDate)))||{}}catch(e){return{}}};
-const saveDay=d=>localStorage.setItem('prayers_'+dayKey(currentDate),JSON.stringify(d));
+const saveDay=d=>{applyGoals(d);localStorage.setItem('prayers_'+dayKey(currentDate),JSON.stringify(d))};
 const prayerIndex=id=>PRAYERS.findIndex(p=>p.id===id);
 const getMissedIndex=d=>PRAYERS.findIndex(p=>d[p.id]?.opt==='missed');
 const isLockedByMissed=(id,d)=>{let a=prayerIndex(id),m=getMissedIndex(d);return m!==-1&&a<=m};
@@ -212,7 +235,7 @@ function calcPoints(id,d){
 }
 
 const LEVELS=[0,500,1500,3000,5000,8000,12000,17000,23000,30000];
-function totalAllDays(){let t=0;for(let k of Object.keys(localStorage))if(k.startsWith('prayers_'))try{Object.values(JSON.parse(localStorage.getItem(k))).forEach(r=>t+=r.points||0)}catch(e){}return t}
+function totalAllDays0(){let t=0;for(let k of Object.keys(localStorage))if(k.startsWith('prayers_'))try{Object.values(JSON.parse(localStorage.getItem(k))).forEach(r=>t+=r.points||0)}catch(e){}return t}
 function renderLevel(){
  let total=totalAllDays(),lvl=1;for(let i=0;i<LEVELS.length;i++)if(total>=LEVELS[i])lvl=i+1;
  $('lvlBadge').textContent='المستوى '+lvl;
@@ -265,7 +288,7 @@ function renderTracking(){
   row.innerHTML=`<div class="circle ${sel?'filled ':''}${locked?'locked':''}" data-id="${p.id}" style="${sel?`background:${sel.bg};border-color:${sel.bg}`:''}">${icon}</div><div class="p-info"><div class="p-name">${p.name}</div><div class="p-status">${status}</div><div class="p-pts">${rec?'⭐ '+rec.points+' نقطة':''}</div></div>`;
   wrap.appendChild(row);
  });
- $('totalPts').textContent=total;$('doneCount').textContent=done+'/5';$('mosqueCount').textContent=mosque;$('homeCount').textContent=home;
+ total+=extraPts(dayKey(currentDate))+PRAYERS.reduce((a,p)=>a+((data[p.id]&&data[p.id].opt==='missed')?(data[p.id].points||0):0),0);renderExtras();$('totalPts').textContent=total;$('doneCount').textContent=done+'/5';$('mosqueCount').textContent=mosque;$('homeCount').textContent=home;
  $('mosqueStat').style.display=getGender()==='woman'?'none':'block';
  $('multHint').textContent=getGender()==='woman'?'صلاتك في البيت: أي صلاة × 2 · العشاء × 4 · الفجر × 5':'الفجر أي نقاط × 3 · العشاء أي نقاط × 2';
  renderLevel();attachPressHandlers();
@@ -390,7 +413,7 @@ function updateRemindUI(){$('remToggle').textContent=remindOn()?'شغال ✅':'
 $('remToggle').onclick=async()=>{if(remindOn())localStorage.setItem('remindOn','0');else{if('Notification'in window&&Notification.permission!=='granted'){if(await Notification.requestPermission()!=='granted')return toast('الإذن اترفض — التنبيهات مش هتشتغل')}localStorage.setItem('remindOn','1');toast('🔔 التنبيهات شغالة')}updateRemindUI()};
 $('remMinBtn').onclick=()=>{let i=REM_MINS.indexOf(remindMin());localStorage.setItem('remindMin',REM_MINS[(i+1)%REM_MINS.length]);updateRemindUI()};$('warnX').onclick=()=>$('warnBanner').style.display='none';
 
-function dayStats(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
+function dayStats0(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
 function renderBars(el,items){let max=Math.max(...items.map(i=>i.v),1);el.innerHTML='';items.forEach(i=>{let w=document.createElement('div');w.className='bar-w';w.innerHTML=`<div class="bar-v">${i.v||''}</div><div class="bar" style="height:${Math.round(i.v/max*100)}%"></div><div class="bar-l">${i.l}</div>`;el.appendChild(w)})}
 function renderStats(){
  let week=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let s=dayStats(dayKey(d));week.push({v:s.pts,l:d.toLocaleDateString('ar-EG',{weekday:'short'})})}renderBars($('weekBars'),week);
@@ -401,16 +424,118 @@ function renderStats(){
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='stats')renderStats()});
 
 function showGender(){$('genderOv').style.display='flex'}
-document.querySelectorAll('.g-btn').forEach(b=>b.onclick=()=>{setGender(b.dataset.g);$('genderOv').style.display='none';renderTracking();toast('تم حفظ الإعداد ✅')});
+document.querySelectorAll('.g-btn').forEach(b=>b.onclick=()=>{setGender(b.dataset.g);{let s=localStorage.getItem('rafiq_session'),us=USERS();if(s&&us[s]){us[s].gender=b.dataset.g;saveUsers(us)}}$('genderOv').style.display='none';renderTracking();toast('تم حفظ الإعداد ✅')});
 $('gearBtn').onclick=()=>{document.querySelector('[data-page="settings"]').click()};
 $('genderChange').onclick=showGender;
 
+const USERS=()=>{try{return JSON.parse(localStorage.getItem('rafiq_users')||'{}')}catch(e){return{}}},saveUsers=u=>localStorage.setItem('rafiq_users',JSON.stringify(u)),uKey=n=>n.trim().toLowerCase();
+async function hashPw(p){try{let b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(p)))}}
+function showAuth(step){$('authOv').style.display='flex';['auHome','auUp','auIn'].forEach(i=>$(i).style.display=i===step?'block':'none')}
+function loginAs(u){localStorage.setItem('rafiq_session',uKey(u.name));setGender(u.gender);$('authOv').style.display='none';$('accName').textContent='👤 '+u.name;renderTracking();toast('أهلًا '+u.name+' 🌙')}
+let sg=null;
+document.querySelectorAll('[data-sg]').forEach(b=>b.onclick=()=>{sg=b.dataset.sg;document.querySelectorAll('[data-sg]').forEach(x=>x.classList.toggle('sel',x===b))});
+document.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>b.classList.toggle('sel'));
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>showAuth('auHome'));
+$('goUp').onclick=()=>showAuth('auUp');$('goIn').onclick=()=>showAuth('auIn');
+$('suGo').onclick=async()=>{let n=$('suName').value.trim(),a=+$('suAge').value,g=[...document.querySelectorAll('[data-goal].sel')].map(b=>b.dataset.goal),p=$('suPass').value,e=$('suErr');
+ if(!n)return e.textContent='اكتب اسمك';if(!(a>=3&&a<=120))return e.textContent='اكتب عمرك صح';if(!sg)return e.textContent='اختر ذكر أو أنثى';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p.length<4)return e.textContent='كلمة المرور 4 حروف على الأقل';
+ let us=USERS();if(us[uKey(n)])return e.textContent='الاسم ده مستخدم قبل كده';
+ let u={created:Date.now(),name:n,age:a,gender:sg,goals:g,pw:await hashPw(p)};us[uKey(n)]=u;saveUsers(us);e.textContent='';loginAs(u)};
+$('siGo').onclick=async()=>{let n=$('siName').value.trim(),e=$('siErr'),u=USERS()[uKey(n)];if(!u||u.pw!==await hashPw($('siPass').value))return e.textContent='الاسم أو كلمة المرور غلط';e.textContent='';loginAs(u)};
+$('logoutBtn').onclick=()=>{localStorage.removeItem('rafiq_session');showAuth('auHome')};
+
+const GOALS=["أحافظ على صلواتي","أصلي صلواتي في معادها","أصلي كل الصلوات جماعة","أصلي كل الصلوات في المسجد","أصلي الفجر كل يوم","أصلي قيام الليل كل يوم","أقرأ وِرد القرآن كل يوم","أصلي النوافل كل يوم","أصوم الأيام البيض كل شهر","أصوم الاثنين والخميس كل شهر","أصوم كل السنن"];
+const THEMES={green:{n:'أخضر',bg1:'#0f2027',bg2:'#203a43',bg3:'#2c5364',ac:'#7CFC9A',ac2:'#2e9e4f',ac3:'#2e7d52',fg:'255,255,255',tx:'#ffffff'},white:{n:'أبيض',bg1:'#f4f6f8',bg2:'#e9edf1',bg3:'#dde3ea',ac:'#1f8a4c',ac2:'#2e9e4f',ac3:'#2e7d52',fg:'0,0,0',tx:'#111111'},black:{n:'أسود',bg1:'#000000',bg2:'#0d0d0d',bg3:'#1c1c1c',ac:'#e5e5e5',ac2:'#9ca3af',ac3:'#6b7280',fg:'255,255,255',tx:'#ffffff'},red:{n:'أحمر',bg1:'#2a0a0a',bg2:'#4a1010',bg3:'#7f1d1d',ac:'#ff8a8a',ac2:'#dc2626',ac3:'#b91c1c',fg:'255,255,255',tx:'#ffffff'},blue:{n:'أزرق',bg1:'#071a33',bg2:'#0b2a55',bg3:'#1e4d91',ac:'#7dc4ff',ac2:'#2f7de1',ac3:'#1d5fbf',fg:'255,255,255',tx:'#ffffff'},yellow:{n:'أصفر',bg1:'#2b2200',bg2:'#4a3a00',bg3:'#7a6100',ac:'#ffe066',ac2:'#e6c229',ac3:'#b8860b',fg:'255,255,255',tx:'#ffffff'},purple:{n:'بنفسجي',bg1:'#1a0b2e',bg2:'#2e1450',bg3:'#4c2a85',ac:'#d0b3ff',ac2:'#8b5cf6',ac3:'#6d28d9',fg:'255,255,255',tx:'#ffffff'},pink:{n:'بينك',bg1:'#2e0a1e',bg2:'#500f36',bg3:'#8a1c5c',ac:'#ffb3d9',ac2:'#ec4899',ac3:'#be185d',fg:'255,255,255',tx:'#ffffff'}};
+function applyTheme(k){let t=THEMES[k]||THEMES.green,r=document.documentElement.style;['bg1','bg2','bg3','ac','ac2','ac3','fg','tx'].forEach(p=>r.setProperty('--'+p,t[p]));localStorage.setItem('theme',k);let m=document.querySelector('meta[name=theme-color]');if(m)m.content=t.bg1;document.querySelectorAll('.thm').forEach(b=>b.classList.toggle('on2',b.dataset.t===k))}
+$('thmRow').innerHTML=Object.entries(THEMES).map(([k,t])=>`<button class="thm" data-t="${k}" onclick="applyTheme('${k}')"><i style="background:${t.ac2}"></i>${t.n}</button>`).join('');
+const XU=()=>USERS()[localStorage.getItem('rafiq_session')]||{},XG=()=>XU().goals||[],hasG=x=>XG().some(g=>g.includes(x));
+function XUP(f){let s=localStorage.getItem('rafiq_session'),us=USERS();if(us[s]){f(us[s]);saveUsers(us)}}
+const XEX=k=>{try{return JSON.parse(localStorage.getItem('extras_'+k))||{}}catch(e){return{}}},XSX=(k,o)=>localStorage.setItem('extras_'+k,JSON.stringify(o));
+const QU={pages:'صفحة',juz:'جزء',quarter:'ربع',ayah:'آية'};
+function applyGoals(d){const MQ=/^mosque/,JM=/^(mosque|group|imam_group)/;for(const p of PRAYERS){let r=d[p.id];if(r&&r.opt==='missed'){r.points=hasG('أحافظ على صلواتي')?-30:0;continue}if(!r)continue;if(r.raw===undefined)r.raw=r.points;let pts=r.raw;
+ if(r.opt==='late'){let b=-10;if(hasG('معادها'))b=-20;if(p.id==='fajr'&&hasG('الفجر كل يوم'))b=Math.min(b,-15);pts=b*mult(p.id)}
+ else if((hasG('في المسجد')&&!MQ.test(r.opt))||(hasG('جماعة')&&!JM.test(r.opt)))pts=0;
+ r.points=pts}}
+function hijriDay(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric'}).format(d))}catch(e){return 0}}
+function fastInfo(d){let hd=hijriDay(d),wd=d.getDay(),w=hd>=13&&hd<=15,m=wd===1||wd===4,all=hasG('كل السنن');return{show:w||m,must:(w&&(hasG('الأيام البيض')||all))||(m&&(hasG('الاثنين')||all)),label:(w?'الأيام البيض ('+hd+' هجري)':'')+(w&&m?' + ':'')+(m?(wd===1?'يوم الاثنين':'يوم الخميس'):'')}}
+function extraPts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),t=0,n=d.n||{};
+ const NP={fajr:20,dhuhr:5,maghrib:5,isha:10};
+ for(const x in NP){if(n[x]==='y')t+=NP[x];else if(hasG('النوافل')&&(n[x]==='n'||(past&&!n[x])))t-=2}
+ if(d.qy&&d.qy!=='n')t+={2:5,4:10,6:15,8:20}[d.qy]||0;else if(hasG('قيام الليل')&&(d.qy==='n'||(past&&!d.qy)))t-=3;
+ let q=u.quran;if(q&&(d.q!==undefined||past)){let r=d.q||0,p=r===0?-3:r<q.n?2:r===q.n?5:8;t+=hasG('القرآن')?p*2:p}
+ let f=fastInfo(dt);if(f.show){if(d.f==='y')t+=10;else if(f.must&&(d.f==='n'||(past&&!d.f)))t-=15}
+ return t}
+function dayStats(k){let s=dayStats0(k);s.pts+=extraPts(k);return s}
+function totalAllDays(){let t=totalAllDays0();for(let k of Object.keys(localStorage))if(k.startsWith('extras_'))t+=extraPts(k.slice(7));return t}
+function renderExtras(){let box=$('extras');if(!box||box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT')return;let k=dayKey(currentDate),d=XEX(k),n=d.n||{},q=XU().quran,f=fastInfo(new Date(k+'T00:00:00')),b=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`,h='';
+ h+='<div class="xc"><b>🌙 النوافل</b>'+[['fajr','الفجر',20],['dhuhr','الظهر',5],['maghrib','المغرب',5],['isha','العشاء',10]].map(([x,l,p])=>`<div class="xr"><span>${l} <small>(+${p})</small></span><span>${prayerTimeArrived(x)?b(n[x]==='y',`setNaf('${x}','y')`,'✅ صليت')+b(n[x]==='n',`setNaf('${x}','n')`,'❌ لا'):'<small>⏳ لسه وقتها ما دخلش</small>'}</span></div>`).join('')+'</div>';
+ h+=`<div class="xc"><b>🌌 قيام الليل</b>${prayerTimeArrived('isha')?`<div class="xr"><span>${[2,4,6,8].map(x=>b(d.qy===x,`setQy(${x})`,x+' ركعة (+'+{2:5,4:10,6:15,8:20}[x]+')')).join('')}${b(d.qy==='n',"setQy('n')",'❌ لا')}</span></div>`:'<p class="xs">⏳ لسه وقته ما جاش (بعد صلاة العشاء)</p>'}</div>`;
+ h+=!q?`<div class="xc"><b>📖 ورد القرآن</b><p class="xs">حدد وردك اليومي (هتتحاسب عليه):</p><input class="ai" id="qN" type="number" min="1" placeholder="العدد"><select class="ai" id="qU">${Object.entries(QU).map(([a,c])=>`<option value="${a}">${c}</option>`).join('')}</select><button class="xb" style="width:100%" onclick="saveQTarget()">حفظ الورد</button></div>`:`<div class="xc"><b>📖 ورد القرآن</b><p class="xs">وردك: ${q.n} ${QU[q.u]} يوميًا<br><small>لو زدت أو قللت 5 أيام ورا بعض وردك بيتعدّل لوحده</small></p><input class="ai" id="qR" type="number" min="0" placeholder="قرأت كام ${QU[q.u]} النهاردة؟" value="${d.q??''}"><button class="xb" style="width:100%" onclick="saveQRead()">حفظ</button><button class="xl" onclick="resetQ()">تغيير الورد</button></div>`;
+ if(f.show)h+=`<div class="xc"><b>🌿 صيام ${f.label}</b><div class="xr"><span>صمت النهاردة؟</span><span>${b(d.f==='y',"setFast('y')",'✅ صمت')}${b(d.f==='n',"setFast('n')",'❌ لا')}</span></div></div>`;
+ box.innerHTML=h}
+function setNaf(x,v){if(!prayerTimeArrived(x))return toast('⏳ لسه وقت الصلاة ما دخلش');let k=dayKey(currentDate),d=XEX(k);d.n=d.n||{};d.n[x]=d.n[x]===v?undefined:v;XSX(k,d);renderTracking()}
+function setFast(v){let k=dayKey(currentDate),d=XEX(k);d.f=d.f===v?undefined:v;XSX(k,d);renderTracking()}
+function setQy(v){if(!prayerTimeArrived('isha'))return toast('⏳ لسه وقته ما جاش');let k=dayKey(currentDate),d=XEX(k);d.qy=d.qy===v?undefined:v;XSX(k,d);renderTracking()}
+function qAdjust(k){let q=XU().quran;if(!q)return'';let rs=[];for(let i=0;i<5;i++){let dt=new Date(k+'T00:00:00');dt.setDate(dt.getDate()-i);let kk=dayKey(dt);if(kk<(q.since||'0000'))return'';let r=XEX(kk).q;if(r===undefined)return'';rs.push(r)}
+ let up=rs.every(r=>r>q.n),dn=rs.every(r=>r<q.n);if(!up&&!dn)return'';let avg=rs.reduce((a,b)=>a+b,0)/5,nn=up?Math.ceil(avg):Math.max(1,Math.floor(avg));if(nn===q.n)return'';
+ let nx=new Date(k+'T00:00:00');nx.setDate(nx.getDate()+1);XUP(x=>{x.quran.n=nn;x.quran.since=dayKey(nx)});return(up?'📈 وردك زاد لـ ':'📉 وردك قل لـ ')+nn+' '+QU[q.u]+' يوميًا'}
+function saveQTarget(){let n=+$('qN').value,u=$('qU').value;if(!(n>0))return toast('اكتب عدد صح');XUP(x=>x.quran={n,u,since:dayKey(new Date())});renderTracking();toast('تم حفظ الورد ✅')}
+function saveQRead(){let v=$('qR').value;if(v==='')return toast('اكتب العدد');let k=dayKey(currentDate),d=XEX(k);d.q=+v;XSX(k,d);document.activeElement.blur();let m=k===dayKey(new Date())?qAdjust(k):'';renderTracking();toast(m||'تم الحفظ ✅')}
+function resetQ(){XUP(x=>delete x.quran);renderTracking()}
+function fillAcc(){let u=XU();if(!u.name)return;if(!u.created)XUP(x=>x.created=Date.now());$('acName').value=u.name;$('acAge').value=u.age||'';$('acGender').value=u.gender||'man';$('acPass').value='';
+ $('acGoals').innerHTML=GOALS.map(g=>`<button type="button" class="xb ${(u.goals||[]).includes(g)?'on2':''}" data-sg2="${g}">${g}</button>`).join('');
+ document.querySelectorAll('[data-sg2]').forEach(b=>b.onclick=()=>b.classList.toggle('on2'));
+ let ms=Date.now()-(u.created||Date.now()),dd=Math.floor(ms/864e5);$('useTime').textContent='⏱ بتستخدم رفيقي من '+(dd>0?dd+' يوم':Math.max(1,Math.floor(ms/36e5))+' ساعة')}
+$('acSave').onclick=async()=>{let s=localStorage.getItem('rafiq_session'),us=USERS(),u=us[s],e=$('acErr');if(!u)return;let n=$('acName').value.trim(),a=+$('acAge').value,g=[...document.querySelectorAll('[data-sg2].on2')].map(b=>b.dataset.sg2),p=$('acPass').value;
+ if(!n)return e.textContent='اكتب الاسم';if(!(a>=3&&a<=120))return e.textContent='اكتب عمرك صح';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p&&p.length<(FB?6:4))return e.textContent='كلمة المرور 4 حروف على الأقل';
+ let nk=uKey(n);if(nk!==s&&us[nk])return e.textContent='الاسم ده مستخدم';
+ u.name=n;u.age=a;u.gender=$('acGender').value;u.goals=g;if(p){try{if(FB&&FB.auth.currentUser)await FB.auth.currentUser.updatePassword(p);else u.pw=await hashPw(p)}catch(er){e.textContent='لتغيير كلمة المرور سجّل خروج وادخل تاني وحاول';return}}delete us[s];us[nk]=u;saveUsers(us);localStorage.setItem('rafiq_session',nk);setGender(u.gender);$('accName').textContent='👤 '+n;e.textContent='';renderTracking();toast('تم حفظ الحساب ✅')};
+document.querySelector('[data-page="settings"]').addEventListener('click',fillAcc);
+applyTheme(localStorage.getItem('theme')||'green');fillAcc();
+
+let FB=null;
+if(typeof firebase!=='undefined'){try{
+FB={};firebase.initializeApp({apiKey:"AIzaSyCmAV3_k2aqGNdJrOzD5eFKqD14ot_Vgi0",authDomain:"rafiq-database.firebaseapp.com",projectId:"rafiq-database",storageBucket:"rafiq-database.firebasestorage.app",messagingSenderId:"720637028034",appId:"1:720637028034:web:84ef53a07595ac28debd5b"});
+FB.auth=firebase.auth();FB.db=firebase.firestore();
+const SKIP=/^(rafiq_users|rafiq_session|rafiq_uid|rafiq_pushed|ptimes_|lastLevel)/;
+let pushT=null,cloudOn=false,busy=false;
+const _si=Storage.prototype.setItem,_ri=Storage.prototype.removeItem;
+const storeObj=()=>{let o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(!SKIP.test(k))o[k]=localStorage.getItem(k)}return o};
+const sched=k=>{if(!cloudOn||(SKIP.test(k)&&k!=='rafiq_users'))return;clearTimeout(pushT);pushT=setTimeout(pushNow,1500)};
+Storage.prototype.setItem=function(k,v){_si.call(this,k,v);if(this===localStorage)sched(k)};
+Storage.prototype.removeItem=function(k){_ri.call(this,k);if(this===localStorage)sched(k)};
+async function mkEmail(n){let b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('rafiq:'+uKey(n)));return'u'+[...new Uint8Array(b)].slice(0,16).map(x=>x.toString(16).padStart(2,'0')).join('')+'@rafiq-app.com'}
+async function pushNow(){let u=FB.auth.currentUser;if(!u||!cloudOn)return;let p={...XU()};delete p.pw;try{let ts=Date.now();await FB.db.collection('users').doc(u.uid).set({profile:p,store:storeObj(),updated:ts});_si.call(localStorage,'rafiq_pushed',String(ts))}catch(e){}}
+async function pullApply(u,snap){snap=snap||await FB.db.collection('users').doc(u.uid).get();
+ if(snap.exists){let d=snap.data(),p=d.profile||{},st=d.store||{};Object.keys(storeObj()).forEach(k=>localStorage.removeItem(k));Object.entries(st).forEach(([k,v])=>localStorage.setItem(k,v));let us={};us[uKey(p.name||'')]=p;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(p.name||''));localStorage.setItem('rafiq_pushed',String(d.updated||0))}
+ else if(!XU().name){let p={name:'مستخدم',age:18,gender:'man',goals:[],created:Date.now()},us={};us[uKey(p.name)]=p;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(p.name))}
+ localStorage.setItem('rafiq_uid',u.uid)}
+function afterLogin(){let p=XU();setGender(p.gender);applyTheme(localStorage.getItem('theme')||'green');$('authOv').style.display='none';$('accName').textContent='👤 '+(p.name||'');fillAcc();updateSrcUI();updateRemindUI();updateGeoUI();renderTracking();ensureTimes();cloudOn=true}
+async function checkCloud(){let u=FB.auth.currentUser;if(!u||busy)return;try{let snap=await FB.db.collection('users').doc(u.uid).get();if(snap.exists&&(snap.data().updated||0)>(+localStorage.getItem('rafiq_pushed')||0)){cloudOn=false;await pullApply(u,snap);afterLogin()}}catch(e){}}
+$('suGo').onclick=async()=>{let n=$('suName').value.trim(),a=+$('suAge').value,g=[...document.querySelectorAll('[data-goal].sel')].map(b=>b.dataset.goal),p=$('suPass').value,e=$('suErr');
+ if(!n)return e.textContent='اكتب اسمك';if(!(a>=3&&a<=120))return e.textContent='اكتب عمرك صح';if(!sg)return e.textContent='اختر ذكر أو أنثى';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p.length<6)return e.textContent='كلمة المرور 6 حروف على الأقل';
+ e.textContent='جاري إنشاء الحساب...';busy=true;
+ try{let cr=await FB.auth.createUserWithEmailAndPassword(await mkEmail(n),p),u={created:Date.now(),name:n,age:a,gender:sg,goals:g},us={};us[uKey(n)]=u;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(n));localStorage.setItem('rafiq_uid',cr.user.uid);cloudOn=true;await pushNow();e.textContent='';afterLogin();toast('أهلًا '+n+' 🌙')}
+ catch(er){e.textContent=er.code==='auth/email-already-in-use'?'الاسم ده مستخدم':er.code==='auth/weak-password'?'كلمة المرور ضعيفة':'مشكلة في الاتصال، حاول تاني'}
+ busy=false};
+$('siGo').onclick=async()=>{let n=$('siName').value.trim(),p=$('siPass').value,e=$('siErr');if(!n||!p)return e.textContent='اكتب الاسم وكلمة المرور';e.textContent='جاري الدخول...';busy=true;
+ try{let cr=await FB.auth.signInWithEmailAndPassword(await mkEmail(n),p);await pullApply(cr.user);e.textContent='';afterLogin();toast('أهلًا '+XU().name+' 🌙')}
+ catch(er){e.textContent=/invalid|wrong|not-found/.test(er.code||'')?'الاسم أو كلمة المرور غلط':'مشكلة في الاتصال، حاول تاني'}
+ busy=false};
+$('logoutBtn').onclick=async()=>{clearTimeout(pushT);try{await pushNow()}catch(e){}cloudOn=false;try{await FB.auth.signOut()}catch(e){}[...Object.keys(storeObj()),'rafiq_users','rafiq_session','rafiq_uid','rafiq_pushed'].forEach(k=>_ri.call(localStorage,k));location.reload()};
+FB.auth.onAuthStateChanged(async u=>{if(busy)return;
+ if(!u){cloudOn=false;if(localStorage.getItem('rafiq_session')){localStorage.removeItem('rafiq_session');showAuth('auHome')}return}
+ if(localStorage.getItem('rafiq_uid')===u.uid&&localStorage.getItem('rafiq_session')){afterLogin();checkCloud();return}
+ try{await pullApply(u);afterLogin()}catch(er){}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cloudOn)checkCloud()});
+}catch(err){FB=null;console.error(err)}}
 updateSrcUI();updateRemindUI();updateGeoUI();
-if(!getGender())showGender();
+let ses=localStorage.getItem('rafiq_session'),cu=ses&&USERS()[ses];if(cu){setGender(cu.gender);$('accName').textContent='👤 '+cu.name}else showAuth('auHome');
 renderTracking();ensureTimes();
 
 setInterval(()=>{let ov=$('overlay');if(!ov.classList.contains('open')&&$('page-tracking').classList.contains('active'))renderTracking()},30000);
 setInterval(()=>{if(!remindOn())return;let c=loadTimesCache();if(!c)return;let n=new Date(),mins=n.getHours()*60+n.getMinutes(),o=loadOffsets();P_NAMES.filter(x=>x[0]!=='Sunrise').forEach(([k,name])=>{let t=toMin(c.timings[k])+(o[k]||0)-remindMin();if(mins>=t&&mins<t+2){let id=dayKey(n)+k;if(notifiedToday[id])return;notifiedToday[id]=true;if('Notification'in window&&Notification.permission==='granted')new Notification('🕌 اقترب موعد الصلاة',{body:'باقي '+remindMin()+' دقيقة على صلاة '+name})}})},20000);
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>

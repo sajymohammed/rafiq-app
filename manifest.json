@@ -1,0 +1,27 @@
+{
+ "name": "رفيقي — متابعة الصلوات",
+ "short_name": "رفيقي",
+ "description": "مواقيت الصلاة وتتبع العبادات",
+ "start_url": "./index.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#0f2027",
+ "theme_color": "#0f2027",
+ "lang": "ar",
+ "dir": "rtl",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any maskable"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
