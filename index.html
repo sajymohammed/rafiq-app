@@ -43,6 +43,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .xb.on2,.thm.on2{outline:2px solid var(--ac);background:rgba(var(--fg),.28)}.xl{background:none;border:0;color:var(--ac);font-family:inherit;text-decoration:underline;cursor:pointer}
 .ai{display:block;width:100%;margin:8px 0;padding:12px;border-radius:12px;border:1px solid rgba(var(--fg),.25);background:rgba(var(--fg),.1);color:var(--tx);font-family:inherit;font-size:15px;text-align:right}.ai option{color:#000}
 .thm i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:6px;vertical-align:middle}
+.dial{position:absolute;inset:0;transition:transform .12s linear}.q-mark{position:absolute;inset:0}.q-mark span{position:absolute;top:-2px;left:50%;transform:translateX(-50%);font-size:34px;line-height:1}.c-ptr{position:absolute;top:-22px;left:50%;transform:translateX(-50%);color:var(--ac);font-size:20px;z-index:2}.compass.ok{box-shadow:0 0 22px var(--ac);border-color:var(--ac)}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -87,7 +88,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 
   <div class="card compass-wrap">
     <h3>🕋 اتجاه القبلة</h3>
-    <div class="compass"><span class="cardn nN">ش</span><span class="cardn nS">ج</span><span class="cardn nE">ق</span><span class="cardn nW">غ</span><div class="q-arrow" id="qArrow">🕋</div></div>
+    <div class="compass"><div class="c-ptr">▼</div><div class="dial" id="dial"><span class="cardn nN">ش</span><span class="cardn nS">ج</span><span class="cardn nE">ق</span><span class="cardn nW">غ</span><div class="q-mark" id="qMark"><span id="qEmoji">🕋</span></div></div></div>
     <div class="q-deg" id="qDeg"></div><div class="q-status" id="qStatus">فعّل البوصلة لتحريك السهم مع اتجاه الهاتف</div>
     <button class="mini-btn" id="compassBtn" style="margin-top:10px">🧭 تفعيل البوصلة</button>
   </div>
@@ -397,10 +398,19 @@ function updateSrcUI(){$('manualForm').style.display=manualOn()?'block':'none';l
 $('srcSel').onchange=()=>{localStorage.setItem('timesSource',$('srcSel').value==='manual'?'manual':'auto');updateSrcUI();ensureTimes(true)};
 $('mtSave').onclick=()=>{let mt={},ok=true;['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(k=>{let v=$('mt_'+k).value;if(!v)ok=false;else mt[k]=v});if(!ok)return toast('كمّل الأوقات الستة الأول');localStorage.setItem('manualTimes',JSON.stringify(mt));ensureTimes(true);toast('تم حفظ المواقيت اليدوية ✅')};
 
-const KAABA={lat:21.4225,lon:39.8262};let qiblaDeg=0;
-function qiblaFrom(lat,lon){let p1=lat*Math.PI/180,p2=KAABA.lat*Math.PI/180,dl=(KAABA.lon-lon)*Math.PI/180,t=Math.atan2(Math.sin(dl),Math.cos(p1)*Math.tan(p2)-Math.sin(p1)*Math.cos(dl));qiblaDeg=(t*180/Math.PI+360)%360;$('qArrow').style.transform='rotate('+qiblaDeg+'deg)';return qiblaDeg}
-function handleOrient(e){let h=e.webkitCompassHeading!=null?e.webkitCompassHeading:e.alpha!=null?360-e.alpha:null;if(h==null)return;$('qArrow').style.transform='rotate('+(qiblaDeg-h)+'deg)';$('qStatus').textContent='البوصلة شغالة! السهم بيشاور على القبلة 🧭'}
-$('compassBtn').onclick=async()=>{try{if(DeviceOrientationEvent?.requestPermission){if(await DeviceOrientationEvent.requestPermission()!=='granted')return}$('qStatus').textContent='حرّك الموبايل لحد ما السهم يقف لفوق 🕋';window.addEventListener('deviceorientation',handleOrient,true);$('compassBtn').style.display='none'}catch(e){}};
+const KAABA={lat:21.4225,lon:39.8262};let qiblaDeg=0,hasQ=false,unw=null,gotAbs=false,lastVib=0;
+function qiblaFrom(lat,lon){let p1=lat*Math.PI/180,p2=KAABA.lat*Math.PI/180,dl=(KAABA.lon-lon)*Math.PI/180,t=Math.atan2(Math.sin(dl),Math.cos(p1)*Math.tan(p2)-Math.sin(p1)*Math.cos(dl));qiblaDeg=(t*180/Math.PI+360)%360;hasQ=true;$('qMark').style.transform='rotate('+qiblaDeg+'deg)';return qiblaDeg}
+function tiltHeading(a,b,g){const r=Math.PI/180,x=b*r,y=g*r,z=a*r,cY=Math.cos(y),cZ=Math.cos(z),sX=Math.sin(x),sY=Math.sin(y),sZ=Math.sin(z),Vx=-cZ*sY-sZ*sX*cY,Vy=-sZ*sY+cZ*sX*cY;let h=Math.atan(Vx/Vy);if(Vy<0)h+=Math.PI;else if(Vx<0)h+=2*Math.PI;return h*180/Math.PI}
+function setHeading(h){if(unw===null)unw=h;else{let d=((h-(((unw%360)+360)%360)+540)%360)-180;unw+=d*0.25}
+ $('dial').style.transform='rotate('+(-unw)+'deg)';$('qEmoji').style.transform='translateX(-50%) rotate('+(unw-qiblaDeg)+'deg)';
+ let hn=((unw%360)+360)%360,diff=((qiblaDeg-hn+540)%360)-180,ok=hasQ&&Math.abs(diff)<5;$('dial').parentNode.classList.toggle('ok',ok);
+ $('qStatus').textContent=!hasQ?'حدد مدينتك أو فعّل الموقع الأول عشان نعرف القبلة':ok?'✅ إنت في اتجاه القبلة':'لف لحد ما 🕋 يوصل لفوق عند السهم ▼ (خلي الموبايل مفرود)';
+ if(ok&&Date.now()-lastVib>3000){lastVib=Date.now();try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}}}
+function onOri(e){let h=null;if(e.webkitCompassHeading!=null)h=e.webkitCompassHeading;else if(e.alpha!=null&&(e.absolute||e.type==='deviceorientationabsolute')){gotAbs=true;h=(e.beta!=null&&e.gamma!=null)?tiltHeading(e.alpha,e.beta,e.gamma):360-e.alpha}
+ if(h==null||isNaN(h))return;gotAbs=true;setHeading(h)}
+$('compassBtn').onclick=async()=>{try{if(typeof DeviceOrientationEvent!=='undefined'&&DeviceOrientationEvent.requestPermission){if(await DeviceOrientationEvent.requestPermission()!=='granted')return $('qStatus').textContent='لازم تسمح بالوصول للحساسات'}
+ $('qStatus').textContent='جاري قراءة الحساس... حرّك الموبايل على شكل رقم 8 للمعايرة';window.addEventListener('deviceorientationabsolute',onOri,true);window.addEventListener('deviceorientation',onOri,true);$('compassBtn').style.display='none';
+ setTimeout(()=>{if(!gotAbs){$('qStatus').textContent='الحساس مش بيرد. جرّب متصفح Chrome، وتأكد إن حساس البوصلة شغال في جهازك';$('compassBtn').style.display=''}},2500)}catch(e){$('qStatus').textContent='البوصلة مش مدعومة على المتصفح ده'}};
 
 async function fetchMonth(lat,lon){
  let n=new Date(),key=`pcal_${n.getFullYear()}-${n.getMonth()+1}_${getMethod()}_${getSchool()}_${Number(lat).toFixed(3)}_${Number(lon).toFixed(3)}`,cal;try{cal=JSON.parse(localStorage.getItem(key))}catch(e){}
