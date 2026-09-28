@@ -85,44 +85,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
     <h3 id="monthTitle">📅 جدول الشهر</h3>
     <div class="mtable-wrap"><table class="mtable"><thead><tr><th>اليوم</th><th>الفجر</th><th>الشروق</th><th>الظهر</th><th>العصر</th><th>المغرب</th><th>العشاء</th></tr></thead><tbody id="monthBody"></tbody></table></div>
   </div>
-
-  <div class="card compass-wrap">
-    <h3>🕋 اتجاه القبلة</h3>
-    <div class="compass"><div class="c-ptr">▼</div><div class="dial" id="dial"><span class="cardn nN">ش</span><span class="cardn nS">ج</span><span class="cardn nE">ق</span><span class="cardn nW">غ</span><div class="q-mark" id="qMark"><span id="qEmoji">🕋</span></div></div></div>
-    <div class="q-deg" id="qDeg"></div><div class="q-status" id="qStatus">فعّل البوصلة لتحريك السهم مع اتجاه الهاتف</div>
-    <button class="mini-btn" id="compassBtn" style="margin-top:10px">🧭 تفعيل البوصلة</button>
-  </div>
-</div>
-
-<!-- التتبع: التسجيل -->
-<div class="page" id="page-tracking">
-  <header><h1>📋 التتبع</h1><div class="bism">تابع صلواتك ونقاطك اليومية</div></header>
-
-  <div class="pts-note">⚠️ هذه النقاط لا تعني أن هذا هو عدد الحسنات التي سوف تأخذها، إنما هو عدد تقريبي.</div>
-  <div class="points-hero">
-    <div class="trophy">🏆</div><div class="val" id="totalPts">0</div><div class="lbl">نقاطك اليوم</div>
-    <div class="lvl-row"><span class="lvl-badge" id="lvlBadge">المستوى 1</span><div class="lvl-bar"><div class="lvl-fill" id="lvlFill"></div></div></div>
-    <div class="lvl-next" id="lvlNext"></div>
-  </div>
-
-  <div class="date-bar"><button id="prevDay">‹</button><div class="date-info"><div class="g" id="gregDate"></div><div class="h" id="hijriDate"></div></div><button id="nextDay">›</button></div>
-
-  <div class="stats">
-    <div class="stat"><div class="num" id="doneCount">0/5</div><div class="lbl">صليت اليوم</div></div>
-    <div class="stat" id="mosqueStat"><div class="num" id="mosqueCount">0</div><div class="lbl">في المسجد</div></div>
-    <div class="stat"><div class="num" id="homeCount">0</div><div class="lbl">في البيت</div></div>
-  </div>
-
-  <div id="prayers"></div><div id="extras"></div>
-  <div class="hint" id="multHint"></div>
-  <div class="hint">اضغط على دائرة الصلاة لاختيار حالتها ✨</div>
-</div>
-
-<!-- الإحصائيات -->
-<div class="page" id="page-stats">
-  <header><h1>📊 الإحصائيات</h1></header>
-  <div class="card"><h3>📅 آخر 7 أيام</h3><div class="bars" id="weekBars"></div></div>
-  <div class="card"><h3>🗓 آخر 30 يوم</h3><div class="sum-grid">
+<div class="card"><h3>🗓 آخر 30 يوم</h3><div class="sum-grid">
     <div class="stat"><div class="num" id="mTot">0</div><div class="lbl">مجموع النقاط</div></div>
     <div class="stat"><div class="num" id="mAvg">0</div><div class="lbl">متوسط صلوات/يوم</div></div>
     <div class="stat"><div class="num" id="mFull">0</div><div class="lbl">أيام مكتملة</div></div>
