@@ -539,9 +539,9 @@ $('logoutBtn').onclick=async()=>{if(outBusy)return;outBusy=true;const btn=$('log
  try{if(FB.auth.currentUser&&cloudOn){await Promise.race([pushNow(),wait(5000)]);ok=localStorage.getItem('rafiq_pushed')!==before}}catch(e){ok=false}
  if(!ok&&!confirm('⚠️ ماقدرتش أحفظ آخر تعديلاتك على السيرفر (النت ضعيف؟). لو خرجت دلوقتي ممكن تضيع. تخرج برضه؟'))return reset();
  cloudOn=false;try{await Promise.race([FB.auth.signOut(),wait(3000)])}catch(e){}
- [...Object.keys(storeObj()),'rafiq_users','rafiq_session','rafiq_uid','rafiq_pushed'].forEach(k=>_ri.call(localStorage,k));location.reload()};
+ [...Object.keys(storeObj()),'rafiq_users','rafiq_session','rafiq_session_lost','rafiq_uid','rafiq_pushed'].forEach(k=>_ri.call(localStorage,k));location.reload()};
 FB.auth.onAuthStateChanged(async u=>{if(busy)return;
- if(!u){cloudOn=false;if(localStorage.getItem('rafiq_session')){localStorage.removeItem('rafiq_session');showAuth('auHome')}return}
+ if(!u){cloudOn=false;if(localStorage.getItem('rafiq_session')){await wait(3000);if(FB.auth.currentUser||busy||outBusy)return;_si.call(localStorage,'rafiq_session_lost',String(Date.now()));toast('⚠️ المزامنة متوقفة، بياناتك محفوظة على جهازك. سجّل خروج ثم ادخل تاني لتفعيلها')}return}
  if(localStorage.getItem('rafiq_uid')===u.uid&&localStorage.getItem('rafiq_session')){afterLogin();checkCloud();return}
  try{await pullApply(u);afterLogin()}catch(er){}});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cloudOn)checkCloud()});
