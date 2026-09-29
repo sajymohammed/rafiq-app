@@ -128,6 +128,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 <!-- الإحصائيات -->
 <div class="page" id="page-stats">
   <header><h1>📊 الإحصائيات</h1></header>
+  <div class="card"><h3>🔥 الستريك</h3><div id="stkBox"></div></div>
   <div class="card"><h3>📅 آخر 7 أيام</h3><div class="bars" id="weekBars"></div></div>
   <div class="card"><h3>🗓 آخر 30 يوم</h3><div class="sum-grid">
     <div class="stat"><div class="num" id="mTot">0</div><div class="lbl">مجموع النقاط</div></div>
@@ -173,7 +174,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 
   <div class="card">
     <h3>👤 الحساب</h3>
-    <div class="xc"><div class="trow"><span class="pn" id="accName">—</span><button class="mini-btn" id="logoutBtn">تسجيل الخروج</button></div><div id="useTime" class="xs"></div><input class="ai" id="acName" placeholder="الاسم"><input class="ai" id="acAge" type="number" inputmode="numeric" placeholder="العمر"><select class="ai" id="acGender"><option value="man">ذكر</option><option value="woman">أنثى</option></select><input class="ai" id="acPass" type="password" placeholder="كلمة مرور جديدة (سيبها فاضية لو مش عايز تغيّرها)" autocomplete="new-password"><div class="xs">الأهداف</div><div id="acGoals"></div><div class="au-err" id="acErr"></div><button class="xb" id="acSave" style="width:100%;padding:12px">💾 حفظ بيانات الحساب</button><div class="xs" style="margin-top:14px">🎨 لون البرنامج</div><div id="thmRow"></div></div>
+    <div class="xc"><div class="trow"><span class="pn" id="accName">—</span><button class="mini-btn" id="logoutBtn">تسجيل الخروج</button></div><div id="useTime" class="xs"></div><input class="ai" id="acName" placeholder="الاسم"><input class="ai" id="acAge" type="number" inputmode="numeric" placeholder="العمر"><select class="ai" id="acGender"><option value="man">ذكر</option><option value="woman">أنثى</option></select><input class="ai" id="acPass" type="password" placeholder="كلمة مرور جديدة (سيبها فاضية لو مش عايز تغيّرها)" autocomplete="new-password"><div class="xs">الأهداف</div><div id="acGoals"></div><div class="au-err" id="acErr"></div><button class="xb" id="acSave" style="width:100%;padding:12px">💾 حفظ بيانات الحساب</button><div class="xs" style="margin-top:14px">🌐 اللغة / Language</div><div class="seg" id="langSeg"><button data-l="ar">العربية</button><button data-l="en">English</button></div><button class="xb" style="width:100%;margin-top:14px" onclick="openGuide()">📘 شرح التطبيق</button><div class="xs" style="margin-top:14px">🎨 لون البرنامج</div><div id="thmRow"></div></div>
     <div class="trow"><span class="pn">الجنس</span><button class="mini-btn" id="genderChange">تغيير</button></div>
   </div>
 
@@ -205,6 +206,8 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <div class="qbar" id="qBar" style="display:none"><span id="qBarT"></span><button class="btn-done" onclick="qMark()">📍 وقفت هنا</button></div>
   <div class="qnavb"><button class="mini-btn" onclick="qStep(-1)">› السابقة</button><span class="qpg"><input id="qPg" type="number" inputmode="numeric" min="1" max="604" onchange="qGoPage(this.value)"> / ٦٠٤</span><button class="mini-btn" onclick="qStep(1)">التالية ‹</button></div>
 </div>
+
+<div class="qr" id="guide" style="display:none"><div class="qh"><button class="mini-btn" onclick="closeGuide()">✕</button><div class="qt" id="guideT"></div><span></span></div><div class="qb" id="guideBody"></div></div>
 
 <div class="toast" id="toast"></div>
 
@@ -293,7 +296,7 @@ function fmtDates(){
  try{$('hijriDate').textContent=new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(currentDate)}catch(e){$('hijriDate').textContent=''}
 }
 
-function renderTracking(){
+function renderTracking(){try{stkCheck()}catch(e){}
  fmtDates();let data=loadDay(),wrap=$('prayers');wrap.innerHTML='';let done=0,mosque=0,home=0,total=0,missedIdx=getMissedIndex(data);
  PRAYERS.forEach(p=>{
   let rec=data[p.id],sel=rec&&OPTIONS.find(o=>o.id===rec.opt);
@@ -468,14 +471,14 @@ function applyGoals(d){const MQ=/^mosque/,JM=/^(mosque|group|imam_group)/;for(co
  r.points=pts}}
 function hijriDay(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric'}).format(d))}catch(e){return 0}}
 function fastInfo(d){let hd=hijriDay(d),wd=d.getDay(),w=hd>=13&&hd<=15,m=wd===1||wd===4,all=hasG('كل السنن');return{show:w||m,must:(w&&(hasG('الأيام البيض')||all))||(m&&(hasG('الاثنين')||all)),label:(w?'الأيام البيض ('+hd+' هجري)':'')+(w&&m?' + ':'')+(m?(wd===1?'يوم الاثنين':'يوم الخميس'):'')}}
-function extraParts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),n=d.n||{},P={naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0};
+function extraParts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),n=d.n||{},P={naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0,bn:0};
  const NP={fajr:20,dhuhr:5,maghrib:5,isha:10};
  for(const x in NP){if(n[x]==='y'){P.naf+=NP[x];P.nafC++}else if(hasG('النوافل')&&(n[x]==='n'||(past&&!n[x])))P.naf-=2}
  if(d.qy&&d.qy!=='n'){P.qy+={2:5,4:10,6:15,8:20}[d.qy]||0;P.qyC++}else if(hasG('قيام الليل')&&(d.qy==='n'||(past&&!d.qy)))P.qy-=3;
  let q=u.quran;if(q&&(d.q!==undefined||past)){let r=d.q||0,p=r===0?-3:r<q.n?2:r===q.n?5:8;P.q+=hasG('القرآن')?p*2:p;if(r>0)P.qC++}
  let f=fastInfo(dt);if(f.show){if(d.f==='y'){P.f+=10;P.fC++}else if(f.must&&(d.f==='n'||(past&&!d.f)))P.f-=15}
- return P}
-function extraPts(k){let P=extraParts(k);return P.naf+P.qy+P.q+P.f}
+ if(d.kok&&!q){P.q+=hasG('القرآن')?10:5;P.qC++}P.bn=d.bn||0;return P}
+function extraPts(k){let P=extraParts(k);return P.naf+P.qy+P.q+P.f+P.bn}
 function dayStats(k){let s=dayStats0(k);s.pts+=extraPts(k);return s}
 function renderExtras(){let box=$('extras');if(!box||box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT')return;let k=dayKey(currentDate),d=XEX(k),n=d.n||{},q=XU().quran,f=fastInfo(new Date(k+'T00:00:00')),b=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`,h='';
  h+='<div class="xc"><b>🌙 النوافل</b>'+[['fajr','الفجر',20],['dhuhr','الظهر',5],['maghrib','المغرب',5],['isha','العشاء',10]].map(([x,l,p])=>`<div class="xr"><span>${l} <small>(+${p})</small></span><span>${prayerTimeArrived(x)?b(n[x]==='y',`setNaf('${x}','y')`,'✅ صليت')+b(n[x]==='n',`setNaf('${x}','n')`,'❌ لا'):'<small>⏳ لسه وقتها ما دخلش</small>'}</span></div>`).join('')+'</div>';
@@ -558,18 +561,62 @@ function totalAllDays(){let u=XU(),now=new Date(),first=new Date(u.created||Date
  el.addEventListener('pointermove',e=>{if(tm&&(Math.abs(e.clientX-sx)>12||Math.abs(e.clientY-sy)>12))cancel()});
  ['pointerup','pointerleave','pointercancel'].forEach(v=>el.addEventListener(v,cancel));
  el.addEventListener('contextmenu',e=>e.preventDefault())})();
+/* ===== ستريك + لغة + شرح ===== */
+var LANG=localStorage.getItem('lang')||'ar';
+function tl(a,e){return LANG==='en'?e:a}
+function STKC(t){return{p:{n:30,pts:1500},q:{n:15,pts:500},y:{n:20,pts:1000},s:{n:20,pts:1000}}[t]}
+function stkMode(){return localStorage.getItem('stkMode')||'all'}
+function stkOK(t,k){
+ if(t==='p'){let d;try{d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}')}catch(e){return false}
+  let m=stkMode(),re=m==='mosque'?/^mosque/:m==='jamaa'?/^(mosque|group|imam_group)/:null;
+  return['fajr','dhuhr','asr','maghrib','isha'].every(i=>{let r=d[i];return r&&r.opt&&r.opt!=='missed'&&(!re||re.test(r.opt))})}
+ let d=XEX(k);
+ if(t==='y')return!!d.qy&&d.qy!=='n';
+ if(t==='s'){let n=d.n||{};return['fajr','dhuhr','maghrib','isha'].every(x=>n[x]==='y')}
+ let q=XU().quran;return!!d.kok||!!(q&&d.q>=q.n)}
+function stkInfo(t){let d=new Date(),n=0,start=dayKey(d);
+ for(let i=0;i<800;i++){let k=dayKey(d);if(stkOK(t,k)){n++;start=k}else if(i>0)break;d.setDate(d.getDate()-1)}
+ return{n,start}}
+function stkBonus(a){let k=dayKey(new Date()),d=XEX(k);d.bn=(d.bn||0)+a;XSX(k,d)}
+function stkCheck(){let aw=XU().awd||{},add=0,nw={};
+ for(const t of['p','q','y','s']){if(t==='q'&&khGet())continue;let c=STKC(t),r=stkInfo(t),m=t==='p'?stkMode()+'|':'';
+  for(let i=1;i<=Math.floor(r.n/c.n);i++){let id=t+'|'+m+r.start+'|'+i;if(!aw[id]){nw[id]=1;add+=c.pts}}}
+ if(add){XUP(x=>{x.awd=Object.assign(x.awd||{},nw)});stkBonus(add);toast(tl('🔥 مكافأة ستريك +','🔥 Streak bonus +')+add)}}
+function stkKhatma(k){let dk=dayKey(new Date()),d=XEX(dk);d.kok=1;XSX(dk,d);let r=stkInfo('q'),el=Math.floor((new Date(dk+'T00:00:00')-new Date(k.start+'T00:00:00'))/864e5)+1,id='kh|'+k.start;
+ if(r.n>=el&&!(XU().awd||{})[id]){XUP(x=>{x.awd=x.awd||{};x.awd[id]=1});stkBonus(750);return tl(' +750 نقطة ستريك الختمة 🔥',' +750 streak pts 🔥')}return''}
+function setStkMode(m){localStorage.setItem('stkMode',m);renderStk()}
+function renderStk(){let b=$('stkBox');if(!b)return;let m=stkMode(),kh=!!khGet(),
+ row=(ic,n,s,t)=>`<div class="trow"><span class="pn">${ic} ${n}<br><small style="opacity:.6;font-weight:400">${s}</small></span><span class="pt">🔥 ${stkInfo(t).n}</span></div>`;
+ b.innerHTML='<div class="seg">'+[['all',tl('الكل','All')],['mosque',tl('كلها مسجد','All mosque')],['jamaa',tl('كلها جماعة','All group')]].map(x=>`<button class="${m===x[0]?'on':''}" onclick="setStkMode('${x[0]}')">${x[1]}</button>`).join('')+'</div>'
+ +row('🕌',tl('ستريك الصلوات','Prayers streak'),tl('كل 30 يوم = 1500 نقطة','Every 30 days = 1500 pts'),'p')
+ +row('📖',kh?tl('ستريك ورد الختمة','Khatma wird streak'):tl('ستريك ورد القرآن','Quran wird streak'),kh?tl('750 نقطة عند إنهاء الختمة','750 pts on finishing the Khatma'):tl('كل 15 يوم = 500 نقطة','Every 15 days = 500 pts'),'q')
+ +row('🌌',tl('ستريك قيام الليل','Night prayer streak'),tl('كل 20 يوم = 1000 نقطة','Every 20 days = 1000 pts'),'y')
+ +row('🌙',tl('ستريك السنن','Sunnah streak'),tl('كل 20 يوم = 1000 نقطة','Every 20 days = 1000 pts'),'s')}
+const GUIDE={ar:[["🏠 الرئيسية", "مواقيت الصلاة اليومية حسب موقعك، وتقدر تحدد مصدر المواقيت والموقع من الإعدادات."], ["🕌 التتبع (الصلوات)", "سجّل كل صلاة بعد دخول وقتها: في البيت، جماعة، إمام، في المسجد، من أول التكبيرة، أو إمام المسجد. في المسجد بتدخل المسافة (خطوات أو متر) والانتظار وعدد المصلين، وكل ده بيحسب نقاط. الصلاة الفايتة بتتقفل ولها خصم لو ده هدفك."], ["⭐ النقاط والمستوى", "كل عبادة ليها نقاط، وبتتجمّع في مستواك. اضغط مطولًا على كارت النقاط عشان تبدّل بين نقاط اليوم ونقاط الحساب (من أول يوم)."], ["🌙 النوافل وقيام الليل والصيام", "تحت الصلوات: سجّل السنن الرواتب (الفجر والظهر والمغرب والعشاء)، وقيام الليل بعدد الركعات (بعد العشاء)، وصيام الأيام البيض والاثنين والخميس. فيه خصم على اللي بتضيّعه لو ده من أهدافك."], ["📖 القرآن", "المصحف على 604 صفحة: اسحب لقلب الصفحة، واكتب رقم الصفحة للذهاب إليها، وكبّر الخط. دوس على أي آية واختار 📍 وقفت هنا عشان تحفظ مكانك."], ["📿 الختمة والورد", "ابدأ ختمة واختار المدة. التطبيق بيقولك اقرأ كام صفحة ومن فين لفين. لما تكون في ختمة، ورد الختمة هو وردك اليومي وورد القرآن العادي بيختفي. اسأل نفسك: هل مشيت على الخطة؟ لو آه بتتحسب. لو لأ اكتب قرأت قد إيه: الناقص بيتزود على الأيام الجاية والزيادة بتتخصم."], ["🔥 الستريك", "الصلوات: كل الصلوات كل يوم (تختار: الكل أو كلها في المسجد أو كلها جماعة)، كل 30 يوم = 1500 نقطة. القرآن: تمشي على وردك أو أكتر؛ في الختمة 750 نقطة عند إنهائها بدون انقطاع، وبدون ختمة 500 نقطة كل 15 يوم. قيام الليل والسنن (الأربعة كلها): كل 20 يوم = 1000 نقطة. اليوم اللي لسه ما خلص ما بيكسرش الستريك."], ["📊 الإحصائيات", "آخر 7 أيام و30 يوم والسنة، وتفصيل كل العبادات (صلوات ونوافل وقيام وقرآن وصيام ومكافآت) بالنقاط، وعدد ختماتك."], ["⚙️ الإعدادات والحساب", "تعديل الاسم والعمر والأهداف وكلمة المرور، ولون البرنامج، واللغة، والتنبيهات. حسابك بيتزامن مع السحابة عشان بياناتك تفضل محفوظة، وتسجيل الخروج بيحفظ آخر تعديلاتك الأول."]],en:[["🏠 Home", "Daily prayer times for your location. Set the times source and location in Settings."], ["🕌 Tracking (Prayers)", "Log each prayer once its time starts: at home, in congregation, as imam, at the mosque, from the first takbir, or as mosque imam. For the mosque you enter distance (steps or meters), waiting time and congregation size, all of which earn points. A missed prayer gets locked, with a penalty if that is one of your goals."], ["⭐ Points & level", "Every act of worship earns points that build your level. Long-press the points card to switch between today's points and account points (since day one)."], ["🌙 Sunnah, night prayer & fasting", "Below the prayers: log the regular sunnah (Fajr, Dhuhr, Maghrib, Isha), night prayer by rak'ahs (after Isha), and fasting the White Days, Mondays and Thursdays. Missed ones cost points if they are among your goals."], ["📖 Quran", "A 604-page mushaf: swipe to turn pages, type a page number to jump, and resize the font. Tap any verse and choose 📍 to save your place."], ["📿 Khatma & daily wird", "Start a khatma and pick its length. The app tells you how many pages to read and from where to where. While a khatma is active, its wird is your daily wird and the regular Quran wird is hidden. Then answer: did you follow the plan? Yes counts it. No: enter what you read, a shortfall is added to upcoming days and extra is deducted."], ["🔥 Streaks", "Prayers: all prayers every day (choose: all, all at the mosque, or all in congregation), every 30 days = 1500 pts. Quran: follow your wird or more; with a khatma, 750 pts on finishing it unbroken; without one, 500 pts every 15 days. Night prayer and sunnah (all four): every 20 days = 1000 pts. A day that is not over yet never breaks a streak."], ["📊 Stats", "Last 7 days, 30 days and the year, a breakdown of all worship (prayers, sunnah, night prayer, Quran, fasting, bonuses) in points, and your completed khatmas."], ["⚙️ Settings & account", "Edit name, age, goals and password, app color, language and reminders. Your account syncs to the cloud so your data stays safe, and logging out saves your latest changes first."]]};
+function openGuide(){$('guideT').textContent=tl('📘 شرح التطبيق','📘 App guide');$('guideBody').innerHTML=GUIDE[LANG==='en'?'en':'ar'].map(g=>`<div class="card"><h3>${g[0]}</h3><p class="xs" style="line-height:1.9;font-size:14px">${g[1]}</p></div>`).join('');$('guide').style.display='flex';document.body.style.overflow='hidden'}
+function closeGuide(){$('guide').style.display='none';document.body.style.overflow=''}
+const DICT=[["نقاط حسابك (من أول يوم لحد دلوقتي)", "Account points (since day one)"], ["هل مشيت على خطة الختمة؟", "Did you follow the Khatma plan?"], ["حفظ بيانات الحساب", "Save account data"], ["متوسط صلوات/يوم", "Avg prayers/day"], ["تفصيل العبادات", "Worship breakdown"], ["السنة الحالية", "Current year"], ["تسجيل الخروج", "Log out"], ["كمّل القراءة", "Continue reading"], ["إلغاء الختمة", "Cancel Khatma"], ["ورد النهاردة", "Today's wird"], ["مجموع النقاط", "Total points"], ["لون البرنامج", "App color"], ["ابحث عن سورة", "Search surah"], ["جاري التحميل", "Loading"], ["تم حفظ الورد", "Wird saved"], ["نقاطك اليوم", "Your points today"], ["ختمة القرآن", "Quran Khatma"], ["ابدأ الختمة", "Start Khatma"], ["شرح التطبيق", "App guide"], ["أيام مكتملة", "Full days"], ["الإحصائيات", "Stats"], ["ورد القرآن", "Quran wird"], ["ورد الختمة", "Khatma wird"], ["قيام الليل", "Night prayer"], ["آخر 7 أيام", "Last 7 days"], ["آخر 30 يوم", "Last 30 days"], ["الإعدادات", "Settings"], ["حفظ الورد", "Save wird"], ["في المسجد", "At mosque"], ["الرئيسية", "Home"], ["تم الحفظ", "Saved"], ["النوافل", "Sunnah prayers"], ["الصلوات", "Prayers"], ["المجموع", "Total"], ["الأهداف", "Goals"], ["الستريك", "Streaks"], ["التتبع", "Tracking"], ["القرآن", "Quran"], ["المغرب", "Maghrib"], ["العشاء", "Isha"], ["الصيام", "Fasting"], ["الفجر", "Fajr"], ["الظهر", "Dhuhr"], ["العصر", "Asr"], ["حفظ ✓", "Save ✓"], ["السنن", "Sunnah"], ["أسبوع", "Week"], ["الاسم", "Name"], ["العمر", "Age"], ["السور", "Surahs"], ["رجوع", "Back"], ["❌ لا", "❌ No"], ["صفحة", "pages"], ["أنثى", "Female"], ["حفظ", "Save"], ["شهر", "Month"], ["سنة", "Year"], ["ذكر", "Male"], ["آه", "Yes"]];
+function trStr(s){for(const d of DICT)if(s.indexOf(d[0])>=0)s=s.split(d[0]).join(d[1]);return s}
+let trBusy=false,trT=null;
+function trAll(){if(LANG!=='en')return;trBusy=true;
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){let p=n.parentElement;if(!p||!/[\u0600-\u06FF]/.test(n.nodeValue)||p.closest('.qtxt,#qList,#qBody,#guideBody,script,style'))continue;let t=trStr(n.nodeValue);if(t!==n.nodeValue)n.nodeValue=t}
+ document.querySelectorAll('[placeholder]').forEach(el=>{let t=trStr(el.placeholder);if(t!==el.placeholder)el.placeholder=t});
+ trBusy=false}
+document.querySelectorAll('#langSeg button').forEach(b=>{b.classList.toggle('on',b.dataset.l===(LANG==='en'?'en':'ar'));b.onclick=()=>{if(b.dataset.l===LANG)return;localStorage.setItem('lang',b.dataset.l);location.reload()}});
+if(LANG==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';new MutationObserver(()=>{if(trBusy)return;clearTimeout(trT);trT=setTimeout(trAll,120)}).observe(document.body,{childList:true,subtree:true,characterData:true});trAll()}
 let stRange=30;
-function statRange(days){let r={pr:0,cnt:0,full:0,naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0};
- for(let i=0;i<days;i++){let d=new Date();d.setDate(d.getDate()-i);let k=dayKey(d),s=dayStats0(k),P=extraParts(k);r.pr+=s.pts;r.cnt+=s.cnt;if(s.cnt===5)r.full++;for(const x of['naf','nafC','qy','qyC','q','qC','f','fC'])r[x]+=P[x]}
- r.pts=r.pr+r.naf+r.qy+r.q+r.f;return r}
-function renderStats(){
+function statRange(days){let r={pr:0,cnt:0,full:0,naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0,bn:0};
+ for(let i=0;i<days;i++){let d=new Date();d.setDate(d.getDate()-i);let k=dayKey(d),s=dayStats0(k),P=extraParts(k);r.pr+=s.pts;r.cnt+=s.cnt;if(s.cnt===5)r.full++;for(const x of['naf','nafC','qy','qyC','q','qC','f','fC','bn'])r[x]+=P[x]}
+ r.pts=r.pr+r.naf+r.qy+r.q+r.f+r.bn;return r}
+function renderStats(){try{stkCheck();renderStk()}catch(e){}
  let week=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);week.push({v:dayStats(dayKey(d)).pts,l:d.toLocaleDateString('ar-EG',{weekday:'short'})})}renderBars($('weekBars'),week);
  let m=statRange(30);$('mTot').textContent=m.pts;$('mAvg').textContent=(m.cnt/30).toFixed(1);$('mFull').textContent=m.full;
  let bk=[];for(let b=5;b>=0;b--){let sum=0,lab;for(let i=b*5;i<b*5+5;i++){let d=new Date();d.setDate(d.getDate()-i);if(i===b*5)lab=String(d.getDate());sum+=dayStats(dayKey(d)).pts}bk.push({v:sum,l:lab})}renderBars($('monthBars'),bk);
  let now=new Date(),yr=now.getFullYear(),months=[];for(let mo=0;mo<12;mo++){let sum=0,dm=new Date(yr,mo+1,0).getDate();for(let dd=1;dd<=dm;dd++){let d=new Date(yr,mo,dd);if(d>now)break;sum+=dayStats(dayKey(d)).pts}months.push({v:sum,l:new Date(yr,mo,1).toLocaleDateString('ar-EG',{month:'short'})})}renderBars($('yearBars'),months);
  document.querySelectorAll('#stSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.r===stRange));
  let r=statRange(stRange),fm=v=>(v>0?'+':'')+v,row=(ic,n,det,p)=>`<div class="trow"><span class="pn">${ic} ${n}<br><small style="opacity:.6;font-weight:400">${det}</small></span><span class="pt" style="${p<0?'color:#ff9a9a':''}">${fm(p)}</span></div>`,kh=khGet(),kc=+localStorage.getItem('khCount')||0;
- $('stBreak').innerHTML=row('🕌','الصلوات',r.cnt+' صلاة ('+r.full+' يوم مكتمل)',r.pr)+row('🌙','النوافل',r.nafC+' نافلة',r.naf)+row('🌌','قيام الليل',r.qyC+' ليلة',r.qy)+row('📖','ورد القرآن','قرأت في '+r.qC+' يوم',r.q)+row('🌿','الصيام',r.fC+' يوم',r.f)+`<div class="trow"><span class="pn">🏆 المجموع</span><span class="pt">${r.pts}</span></div><div class="xs">📿 ختمات مكتملة: ${kc}${kh?' · الختمة الحالية: '+(Math.floor((kh.pos+1)/6236*1000)/10)+'%':''}</div>`}
+ $('stBreak').innerHTML=row('🕌','الصلوات',r.cnt+' صلاة ('+r.full+' يوم مكتمل)',r.pr)+row('🌙','النوافل',r.nafC+' نافلة',r.naf)+row('🌌','قيام الليل',r.qyC+' ليلة',r.qy)+row('📖','ورد القرآن','قرأت في '+r.qC+' يوم',r.q)+row('🌿','الصيام',r.fC+' يوم',r.f)+row('🔥',tl('مكافآت الستريك','Streak bonuses'),'',r.bn)+`<div class="trow"><span class="pn">🏆 المجموع</span><span class="pt">${r.pts}</span></div><div class="xs">📿 ختمات مكتملة: ${kc}${kh?' · الختمة الحالية: '+(Math.floor((kh.pos+1)/6236*1000)/10)+'%':''}</div>`}
 document.querySelectorAll('#stSeg button').forEach(b=>b.onclick=()=>{stRange=+b.dataset.r;renderStats()});
 
 /* ===== شاشة القرآن + الختمة ===== */
@@ -597,7 +644,7 @@ function khPlan(){let k=khGet();if(!k||!Q_PS)return null;let today=dayKey(new Da
  T=dl===1?Math.max(1,Math.ceil(rem-1e-6)):Math.max(1,Math.round(rem/dl)),E=Math.min(604,Math.max(1,Math.round(b.pg+T))),endPos=E>=604?6235:Q_PS[E]-1,startPos=Math.min(6235,b.pos+1),
  pg=khPgOfPos(k.pos),req=khPgOfPos(endPos)-b.pg;
  return{k,b,T,E,dl,left,late,endPos,startPos,pg,req,readNow:Math.max(0,pg-b.pg),remain:Math.max(0,khPgOfPos(endPos)-pg),done:k.pos>=endPos,init:Math.max(1,Math.round(604/k.days))}}
-function khFinish(){localStorage.setItem('khCount',(+localStorage.getItem('khCount')||0)+1);khSet(null);toast('🎉 ما شاء الله! ختمت القرآن، تقبّل الله منك')}
+function khFinish(){let k=khGet(),m='';try{if(k)m=stkKhatma(k)}catch(e){}localStorage.setItem('khCount',(+localStorage.getItem('khCount')||0)+1);khSet(null);toast('🎉 ما شاء الله! ختمت القرآن، تقبّل الله منك'+m)}
 function khApply(np){let k=khGet();if(!k)return false;np=Math.max(-1,Math.min(6235,np));k.pos=np;khSet(k);if(np>=0)localStorage.setItem('qBm',np);if(np>=6235){khFinish();return true}return false}
 function qRenderK(){let box=$('khCard');if(!box)return;let k=khGet(),cnt=+localStorage.getItem('khCount')||0,h='';
  if(!k)h=`<div class="card"><h3>📿 ختمة القرآن</h3><p class="xs">اختار المدة اللي عايز تختم فيها، وأنا هحسبلك ورد كل يوم (من فين لفين).</p><select id="khDays" class="ai">${[15,30,60,90,180,365].map(d=>`<option value="${d}"${d===30?' selected':''}>${d} يوم</option>`).join('')}</select><button class="xb" style="width:100%" onclick="khStart()">🚀 ابدأ الختمة</button>${cnt?`<p class="xs">✅ ختمات مكتملة: ${cnt}</p>`:''}</div>`;
@@ -608,20 +655,20 @@ function qRenderK(){let box=$('khCard');if(!box)return;let k=khGet(),cnt=+localS
   h=`<div class="card"><h3>📿 ختمة القرآن${cnt?' · ختمات مكتملة: '+cnt:''}</h3><div class="lvl-bar" style="height:12px"><div class="lvl-fill" style="width:${pct}%"></div></div><p class="xs">${pct}% من الختمة${pl?' · '+fN(pl.pg)+' من 604 صفحة':''}</p>${body}<button class="xb" style="width:100%" onclick="khContinue()">▶ كمّل القراءة</button><button class="xl" onclick="khCancel()">إلغاء الختمة</button></div>`}
  box.innerHTML=h}
 function quranCard(q,d,k){let kh=khGet(),useK=!!kh&&k===dayKey(new Date()),bt=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`;
- if(!q&&(!useK||localStorage.getItem('qSetT')))return`<div class="xc"><b>📖 ورد القرآن</b><p class="xs">حدد وردك اليومي (هتتحاسب عليه):</p><input class="ai" id="qN" type="number" min="1" placeholder="العدد"><select class="ai" id="qU">${Object.entries(QU).map(([a,c])=>`<option value="${a}">${c}</option>`).join('')}</select><button class="xb" style="width:100%" onclick="saveQTarget()">حفظ الورد</button></div>`;
- let u=q?q.u:'pages',h='<div class="xc"><b>📖 ورد القرآن</b>'+(q?`<p class="xs">وردك: ${q.n} ${QU[q.u]} يوميًا<br><small>لو زدت أو قللت 5 أيام ورا بعض وردك بيتعدّل لوحده</small></p>`:'<p class="xs">مفيش ورد يومي محدد <button class="xl" onclick="localStorage.setItem(\'qSetT\',1);renderTracking()">حدد ورد</button></p>');
+ if(!q&&!useK)return`<div class="xc"><b>📖 ورد القرآن</b><p class="xs">حدد وردك اليومي (هتتحاسب عليه):</p><input class="ai" id="qN" type="number" min="1" placeholder="العدد"><select class="ai" id="qU">${Object.entries(QU).map(([a,c])=>`<option value="${a}">${c}</option>`).join('')}</select><button class="xb" style="width:100%" onclick="saveQTarget()">حفظ الورد</button></div>`;
+ let u=q?q.u:'pages',h='<div class="xc"><b>'+(useK?'📿 ورد الختمة':'📖 ورد القرآن')+'</b>'+(useK?'':q?`<p class="xs">وردك: ${q.n} ${QU[q.u]} يوميًا<br><small>لو زدت أو قللت 5 أيام ورا بعض وردك بيتعدّل لوحده</small></p>`:'<p class="xs">مفيش ورد يومي محدد <button class="xl" onclick="localStorage.setItem(\'qSetT\',1);renderTracking()">حدد ورد</button></p>');
  let inp=`<input class="ai" id="qR" type="number" min="0" step="any" placeholder="قرأت كام ${QU[u]} النهاردة؟" value="${d.q??''}"><button class="xb" style="width:100%" onclick="saveQRead()">حفظ</button>`;
  if(useK){if(!Q_PS){qLoad().then(()=>renderTracking()).catch(()=>{});return h+'<p class="xs">⏳ جاري تجهيز الختمة...</p></div>'}
   let pl=khPlan();h+=`<div class="xs" style="margin-top:6px">📿 ورد الختمة النهاردة: <b>${pl.T} صفحة</b><br>من ${khTxt(pl.startPos)}<br>إلى نهاية ${khTxt(pl.endPos)}</div><div class="xr"><span>هل مشيت على خطة الختمة؟</span><span>${bt(d.kh==='y','khYes()','✅ آه')}${bt(d.kh==='n','khNo()','❌ لا')}</span></div>`;
   if(d.kh==='y')h+='<p class="xs">✅ اتحسبت في الختمة</p>';else if(d.kh==='n')h+=`<p class="xs">اكتب قرأت قد إيه (لو أقل بيتزود على الأيام الجاية، ولو أكتر بيتخصم):</p>`+inp}
  else h+=inp;
- if(q)h+='<button class="xl" onclick="resetQ()">تغيير الورد</button>';return h+'</div>'}
+ if(q&&!useK)h+='<button class="xl" onclick="resetQ()">تغيير الورد</button>';return h+'</div>'}
 function khToUnit(u,pages,ayat){return u==='ayah'?ayat:Math.round(pages/KPPU[u]*10)/10}
 function khYes(){let pl=khPlan();if(!pl)return toast('⏳ استنى ثواني لحد ما الختمة تجهز');let dk=dayKey(new Date()),d=XEX(dk),np=Math.max(pl.k.pos,pl.endPos),read=khPgOfPos(np)-pl.b.pg,q=XU().quran;
- d.kh='y';if(q)d.q=khToUnit(q.u,read,np-pl.b.pos);XSX(dk,d);let fin=khApply(np),m=q?qAdjust(dk):'';renderTracking();qRenderK();if(!fin)toast(m||'✅ اتحسبت في الختمة')}
+ d.kh='y';d.kok=1;if(q)d.q=khToUnit(q.u,read,np-pl.b.pos);XSX(dk,d);let fin=khApply(np),m=q?qAdjust(dk):'';renderTracking();qRenderK();if(!fin)toast(m||'✅ اتحسبت في الختمة')}
 function khNo(){let dk=dayKey(new Date()),d=XEX(dk);d.kh='n';XSX(dk,d);renderTracking()}
 function khFromRead(x,u){let pl=khPlan();if(!pl)return'';let b=pl.b,np=x<=0?b.pos:u==='ayah'?Math.min(6235,b.pos+Math.round(x)):khPosOfPg(b.pg+x*KPPU[u]),read=khPgOfPos(np)-b.pg;
- if(khApply(np))return'';let rem=604-khPgOfPos(np),dt=pl.dl-1,t2=dt<1?Math.ceil(rem):Math.max(1,Math.round(rem/dt)),diff=read-pl.req;
+ if(read>=(pl.req||0)-0.5){let dk0=dayKey(new Date()),dd0=XEX(dk0);dd0.kok=1;XSX(dk0,dd0)}if(khApply(np))return'';let rem=604-khPgOfPos(np),dt=pl.dl-1,t2=dt<1?Math.ceil(rem):Math.max(1,Math.round(rem/dt)),diff=read-pl.req;
  return diff<-0.5?`⚠️ قرأت ${fN(read)} من ${fN(pl.req)} صفحة، ${fN(-diff)} اتزودوا على الأيام الجاية (ورد بكرة ≈ ${t2})`:diff>0.5?`🌟 قرأت زيادة ${fN(diff)} صفحة، اتخصموا من الأيام الجاية (ورد بكرة ≈ ${t2})`:'✅ اتحسبت في الختمة'}
 function khStart(){khSet({start:dayKey(new Date()),days:+$('khDays').value,pos:-1,log:{}});qRenderK();toast('بدأت الختمة 📿 بالتوفيق')}
 function khCancel(){if(confirm('تلغي الختمة الحالية؟'))khSet(null),qRenderK()}
@@ -653,6 +700,7 @@ $('qBody').addEventListener('click',e=>{let el=e.target.closest('.qa');if(!el)re
 function qMark(){let i=Q_SEL;if(i===null)return;localStorage.setItem('qBm',i);
  document.querySelectorAll('.qa.bm').forEach(x=>x.classList.remove('bm'));let el=$('qBody').querySelector('[data-i="'+i+'"]');if(el)el.classList.add('bm');
  let k=khGet();if(k&&khApply(i)){qRenderK();return}
+ if(k){let pl2=khPlan();if(pl2&&pl2.done){let dk1=dayKey(new Date()),dd1=XEX(dk1);dd1.kok=1;XSX(dk1,dd1)}}
  toast('📍 تم حفظ مكانك'+(k?' في الختمة':''))}
 function qClose(){$('qReader').style.display='none';document.body.style.overflow='';renderQuran()}
 function qFont(d){qFs=Math.max(16,Math.min(48,qFs+d));localStorage.setItem('qFs',qFs);let t=document.querySelector('.qtxt');if(t)t.style.fontSize=qFs+'px'}
