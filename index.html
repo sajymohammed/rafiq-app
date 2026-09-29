@@ -480,7 +480,7 @@ function dayStats(k){let s=dayStats0(k);s.pts+=extraPts(k);return s}
 function renderExtras(){let box=$('extras');if(!box||box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT')return;let k=dayKey(currentDate),d=XEX(k),n=d.n||{},q=XU().quran,f=fastInfo(new Date(k+'T00:00:00')),b=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`,h='';
  h+='<div class="xc"><b>🌙 النوافل</b>'+[['fajr','الفجر',20],['dhuhr','الظهر',5],['maghrib','المغرب',5],['isha','العشاء',10]].map(([x,l,p])=>`<div class="xr"><span>${l} <small>(+${p})</small></span><span>${prayerTimeArrived(x)?b(n[x]==='y',`setNaf('${x}','y')`,'✅ صليت')+b(n[x]==='n',`setNaf('${x}','n')`,'❌ لا'):'<small>⏳ لسه وقتها ما دخلش</small>'}</span></div>`).join('')+'</div>';
  h+=`<div class="xc"><b>🌌 قيام الليل</b>${prayerTimeArrived('isha')?`<div class="xr"><span>${[2,4,6,8].map(x=>b(d.qy===x,`setQy(${x})`,x+' ركعة (+'+{2:5,4:10,6:15,8:20}[x]+')')).join('')}${b(d.qy==='n',"setQy('n')",'❌ لا')}</span></div>`:'<p class="xs">⏳ لسه وقته ما جاش (بعد صلاة العشاء)</p>'}</div>`;
- h+=!q?`<div class="xc"><b>📖 ورد القرآن</b><p class="xs">حدد وردك اليومي (هتتحاسب عليه):</p><input class="ai" id="qN" type="number" min="1" placeholder="العدد"><select class="ai" id="qU">${Object.entries(QU).map(([a,c])=>`<option value="${a}">${c}</option>`).join('')}</select><button class="xb" style="width:100%" onclick="saveQTarget()">حفظ الورد</button></div>`:`<div class="xc"><b>📖 ورد القرآن</b><p class="xs">وردك: ${q.n} ${QU[q.u]} يوميًا<br><small>لو زدت أو قللت 5 أيام ورا بعض وردك بيتعدّل لوحده</small></p><input class="ai" id="qR" type="number" min="0" placeholder="قرأت كام ${QU[q.u]} النهاردة؟" value="${d.q??''}"><button class="xb" style="width:100%" onclick="saveQRead()">حفظ</button><button class="xl" onclick="resetQ()">تغيير الورد</button></div>`;
+ h+=quranCard(q,d,k);
  if(f.show)h+=`<div class="xc"><b>🌿 صيام ${f.label}</b><div class="xr"><span>صمت النهاردة؟</span><span>${b(d.f==='y',"setFast('y')",'✅ صمت')}${b(d.f==='n',"setFast('n')",'❌ لا')}</span></div></div>`;
  box.innerHTML=h}
 function setNaf(x,v){if(!prayerTimeArrived(x))return toast('⏳ لسه وقت الصلاة ما دخلش');let k=dayKey(currentDate),d=XEX(k);d.n=d.n||{};d.n[x]=d.n[x]===v?undefined:v;XSX(k,d);renderTracking()}
@@ -489,8 +489,9 @@ function setQy(v){if(!prayerTimeArrived('isha'))return toast('⏳ لسه وقت�
 function qAdjust(k){let q=XU().quran;if(!q)return'';let rs=[];for(let i=0;i<5;i++){let dt=new Date(k+'T00:00:00');dt.setDate(dt.getDate()-i);let kk=dayKey(dt);if(kk<(q.since||'0000'))return'';let r=XEX(kk).q;if(r===undefined)return'';rs.push(r)}
  let up=rs.every(r=>r>q.n),dn=rs.every(r=>r<q.n);if(!up&&!dn)return'';let avg=rs.reduce((a,b)=>a+b,0)/5,nn=up?Math.ceil(avg):Math.max(1,Math.floor(avg));if(nn===q.n)return'';
  let nx=new Date(k+'T00:00:00');nx.setDate(nx.getDate()+1);XUP(x=>{x.quran.n=nn;x.quran.since=dayKey(nx)});return(up?'📈 وردك زاد لـ ':'📉 وردك قل لـ ')+nn+' '+QU[q.u]+' يوميًا'}
-function saveQTarget(){let n=+$('qN').value,u=$('qU').value;if(!(n>0))return toast('اكتب عدد صح');XUP(x=>x.quran={n,u,since:dayKey(new Date())});renderTracking();toast('تم حفظ الورد ✅')}
-function saveQRead(){let v=$('qR').value;if(v==='')return toast('اكتب العدد');let k=dayKey(currentDate),d=XEX(k);d.q=+v;XSX(k,d);document.activeElement.blur();let m=k===dayKey(new Date())?qAdjust(k):'';renderTracking();toast(m||'تم الحفظ ✅')}
+function saveQTarget(){let n=+$('qN').value,u=$('qU').value;if(!(n>0))return toast('اكتب عدد صح');XUP(x=>x.quran={n,u,since:dayKey(new Date())});localStorage.removeItem('qSetT');renderTracking();toast('تم حفظ الورد ✅')}
+function saveQRead(){let v=$('qR').value;if(v==='')return toast('اكتب العدد');let k=dayKey(currentDate),d=XEX(k),td=k===dayKey(new Date());d.q=+v;XSX(k,d);document.activeElement.blur();
+ let kmsg=td&&khGet()&&d.kh==='n'&&Q_PS?khFromRead(+v,(XU().quran||{u:'pages'}).u):'',m=td?qAdjust(k):'';renderTracking();qRenderK();toast(kmsg||m||'تم الحفظ ✅')}
 function resetQ(){XUP(x=>delete x.quran);renderTracking()}
 function fillAcc(){let u=XU();if(!u.name)return;if(!u.created)XUP(x=>x.created=Date.now());$('acName').value=u.name;$('acAge').value=u.age||'';$('acGender').value=u.gender||'man';$('acPass').value='';
  $('acGoals').innerHTML=GOALS.map(g=>`<button type="button" class="xb ${(u.goals||[]).includes(g)?'on2':''}" data-sg2="${g}">${g}</button>`).join('');
@@ -532,7 +533,13 @@ $('siGo').onclick=async()=>{let n=$('siName').value.trim(),p=$('siPass').value,e
  try{let cr=await FB.auth.signInWithEmailAndPassword(await mkEmail(n),p);await pullApply(cr.user);e.textContent='';afterLogin();toast('أهلًا '+XU().name+' 🌙')}
  catch(er){e.textContent=/invalid|wrong|not-found/.test(er.code||'')?'الاسم أو كلمة المرور غلط':'مشكلة في الاتصال، حاول تاني'}
  busy=false};
-$('logoutBtn').onclick=async()=>{clearTimeout(pushT);try{await pushNow()}catch(e){}cloudOn=false;try{await FB.auth.signOut()}catch(e){}[...Object.keys(storeObj()),'rafiq_users','rafiq_session','rafiq_uid','rafiq_pushed'].forEach(k=>_ri.call(localStorage,k));location.reload()};
+let outBusy=false;const wait=ms=>new Promise(r=>setTimeout(r,ms));
+$('logoutBtn').onclick=async()=>{if(outBusy)return;outBusy=true;const btn=$('logoutBtn'),reset=()=>{outBusy=false;btn.disabled=false;btn.textContent='تسجيل الخروج'};btn.disabled=true;btn.textContent='⏳ جاري الحفظ...';clearTimeout(pushT);
+ let before=localStorage.getItem('rafiq_pushed'),ok=true;
+ try{if(FB.auth.currentUser&&cloudOn){await Promise.race([pushNow(),wait(5000)]);ok=localStorage.getItem('rafiq_pushed')!==before}}catch(e){ok=false}
+ if(!ok&&!confirm('⚠️ ماقدرتش أحفظ آخر تعديلاتك على السيرفر (النت ضعيف؟). لو خرجت دلوقتي ممكن تضيع. تخرج برضه؟'))return reset();
+ cloudOn=false;try{await Promise.race([FB.auth.signOut(),wait(3000)])}catch(e){}
+ [...Object.keys(storeObj()),'rafiq_users','rafiq_session','rafiq_uid','rafiq_pushed'].forEach(k=>_ri.call(localStorage,k));location.reload()};
 FB.auth.onAuthStateChanged(async u=>{if(busy)return;
  if(!u){cloudOn=false;if(localStorage.getItem('rafiq_session')){localStorage.removeItem('rafiq_session');showAuth('auHome')}return}
  if(localStorage.getItem('rafiq_uid')===u.uid&&localStorage.getItem('rafiq_session')){afterLogin();checkCloud();return}
@@ -578,12 +585,44 @@ function qLoad(){if(Q_A)return Promise.resolve(Q_A);if(Q_P)return Q_P;
 function qJuz(i){let j=0;for(let x=0;x<Q_JI.length;x++)if(Q_JI[x]<=i)j=x;return j+1}
 function khGet(){try{return JSON.parse(localStorage.getItem('khatma'))||null}catch(e){return null}}
 function khSet(k){k?localStorage.setItem('khatma',JSON.stringify(k)):localStorage.removeItem('khatma')}
+const KPPU={pages:1,juz:20,quarter:604/240};
+const fN=n=>String(Math.round(n*10)/10);
+function khLen(p){return(p<604?Q_PS[p]:6236)-Q_PS[p-1]}
+function khPgOfPos(pos){if(pos<0)return 0;let p=qPgOf(pos);return(p-1)+(pos+1-Q_PS[p-1])/khLen(p)}
+function khPosOfPg(pg){if(pg<=0)return-1;if(pg>=604)return 6235;let p=Math.floor(pg),f=pg-p;if(f<1e-6)return Q_PS[p]-1;let n=Math.max(1,Math.round(f*khLen(p+1)));return Q_PS[p]+n-1}
+function khTxt(i){let a=Q_A[i];return'سورة '+Q_NAMES[a[0]-1]+' آية '+a[1]+' (ص '+qPgOf(i)+')'}
+function khPlan(){let k=khGet();if(!k||!Q_PS)return null;let today=dayKey(new Date());
+ if(!k.base||k.base.d!==today){k.base={d:today,pos:k.pos,pg:khPgOfPos(k.pos)};khSet(k)}
+ let b=k.base,el=Math.floor((new Date(today+'T00:00:00')-new Date(k.start+'T00:00:00'))/864e5),left=k.days-el,late=left<1,dl=Math.max(1,left),rem=604-b.pg,
+ T=dl===1?Math.max(1,Math.ceil(rem-1e-6)):Math.max(1,Math.round(rem/dl)),E=Math.min(604,Math.max(1,Math.round(b.pg+T))),endPos=E>=604?6235:Q_PS[E]-1,startPos=Math.min(6235,b.pos+1),
+ pg=khPgOfPos(k.pos),req=khPgOfPos(endPos)-b.pg;
+ return{k,b,T,E,dl,left,late,endPos,startPos,pg,req,readNow:Math.max(0,pg-b.pg),remain:Math.max(0,khPgOfPos(endPos)-pg),done:k.pos>=endPos,init:Math.max(1,Math.round(604/k.days))}}
+function khFinish(){localStorage.setItem('khCount',(+localStorage.getItem('khCount')||0)+1);khSet(null);toast('🎉 ما شاء الله! ختمت القرآن، تقبّل الله منك')}
+function khApply(np){let k=khGet();if(!k)return false;np=Math.max(-1,Math.min(6235,np));k.pos=np;khSet(k);if(np>=0)localStorage.setItem('qBm',np);if(np>=6235){khFinish();return true}return false}
 function qRenderK(){let box=$('khCard');if(!box)return;let k=khGet(),cnt=+localStorage.getItem('khCount')||0,h='';
- if(!k)h=`<div class="card"><h3>📿 ختمة القرآن</h3><p class="xs">اختار المدة اللي عايز تختم فيها، وأنا هحسبلك ورد كل يوم.</p><select id="khDays" class="ai">${[15,30,60,90,180,365].map(d=>`<option value="${d}"${d===30?' selected':''}>${d} يوم</option>`).join('')}</select><button class="xb" style="width:100%" onclick="khStart()">🚀 ابدأ الختمة</button>${cnt?`<p class="xs">✅ ختمات مكتملة: ${cnt}</p>`:''}</div>`;
- else{let tot=6236,read=k.pos+1,pct=Math.floor(read/tot*1000)/10,today=dayKey(new Date()),rt=(k.log||{})[today]||0,el=Math.floor((new Date(today+'T00:00:00')-new Date(k.start+'T00:00:00'))/864e5),left=k.days-el,late=left<1,dl=Math.max(1,left),tg=Math.ceil((tot-read+rt)/dl),need=Math.max(0,tg-rt),pg=n=>(n*604/tot).toFixed(1).replace(/\.0$/,''),where='';
-  if(Q_A&&Q_PS&&k.pos>=0){let a=Q_A[k.pos];where=`<p class="xs">📍 آخر مكان: سورة ${Q_NAMES[a[0]-1]} آية ${a[1]} · صفحة ${qPgOf(k.pos)} من 604 · الجزء ${qJuz(k.pos)}</p>`}
-  h=`<div class="card"><h3>📿 ختمة القرآن${cnt?' · ختمات مكتملة: '+cnt:''}</h3><div class="lvl-bar" style="height:12px"><div class="lvl-fill" style="width:${pct}%"></div></div><p class="xs">${pct}% · قرأت ${read} من ${tot} آية</p>${where}<div class="xc" style="margin:8px 0">🎯 ورد النهاردة: حوالي ${tg} آية (≈ ${pg(tg)} صفحة)<br>✅ قرأت النهاردة: ${rt} آية · متبقي: ${need} آية</div><p class="xs">⏳ باقي ${late?0:left} يوم من ${k.days}${late?' — متأخر عن الخطة، الورد اتحسب على يوم واحد':''}</p><button class="xb" style="width:100%" onclick="khContinue()">▶ كمّل القراءة</button><button class="xl" onclick="khCancel()">إلغاء الختمة</button></div>`}
+ if(!k)h=`<div class="card"><h3>📿 ختمة القرآن</h3><p class="xs">اختار المدة اللي عايز تختم فيها، وأنا هحسبلك ورد كل يوم (من فين لفين).</p><select id="khDays" class="ai">${[15,30,60,90,180,365].map(d=>`<option value="${d}"${d===30?' selected':''}>${d} يوم</option>`).join('')}</select><button class="xb" style="width:100%" onclick="khStart()">🚀 ابدأ الختمة</button>${cnt?`<p class="xs">✅ ختمات مكتملة: ${cnt}</p>`:''}</div>`;
+ else{let pl=khPlan(),pct=Math.floor((k.pos+1)/6236*1000)/10,body='';
+  if(!pl)body='<p class="xs">⏳ جاري تجهيز خطة اليوم...</p>';
+  else{let nx=pl.k.pos<6235?khTxt(pl.k.pos+1):'',ay=pl.endPos-pl.b.pos,note=pl.late?'⚠️ متأخر عن الخطة، الباقي كله على النهاردة':pl.T>pl.init+1?'📈 الورد زاد عشان اللي فات':pl.T<pl.init-1?'📉 الورد قل عشان قرأت زيادة':'';
+   body=`<div class="xc" style="margin:8px 0">🎯 <b>ورد النهاردة: ${pl.T} صفحة</b> (≈ ${ay} آية)<br>📖 من: ${khTxt(pl.startPos)}<br>🏁 إلى: نهاية ${khTxt(pl.endPos)}<br>✅ قرأت: ${fN(pl.readNow)} صفحة · ${pl.done?'🎉 خلصت ورد النهاردة':'🔜 متبقي: '+fN(pl.remain)+' صفحة'}</div>${pl.done?'':`<p class="xs">📍 كمّل من: ${nx}</p>`}<p class="xs">⏳ باقي ${pl.late?0:pl.left} يوم من ${k.days}${note?' · '+note:''}</p>`}
+  h=`<div class="card"><h3>📿 ختمة القرآن${cnt?' · ختمات مكتملة: '+cnt:''}</h3><div class="lvl-bar" style="height:12px"><div class="lvl-fill" style="width:${pct}%"></div></div><p class="xs">${pct}% من الختمة${pl?' · '+fN(pl.pg)+' من 604 صفحة':''}</p>${body}<button class="xb" style="width:100%" onclick="khContinue()">▶ كمّل القراءة</button><button class="xl" onclick="khCancel()">إلغاء الختمة</button></div>`}
  box.innerHTML=h}
+function quranCard(q,d,k){let kh=khGet(),useK=!!kh&&k===dayKey(new Date()),bt=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`;
+ if(!q&&(!useK||localStorage.getItem('qSetT')))return`<div class="xc"><b>📖 ورد القرآن</b><p class="xs">حدد وردك اليومي (هتتحاسب عليه):</p><input class="ai" id="qN" type="number" min="1" placeholder="العدد"><select class="ai" id="qU">${Object.entries(QU).map(([a,c])=>`<option value="${a}">${c}</option>`).join('')}</select><button class="xb" style="width:100%" onclick="saveQTarget()">حفظ الورد</button></div>`;
+ let u=q?q.u:'pages',h='<div class="xc"><b>📖 ورد القرآن</b>'+(q?`<p class="xs">وردك: ${q.n} ${QU[q.u]} يوميًا<br><small>لو زدت أو قللت 5 أيام ورا بعض وردك بيتعدّل لوحده</small></p>`:'<p class="xs">مفيش ورد يومي محدد <button class="xl" onclick="localStorage.setItem(\'qSetT\',1);renderTracking()">حدد ورد</button></p>');
+ let inp=`<input class="ai" id="qR" type="number" min="0" step="any" placeholder="قرأت كام ${QU[u]} النهاردة؟" value="${d.q??''}"><button class="xb" style="width:100%" onclick="saveQRead()">حفظ</button>`;
+ if(useK){if(!Q_PS){qLoad().then(()=>renderTracking()).catch(()=>{});return h+'<p class="xs">⏳ جاري تجهيز الختمة...</p></div>'}
+  let pl=khPlan();h+=`<div class="xs" style="margin-top:6px">📿 ورد الختمة النهاردة: <b>${pl.T} صفحة</b><br>من ${khTxt(pl.startPos)}<br>إلى نهاية ${khTxt(pl.endPos)}</div><div class="xr"><span>هل مشيت على خطة الختمة؟</span><span>${bt(d.kh==='y','khYes()','✅ آه')}${bt(d.kh==='n','khNo()','❌ لا')}</span></div>`;
+  if(d.kh==='y')h+='<p class="xs">✅ اتحسبت في الختمة</p>';else if(d.kh==='n')h+=`<p class="xs">اكتب قرأت قد إيه (لو أقل بيتزود على الأيام الجاية، ولو أكتر بيتخصم):</p>`+inp}
+ else h+=inp;
+ if(q)h+='<button class="xl" onclick="resetQ()">تغيير الورد</button>';return h+'</div>'}
+function khToUnit(u,pages,ayat){return u==='ayah'?ayat:Math.round(pages/KPPU[u]*10)/10}
+function khYes(){let pl=khPlan();if(!pl)return toast('⏳ استنى ثواني لحد ما الختمة تجهز');let dk=dayKey(new Date()),d=XEX(dk),np=Math.max(pl.k.pos,pl.endPos),read=khPgOfPos(np)-pl.b.pg,q=XU().quran;
+ d.kh='y';if(q)d.q=khToUnit(q.u,read,np-pl.b.pos);XSX(dk,d);let fin=khApply(np),m=q?qAdjust(dk):'';renderTracking();qRenderK();if(!fin)toast(m||'✅ اتحسبت في الختمة')}
+function khNo(){let dk=dayKey(new Date()),d=XEX(dk);d.kh='n';XSX(dk,d);renderTracking()}
+function khFromRead(x,u){let pl=khPlan();if(!pl)return'';let b=pl.b,np=x<=0?b.pos:u==='ayah'?Math.min(6235,b.pos+Math.round(x)):khPosOfPg(b.pg+x*KPPU[u]),read=khPgOfPos(np)-b.pg;
+ if(khApply(np))return'';let rem=604-khPgOfPos(np),dt=pl.dl-1,t2=dt<1?Math.ceil(rem):Math.max(1,Math.round(rem/dt)),diff=read-pl.req;
+ return diff<-0.5?`⚠️ قرأت ${fN(read)} من ${fN(pl.req)} صفحة، ${fN(-diff)} اتزودوا على الأيام الجاية (ورد بكرة ≈ ${t2})`:diff>0.5?`🌟 قرأت زيادة ${fN(diff)} صفحة، اتخصموا من الأيام الجاية (ورد بكرة ≈ ${t2})`:'✅ اتحسبت في الختمة'}
 function khStart(){khSet({start:dayKey(new Date()),days:+$('khDays').value,pos:-1,log:{}});qRenderK();toast('بدأت الختمة 📿 بالتوفيق')}
 function khCancel(){if(confirm('تلغي الختمة الحالية؟'))khSet(null),qRenderK()}
 function khContinue(){let k=khGet();qOpenIdx(k?Math.min(k.pos+1,6235):0)}
@@ -613,8 +652,7 @@ function qStep(d){if(Q_PS)qGoPage(Q_PAGE+d)}
 $('qBody').addEventListener('click',e=>{let el=e.target.closest('.qa');if(!el)return;document.querySelectorAll('.qa.sel').forEach(x=>x.classList.remove('sel'));let i=+el.dataset.i;if(Q_SEL===i){Q_SEL=null;$('qBar').style.display='none';return}Q_SEL=i;el.classList.add('sel');$('qBarT').textContent='سورة '+Q_NAMES[Q_A[i][0]-1]+' — آية '+Q_A[i][1];$('qBar').style.display='flex'});
 function qMark(){let i=Q_SEL;if(i===null)return;localStorage.setItem('qBm',i);
  document.querySelectorAll('.qa.bm').forEach(x=>x.classList.remove('bm'));let el=$('qBody').querySelector('[data-i="'+i+'"]');if(el)el.classList.add('bm');
- let k=khGet();if(k){let old=k.pos;k.pos=i;if(i>old){k.log=k.log||{};let t=dayKey(new Date());k.log[t]=(k.log[t]||0)+(i-old)}
-  if(i>=6235){localStorage.setItem('khCount',(+localStorage.getItem('khCount')||0)+1);khSet(null);qRenderK();toast('🎉 ما شاء الله! ختمت القرآن، تقبّل الله منك');return}khSet(k)}
+ let k=khGet();if(k&&khApply(i)){qRenderK();return}
  toast('📍 تم حفظ مكانك'+(k?' في الختمة':''))}
 function qClose(){$('qReader').style.display='none';document.body.style.overflow='';renderQuran()}
 function qFont(d){qFs=Math.max(16,Math.min(48,qFs+d));localStorage.setItem('qFs',qFs);let t=document.querySelector('.qtxt');if(t)t.style.fontSize=qFs+'px'}
