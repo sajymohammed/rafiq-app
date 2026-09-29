@@ -27,7 +27,6 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .third-box{background:linear-gradient(135deg,rgba(120,80,255,.18),rgba(120,80,255,.06));border:1px solid rgba(150,120,255,.4);border-radius:16px;padding:14px;text-align:center;margin-bottom:14px}.third-box .tv{font-size:26px;font-weight:800;color:#b9a5ff}.third-box .tl{font-size:13px;opacity:.8}
 .warn-banner{display:none;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.5);border-radius:12px;padding:10px 12px;margin-bottom:14px;font-size:12px;line-height:1.7}.warn-x{background:transparent;border:0;color:var(--tx)}
 .mtable-wrap{max-height:280px;overflow:auto}.mtable{width:100%;border-collapse:collapse;font-size:12px}.mtable th{color:#ffd700;padding:6px 4px;background:#1b2b33;position:sticky;top:0}.mtable td{text-align:center;padding:7px 4px;border-bottom:1px solid rgba(var(--fg),.07)}.mtable tr.today td{background:rgba(124,252,154,.12);color:var(--ac);font-weight:700}
-.compass-wrap{text-align:center}.compass{width:250px;height:250px;border-radius:50%;margin:10px auto;position:relative;background:radial-gradient(circle,rgba(var(--fg),.09),rgba(var(--fg),.02));border:2px solid rgba(var(--fg),.25)}.cardn{position:absolute;font-weight:800;color:rgba(var(--fg),.6)}.nN{top:8px;left:50%;transform:translateX(-50%)}.nS{bottom:8px;left:50%;transform:translateX(-50%)}.nE{right:12px;top:50%;transform:translateY(-50%)}.nW{left:12px;top:50%;transform:translateY(-50%)}.q-arrow{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:52px;transition:.4s}.q-deg{font-size:15px;font-weight:700;color:var(--ac)}.q-status{font-size:12px;opacity:.65;margin-top:6px}
 .bars{display:flex;align-items:flex-end;gap:6px;height:130px;padding-top:8px}.bar-w{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}.bar{width:100%;background:linear-gradient(180deg,var(--ac),var(--ac2));border-radius:6px 6px 2px 2px;min-height:3px}.bar-l{font-size:10px;opacity:.65;margin-top:6px;white-space:nowrap}.bar-v{font-size:10px;color:#ffd700;margin-bottom:3px}
 .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:45;display:flex;background:#16242b;border-top:1px solid rgba(var(--fg),.12);max-width:480px;margin:auto}.tab{flex:1;padding:10px 3px 13px;text-align:center;color:rgba(var(--fg),.55);font-size:11px;border:0;background:transparent;font-family:inherit}.tab .ti{font-size:20px;display:block;margin-bottom:2px}.tab.on{color:var(--ac);font-weight:700}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:50}.overlay.open{display:flex}.sheet{background:#1b2b33;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:18px 16px 26px;animation:up .25s ease;max-height:88vh;overflow-y:auto}@keyframes up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}.sheet h2{text-align:center;font-size:18px}.sheet .sub{text-align:center;font-size:13px;opacity:.6;margin:4px 0 14px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{display:flex;align-items:center;gap:8px;background:rgba(var(--fg),.07);border:2px solid transparent;border-radius:14px;padding:11px;cursor:pointer;color:var(--tx);font-family:inherit;font-size:13px;text-align:right}.opt.selected{border-color:var(--ac)}.opt .ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}.close-row,.frow{display:flex;gap:10px;margin-top:15px}.close-row button,.frow button{flex:1;padding:13px;border:0;border-radius:14px;font-family:inherit;font-weight:700}.btn-clear{background:rgba(255,80,80,.2);color:#ff9a9a}.btn-done,.f-save{background:var(--ac3);color:var(--tx)}.f-back{background:rgba(var(--fg),.12);color:var(--tx)}
@@ -43,7 +42,11 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .xb.on2,.thm.on2{outline:2px solid var(--ac);background:rgba(var(--fg),.28)}.xl{background:none;border:0;color:var(--ac);font-family:inherit;text-decoration:underline;cursor:pointer}
 .ai{display:block;width:100%;margin:8px 0;padding:12px;border-radius:12px;border:1px solid rgba(var(--fg),.25);background:rgba(var(--fg),.1);color:var(--tx);font-family:inherit;font-size:15px;text-align:right}.ai option{color:#000}
 .thm i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:6px;vertical-align:middle}
-.dial{position:absolute;inset:0;transition:transform .12s linear}.q-mark{position:absolute;inset:0}.q-mark span{position:absolute;top:-2px;left:50%;transform:translateX(-50%);font-size:34px;line-height:1}.c-ptr{position:absolute;top:-22px;left:50%;transform:translateX(-50%);color:var(--ac);font-size:20px;z-index:2}.compass.ok{box-shadow:0 0 22px var(--ac);border-color:var(--ac)}
+.points-hero{-webkit-touch-callout:none;touch-action:pan-y}
+.qs{display:flex;align-items:center;gap:12px;width:100%;background:rgba(var(--fg),.07);border:1px solid rgba(var(--fg),.08);border-radius:14px;padding:11px 12px;margin-bottom:8px;color:var(--tx);font-family:inherit;font-size:16px;text-align:right;cursor:pointer}.qnum{background:var(--ac3);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.qr{position:fixed;top:0;bottom:0;left:0;right:0;max-width:480px;margin:auto;z-index:60;flex-direction:column;background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3))}.qh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:rgba(0,0,0,.25)}.qt{font-weight:800;color:#ffd700;font-size:17px}.qb{flex:1;overflow-y:auto;padding:12px 16px 90px}
+.qtxt{font-family:'Amiri Quran','Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif;line-height:2.4;text-align:justify}.qbis{text-align:center;font-family:'Amiri Quran','Amiri','Scheherazade New','Noto Naskh Arabic',serif;font-size:24px;color:#ffd700;margin:6px 0 14px}.qa{border-radius:8px;padding:0 2px;cursor:pointer}.qa.sel{background:rgba(255,215,0,.25)}.qa.tg{background:rgba(var(--fg),.14)}.qa.bm{border-bottom:2px solid var(--ac)}.qe{color:#ffd700;font-size:.75em}.qnav{display:flex;justify-content:space-between;margin:18px 0}
+.qbar{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px 16px;background:#1b2b33;border-top:1px solid rgba(var(--fg),.15)}.qbar span{font-size:14px}.qbar button{border:0;border-radius:14px;padding:11px 16px;font-family:inherit;font-weight:700}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -85,13 +88,6 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
     <h3 id="monthTitle">📅 جدول الشهر</h3>
     <div class="mtable-wrap"><table class="mtable"><thead><tr><th>اليوم</th><th>الفجر</th><th>الشروق</th><th>الظهر</th><th>العصر</th><th>المغرب</th><th>العشاء</th></tr></thead><tbody id="monthBody"></tbody></table></div>
   </div>
-
-  <div class="card compass-wrap">
-    <h3>🕋 اتجاه القبلة</h3>
-    <div class="compass"><div class="c-ptr">▼</div><div class="dial" id="dial"><span class="cardn nN">ش</span><span class="cardn nS">ج</span><span class="cardn nE">ق</span><span class="cardn nW">غ</span><div class="q-mark" id="qMark"><span id="qEmoji">🕋</span></div></div></div>
-    <div class="q-deg" id="qDeg"></div><div class="q-status" id="qStatus">فعّل البوصلة لتحريك السهم مع اتجاه الهاتف</div>
-    <button class="mini-btn" id="compassBtn" style="margin-top:10px">🧭 تفعيل البوصلة</button>
-  </div>
 </div>
 
 <!-- التتبع: التسجيل -->
@@ -100,7 +96,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 
   <div class="pts-note">⚠️ هذه النقاط لا تعني أن هذا هو عدد الحسنات التي سوف تأخذها، إنما هو عدد تقريبي.</div>
   <div class="points-hero">
-    <div class="trophy">🏆</div><div class="val" id="totalPts">0</div><div class="lbl">نقاطك اليوم</div>
+    <div class="trophy">🏆</div><div class="val" id="totalPts">0</div><div class="lbl" id="ptsLbl">نقاطك اليوم</div><div class="lvl-next" style="margin-top:2px">👆 اضغط مطولًا للتبديل بين نقاط اليوم ونقاط الحساب</div>
     <div class="lvl-row"><span class="lvl-badge" id="lvlBadge">المستوى 1</span><div class="lvl-bar"><div class="lvl-fill" id="lvlFill"></div></div></div>
     <div class="lvl-next" id="lvlNext"></div>
   </div>
@@ -118,6 +114,16 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <div class="hint">اضغط على دائرة الصلاة لاختيار حالتها ✨</div>
 </div>
 
+<!-- القرآن -->
+<div class="page" id="page-quran">
+  <header><h1>📖 القرآن الكريم</h1><div class="bism">اقرأ وارتقِ ورتّل</div></header>
+  <div id="khCard"></div>
+  <div class="card"><h3>📚 السور</h3>
+    <input class="ai" id="qSearch" placeholder="🔍 ابحث عن سورة (اسم أو رقم)" style="margin-top:0">
+    <div id="qBm"></div><div id="qList"></div></div>
+  <div class="hint">نص المصحف (الرسم العثماني) من مشروع تنزيل — tanzil.net</div>
+</div>
+
 <!-- الإحصائيات -->
 <div class="page" id="page-stats">
   <header><h1>📊 الإحصائيات</h1></header>
@@ -126,7 +132,10 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
     <div class="stat"><div class="num" id="mTot">0</div><div class="lbl">مجموع النقاط</div></div>
     <div class="stat"><div class="num" id="mAvg">0</div><div class="lbl">متوسط صلوات/يوم</div></div>
     <div class="stat"><div class="num" id="mFull">0</div><div class="lbl">أيام مكتملة</div></div>
-  </div><div class="bars" id="monthBars"></div></div>
+  </div><div class="bars" id="monthBars"></div><div class="hint" style="margin:6px 0 0">كل عمود = 5 أيام</div></div>
+  <div class="card"><h3>🧾 تفصيل العبادات</h3>
+    <div class="seg" id="stSeg"><button data-r="7">أسبوع</button><button data-r="30" class="on">شهر</button><button data-r="365">سنة</button></div>
+    <div id="stBreak"></div></div>
   <div class="card"><h3>📆 السنة الحالية</h3><div class="bars" id="yearBars"></div></div>
 </div>
 
@@ -175,6 +184,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 <nav class="tabbar">
   <button class="tab on" data-page="home"><span class="ti">🕌</span>الرئيسية</button>
   <button class="tab" data-page="tracking"><span class="ti">📋</span>التتبع</button>
+  <button class="tab" data-page="quran"><span class="ti">📖</span>القرآن</button>
   <button class="tab" data-page="stats"><span class="ti">📊</span>الإحصائيات</button>
   <button class="tab" data-page="settings"><span class="ti">⚙️</span>الإعدادات</button>
 </nav>
@@ -187,6 +197,12 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <div id="detail" style="display:none"><div id="qArea"></div><div class="pts-preview" id="ptsPrev" style="display:none"></div><div class="frow"><button class="f-back" id="qBack">رجوع</button><button class="f-save" id="qSave">حفظ ✓</button></div></div>
   <div class="close-row" id="mainRow"><button class="btn-clear" id="clearSel">إلغاء التحديد</button><button class="btn-done" id="closeSheet">تم</button></div>
 </div></div>
+
+<div class="qr" id="qReader" style="display:none">
+  <div class="qh"><button class="mini-btn" onclick="qClose()">✕ رجوع</button><div id="qTitle" class="qt"></div><div><button class="mini-btn" onclick="qFont(-2)">A−</button> <button class="mini-btn" onclick="qFont(2)">A+</button></div></div>
+  <div class="qb" id="qBody"></div>
+  <div class="qbar" id="qBar" style="display:none"><span id="qBarT"></span><button class="btn-done" onclick="qMark()">📍 وقفت هنا</button></div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -241,7 +257,7 @@ function renderLevel(){
  let total=totalAllDays(),lvl=1;for(let i=0;i<LEVELS.length;i++)if(total>=LEVELS[i])lvl=i+1;
  $('lvlBadge').textContent='المستوى '+lvl;
  if(lvl>=LEVELS.length){$('lvlFill').style.width='100%';$('lvlNext').textContent='🏆 وصلت أعلى مستوى!'}
- else{let a=LEVELS[lvl-1],b=LEVELS[lvl];$('lvlFill').style.width=Math.min(100,Math.round((total-a)/(b-a)*100))+'%';$('lvlNext').textContent='باقي '+(b-total)+' نقطة للمستوى '+(lvl+1)}
+ else{let a=LEVELS[lvl-1],b=LEVELS[lvl];$('lvlFill').style.width=Math.max(0,Math.min(100,Math.round((total-a)/(b-a)*100)))+'%';$('lvlNext').textContent='باقي '+(b-total)+' نقطة للمستوى '+(lvl+1)}
  localStorage.setItem('lastLevel',lvl)
 }
 
@@ -289,7 +305,7 @@ function renderTracking(){
   row.innerHTML=`<div class="circle ${sel?'filled ':''}${locked?'locked':''}" data-id="${p.id}" style="${sel?`background:${sel.bg};border-color:${sel.bg}`:''}">${icon}</div><div class="p-info"><div class="p-name">${p.name}</div><div class="p-status">${status}</div><div class="p-pts">${rec?'⭐ '+rec.points+' نقطة':''}</div></div>`;
   wrap.appendChild(row);
  });
- total+=extraPts(dayKey(currentDate))+PRAYERS.reduce((a,p)=>a+((data[p.id]&&data[p.id].opt==='missed')?(data[p.id].points||0):0),0);renderExtras();$('totalPts').textContent=total;$('doneCount').textContent=done+'/5';$('mosqueCount').textContent=mosque;$('homeCount').textContent=home;
+ total+=extraPts(dayKey(currentDate))+PRAYERS.reduce((a,p)=>a+((data[p.id]&&data[p.id].opt==='missed')?(data[p.id].points||0):0),0);renderExtras();$('totalPts').textContent=ptsMode()==='all'?totalAllDays():total;$('ptsLbl').textContent=ptsMode()==='all'?'نقاط حسابك (من أول يوم لحد دلوقتي)':'نقاطك اليوم';$('doneCount').textContent=done+'/5';$('mosqueCount').textContent=mosque;$('homeCount').textContent=home;
  $('mosqueStat').style.display=getGender()==='woman'?'none':'block';
  $('multHint').textContent=getGender()==='woman'?'صلاتك في البيت: أي صلاة × 2 · العشاء × 4 · الفجر × 5':'الفجر أي نقاط × 3 · العشاء أي نقاط × 2';
  renderLevel();attachPressHandlers();
@@ -384,7 +400,7 @@ function renderTimes(c){
  P_NAMES.forEach(([k,n])=>{let row=document.createElement('div');row.className='trow'+(k==='Sunrise'?' sun':'');let m=toMin(c.timings[k])+(offs[k]||0),right=fmtMin(m);if(editModeOn)right=`<button class="adj" style="width:30px" data-k="${k}" data-d="-1">−</button> ${right} <button class="adj" style="width:30px" data-k="${k}" data-d="1">+</button>`;row.innerHTML=`<span class="pn">${n}</span><span class="pt">${right}</span>`;list.appendChild(row)});
  list.querySelectorAll('.adj').forEach(b=>b.onclick=()=>{let o=loadOffsets();o[b.dataset.k]=(o[b.dataset.k]||0)+(+b.dataset.d);localStorage.setItem('poffsets',JSON.stringify(o));renderTimes(c)});
  let mag=toMin(c.timings.Maghrib)+(offs.Maghrib||0),faj=toMin(c.timings.Fajr)+(offs.Fajr||0)+1440,third=mag+Math.round((faj-mag)*2/3);$('thirdBox').style.display='block';$('thirdTime').textContent=fmt12(String(Math.floor(third/60)%24).padStart(2,'0')+':'+String(third%60).padStart(2,'0'));
- if(typeof c.lat==='number'){$('qDeg').textContent='القبلة على '+Math.round(qiblaFrom(c.lat,c.lon))+'° من الشمال';fetchMonth(c.lat,c.lon)}
+ if(typeof c.lat==='number'){fetchMonth(c.lat,c.lon)}
 }
 $('locChange').onclick=()=>{$('cityForm').style.display='block';forceCity=true};
 $('citySave').onclick=()=>{let c=$('inCity').value.trim();if(!c)return;localStorage.setItem('city',c);localStorage.setItem('country',$('inCountry').value.trim());ensureTimes(true)};
@@ -398,19 +414,6 @@ function updateSrcUI(){$('manualForm').style.display=manualOn()?'block':'none';l
 $('srcSel').onchange=()=>{localStorage.setItem('timesSource',$('srcSel').value==='manual'?'manual':'auto');updateSrcUI();ensureTimes(true)};
 $('mtSave').onclick=()=>{let mt={},ok=true;['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(k=>{let v=$('mt_'+k).value;if(!v)ok=false;else mt[k]=v});if(!ok)return toast('كمّل الأوقات الستة الأول');localStorage.setItem('manualTimes',JSON.stringify(mt));ensureTimes(true);toast('تم حفظ المواقيت اليدوية ✅')};
 
-const KAABA={lat:21.4225,lon:39.8262};let qiblaDeg=0,hasQ=false,unw=null,gotAbs=false,lastVib=0;
-function qiblaFrom(lat,lon){let p1=lat*Math.PI/180,p2=KAABA.lat*Math.PI/180,dl=(KAABA.lon-lon)*Math.PI/180,t=Math.atan2(Math.sin(dl),Math.cos(p1)*Math.tan(p2)-Math.sin(p1)*Math.cos(dl));qiblaDeg=(t*180/Math.PI+360)%360;hasQ=true;$('qMark').style.transform='rotate('+qiblaDeg+'deg)';return qiblaDeg}
-function tiltHeading(a,b,g){const r=Math.PI/180,x=b*r,y=g*r,z=a*r,cY=Math.cos(y),cZ=Math.cos(z),sX=Math.sin(x),sY=Math.sin(y),sZ=Math.sin(z),Vx=-cZ*sY-sZ*sX*cY,Vy=-sZ*sY+cZ*sX*cY;let h=Math.atan(Vx/Vy);if(Vy<0)h+=Math.PI;else if(Vx<0)h+=2*Math.PI;return h*180/Math.PI}
-function setHeading(h){if(unw===null)unw=h;else{let d=((h-(((unw%360)+360)%360)+540)%360)-180;unw+=d*0.25}
- $('dial').style.transform='rotate('+(-unw)+'deg)';$('qEmoji').style.transform='translateX(-50%) rotate('+(unw-qiblaDeg)+'deg)';
- let hn=((unw%360)+360)%360;$('qDeg').textContent=$('qDeg').textContent.split(' | ')[0]+' | اتجاهك: '+Math.round(hn)+'°';let diff=((qiblaDeg-hn+540)%360)-180,ok=hasQ&&Math.abs(diff)<5;$('dial').parentNode.classList.toggle('ok',ok);
- $('qStatus').textContent=!hasQ?'حدد مدينتك أو فعّل الموقع الأول عشان نعرف القبلة':ok?'✅ إنت في اتجاه القبلة':'لف لحد ما 🕋 يوصل لفوق عند السهم ▼ (خلي الموبايل مفرود)';
- if(ok&&Date.now()-lastVib>3000){lastVib=Date.now();try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}}}
-function onOri(e){let h=null;if(e.webkitCompassHeading!=null)h=e.webkitCompassHeading;else if(e.alpha!=null&&(e.absolute||e.type==='deviceorientationabsolute')){gotAbs=true;h=(e.beta!=null&&e.gamma!=null&&Math.abs(e.beta)>65)?tiltHeading(e.alpha,e.beta,e.gamma):(360-e.alpha+360)%360}
- if(h==null||isNaN(h))return;gotAbs=true;setHeading(h)}
-$('compassBtn').onclick=async()=>{try{if(typeof DeviceOrientationEvent!=='undefined'&&DeviceOrientationEvent.requestPermission){if(await DeviceOrientationEvent.requestPermission()!=='granted')return $('qStatus').textContent='لازم تسمح بالوصول للحساسات'}
- $('qStatus').textContent='جاري قراءة الحساس... حرّك الموبايل على شكل رقم 8 للمعايرة';window.addEventListener('deviceorientationabsolute',onOri,true);window.addEventListener('deviceorientation',onOri,true);$('compassBtn').style.display='none';
- setTimeout(()=>{if(!gotAbs){$('qStatus').textContent='الحساس مش بيرد. جرّب متصفح Chrome، وتأكد إن حساس البوصلة شغال في جهازك';$('compassBtn').style.display=''}},2500)}catch(e){$('qStatus').textContent='البوصلة مش مدعومة على المتصفح ده'}};
 
 async function fetchMonth(lat,lon){
  let n=new Date(),key=`pcal_${n.getFullYear()}-${n.getMonth()+1}_${getMethod()}_${getSchool()}_${Number(lat).toFixed(3)}_${Number(lon).toFixed(3)}`,cal;try{cal=JSON.parse(localStorage.getItem(key))}catch(e){}
@@ -425,13 +428,8 @@ $('remMinBtn').onclick=()=>{let i=REM_MINS.indexOf(remindMin());localStorage.set
 
 function dayStats0(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
 function renderBars(el,items){let max=Math.max(...items.map(i=>i.v),1);el.innerHTML='';items.forEach(i=>{let w=document.createElement('div');w.className='bar-w';w.innerHTML=`<div class="bar-v">${i.v||''}</div><div class="bar" style="height:${Math.round(i.v/max*100)}%"></div><div class="bar-l">${i.l}</div>`;el.appendChild(w)})}
-function renderStats(){
- let week=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let s=dayStats(dayKey(d));week.push({v:s.pts,l:d.toLocaleDateString('ar-EG',{weekday:'short'})})}renderBars($('weekBars'),week);
- let mt=0,mc=0,mf=0;for(let i=29;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let s=dayStats(dayKey(d));mt+=s.pts;mc+=s.cnt;if(s.cnt===5)mf++}$('mTot').textContent=mt;$('mAvg').textContent=(mc/30).toFixed(1);$('mFull').textContent=mf;
- let yr=new Date().getFullYear(),months=[];for(let m=0;m<12;m++){let sum=0;for(let k of Object.keys(localStorage))if(k.startsWith('prayers_'+yr+'-'+String(m+1).padStart(2,'0')))try{Object.values(JSON.parse(localStorage.getItem(k))).forEach(r=>sum+=r.points||0)}catch(e){}months.push({v:sum,l:new Date(yr,m,1).toLocaleDateString('ar-EG',{month:'short'})})}renderBars($('monthBars'),months);renderBars($('yearBars'),months)
-}
 
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='stats')renderStats()});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats()});
 
 function showGender(){$('genderOv').style.display='flex'}
 document.querySelectorAll('.g-btn').forEach(b=>b.onclick=()=>{setGender(b.dataset.g);{let s=localStorage.getItem('rafiq_session'),us=USERS();if(s&&us[s]){us[s].gender=b.dataset.g;saveUsers(us)}}$('genderOv').style.display='none';renderTracking();toast('تم حفظ الإعداد ✅')});
@@ -468,15 +466,15 @@ function applyGoals(d){const MQ=/^mosque/,JM=/^(mosque|group|imam_group)/;for(co
  r.points=pts}}
 function hijriDay(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric'}).format(d))}catch(e){return 0}}
 function fastInfo(d){let hd=hijriDay(d),wd=d.getDay(),w=hd>=13&&hd<=15,m=wd===1||wd===4,all=hasG('كل السنن');return{show:w||m,must:(w&&(hasG('الأيام البيض')||all))||(m&&(hasG('الاثنين')||all)),label:(w?'الأيام البيض ('+hd+' هجري)':'')+(w&&m?' + ':'')+(m?(wd===1?'يوم الاثنين':'يوم الخميس'):'')}}
-function extraPts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),t=0,n=d.n||{};
+function extraParts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),n=d.n||{},P={naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0};
  const NP={fajr:20,dhuhr:5,maghrib:5,isha:10};
- for(const x in NP){if(n[x]==='y')t+=NP[x];else if(hasG('النوافل')&&(n[x]==='n'||(past&&!n[x])))t-=2}
- if(d.qy&&d.qy!=='n')t+={2:5,4:10,6:15,8:20}[d.qy]||0;else if(hasG('قيام الليل')&&(d.qy==='n'||(past&&!d.qy)))t-=3;
- let q=u.quran;if(q&&(d.q!==undefined||past)){let r=d.q||0,p=r===0?-3:r<q.n?2:r===q.n?5:8;t+=hasG('القرآن')?p*2:p}
- let f=fastInfo(dt);if(f.show){if(d.f==='y')t+=10;else if(f.must&&(d.f==='n'||(past&&!d.f)))t-=15}
- return t}
+ for(const x in NP){if(n[x]==='y'){P.naf+=NP[x];P.nafC++}else if(hasG('النوافل')&&(n[x]==='n'||(past&&!n[x])))P.naf-=2}
+ if(d.qy&&d.qy!=='n'){P.qy+={2:5,4:10,6:15,8:20}[d.qy]||0;P.qyC++}else if(hasG('قيام الليل')&&(d.qy==='n'||(past&&!d.qy)))P.qy-=3;
+ let q=u.quran;if(q&&(d.q!==undefined||past)){let r=d.q||0,p=r===0?-3:r<q.n?2:r===q.n?5:8;P.q+=hasG('القرآن')?p*2:p;if(r>0)P.qC++}
+ let f=fastInfo(dt);if(f.show){if(d.f==='y'){P.f+=10;P.fC++}else if(f.must&&(d.f==='n'||(past&&!d.f)))P.f-=15}
+ return P}
+function extraPts(k){let P=extraParts(k);return P.naf+P.qy+P.q+P.f}
 function dayStats(k){let s=dayStats0(k);s.pts+=extraPts(k);return s}
-function totalAllDays(){let t=totalAllDays0();for(let k of Object.keys(localStorage))if(k.startsWith('extras_'))t+=extraPts(k.slice(7));return t}
 function renderExtras(){let box=$('extras');if(!box||box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT')return;let k=dayKey(currentDate),d=XEX(k),n=d.n||{},q=XU().quran,f=fastInfo(new Date(k+'T00:00:00')),b=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`,h='';
  h+='<div class="xc"><b>🌙 النوافل</b>'+[['fajr','الفجر',20],['dhuhr','الظهر',5],['maghrib','المغرب',5],['isha','العشاء',10]].map(([x,l,p])=>`<div class="xr"><span>${l} <small>(+${p})</small></span><span>${prayerTimeArrived(x)?b(n[x]==='y',`setNaf('${x}','y')`,'✅ صليت')+b(n[x]==='n',`setNaf('${x}','n')`,'❌ لا'):'<small>⏳ لسه وقتها ما دخلش</small>'}</span></div>`).join('')+'</div>';
  h+=`<div class="xc"><b>🌌 قيام الليل</b>${prayerTimeArrived('isha')?`<div class="xr"><span>${[2,4,6,8].map(x=>b(d.qy===x,`setQy(${x})`,x+' ركعة (+'+{2:5,4:10,6:15,8:20}[x]+')')).join('')}${b(d.qy==='n',"setQy('n')",'❌ لا')}</span></div>`:'<p class="xs">⏳ لسه وقته ما جاش (بعد صلاة العشاء)</p>'}</div>`;
@@ -539,6 +537,78 @@ FB.auth.onAuthStateChanged(async u=>{if(busy)return;
  try{await pullApply(u);afterLogin()}catch(er){}});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cloudOn)checkCloud()});
 }catch(err){FB=null;console.error(err)}}
+
+/* ===== نقاط الحساب + الإحصائيات ===== */
+function ptsMode(){return localStorage.getItem('ptsMode')==='all'?'all':'day'}
+function totalAllDays(){let u=XU(),now=new Date(),first=new Date(u.created||Date.now());
+ for(let k of Object.keys(localStorage)){let m=k.match(/^(?:prayers|extras)_(\d{4}-\d\d-\d\d)$/);if(m){let d=new Date(m[1]+'T00:00:00');if(d<first)first=d}}
+ first.setHours(0,0,0,0);let t=0,n=0;for(let d=new Date(first);d<=now&&n<4000;d.setDate(d.getDate()+1),n++)t+=dayStats(dayKey(d)).pts;return t}
+(function(){let el=document.querySelector('.points-hero'),tm=null,sx=0,sy=0;
+ const cancel=()=>{clearTimeout(tm);tm=null};
+ el.addEventListener('pointerdown',e=>{cancel();sx=e.clientX;sy=e.clientY;tm=setTimeout(()=>{tm=null;localStorage.setItem('ptsMode',ptsMode()==='all'?'day':'all');try{navigator.vibrate&&navigator.vibrate(40)}catch(x){}renderTracking();toast(ptsMode()==='all'?'🏆 نقاط الحساب (من أول يوم)':'📅 نقاط اليوم')},600)});
+ el.addEventListener('pointermove',e=>{if(tm&&(Math.abs(e.clientX-sx)>12||Math.abs(e.clientY-sy)>12))cancel()});
+ ['pointerup','pointerleave','pointercancel'].forEach(v=>el.addEventListener(v,cancel));
+ el.addEventListener('contextmenu',e=>e.preventDefault())})();
+let stRange=30;
+function statRange(days){let r={pr:0,cnt:0,full:0,naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0};
+ for(let i=0;i<days;i++){let d=new Date();d.setDate(d.getDate()-i);let k=dayKey(d),s=dayStats0(k),P=extraParts(k);r.pr+=s.pts;r.cnt+=s.cnt;if(s.cnt===5)r.full++;for(const x of['naf','nafC','qy','qyC','q','qC','f','fC'])r[x]+=P[x]}
+ r.pts=r.pr+r.naf+r.qy+r.q+r.f;return r}
+function renderStats(){
+ let week=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);week.push({v:dayStats(dayKey(d)).pts,l:d.toLocaleDateString('ar-EG',{weekday:'short'})})}renderBars($('weekBars'),week);
+ let m=statRange(30);$('mTot').textContent=m.pts;$('mAvg').textContent=(m.cnt/30).toFixed(1);$('mFull').textContent=m.full;
+ let bk=[];for(let b=5;b>=0;b--){let sum=0,lab;for(let i=b*5;i<b*5+5;i++){let d=new Date();d.setDate(d.getDate()-i);if(i===b*5)lab=String(d.getDate());sum+=dayStats(dayKey(d)).pts}bk.push({v:sum,l:lab})}renderBars($('monthBars'),bk);
+ let now=new Date(),yr=now.getFullYear(),months=[];for(let mo=0;mo<12;mo++){let sum=0,dm=new Date(yr,mo+1,0).getDate();for(let dd=1;dd<=dm;dd++){let d=new Date(yr,mo,dd);if(d>now)break;sum+=dayStats(dayKey(d)).pts}months.push({v:sum,l:new Date(yr,mo,1).toLocaleDateString('ar-EG',{month:'short'})})}renderBars($('yearBars'),months);
+ document.querySelectorAll('#stSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.r===stRange));
+ let r=statRange(stRange),fm=v=>(v>0?'+':'')+v,row=(ic,n,det,p)=>`<div class="trow"><span class="pn">${ic} ${n}<br><small style="opacity:.6;font-weight:400">${det}</small></span><span class="pt" style="${p<0?'color:#ff9a9a':''}">${fm(p)}</span></div>`,kh=khGet(),kc=+localStorage.getItem('khCount')||0;
+ $('stBreak').innerHTML=row('🕌','الصلوات',r.cnt+' صلاة ('+r.full+' يوم مكتمل)',r.pr)+row('🌙','النوافل',r.nafC+' نافلة',r.naf)+row('🌌','قيام الليل',r.qyC+' ليلة',r.qy)+row('📖','ورد القرآن','قرأت في '+r.qC+' يوم',r.q)+row('🌿','الصيام',r.fC+' يوم',r.f)+`<div class="trow"><span class="pn">🏆 المجموع</span><span class="pt">${r.pts}</span></div><div class="xs">📿 ختمات مكتملة: ${kc}${kh?' · الختمة الحالية: '+(Math.floor((kh.pos+1)/6236*1000)/10)+'%':''}</div>`}
+document.querySelectorAll('#stSeg button').forEach(b=>b.onclick=()=>{stRange=+b.dataset.r;renderStats()});
+
+/* ===== شاشة القرآن + الختمة ===== */
+const Q_NAMES=["الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس", "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه", "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم", "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر", "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق", "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس", "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات", "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر", "المسد", "الإخلاص", "الفلق", "الناس"],Q_JUZ=[[1, 1], [2, 142], [2, 253], [3, 93], [4, 24], [4, 148], [5, 82], [6, 111], [7, 88], [8, 41], [9, 93], [11, 6], [12, 53], [15, 1], [17, 1], [18, 75], [21, 1], [23, 1], [25, 21], [27, 56], [29, 46], [33, 31], [36, 28], [39, 32], [41, 47], [46, 1], [51, 31], [58, 1], [67, 1], [78, 1]];
+let Q_BSM='',Q_A=null,Q_ST=null,Q_JI=null,Q_P=null,Q_CUR=1,Q_SEL=null,qFs=+localStorage.getItem('qFs')||26;
+const qn=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]),qNorm=s=>String(s).replace(/[\u064B-\u065F\u0670]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').trim();
+function qLoad(){if(Q_A)return Promise.resolve(Q_A);if(Q_P)return Q_P;
+ Q_P=fetch('quran.txt').then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>{let a=[],st=[];
+  t.split('\n').forEach(l=>{let m=l.trim().match(/^(\d+)\|(\d+)\|(.+)$/);if(m){let s=+m[1],x=m[3].trim();if(st[s]===undefined)st[s]=a.length;if(s===1&&m[2]==='1')Q_BSM=x;if(s!==1&&s!==9&&m[2]==='1'&&Q_BSM){let w=Q_BSM.split(' ').pop(),ix=x.indexOf(w);if(ix>=0&&ix<45)x=x.slice(ix+w.length).trim()}a.push([s,+m[2],x])}});
+  if(a.length!==6236)throw 0;Q_A=a;Q_ST=st;Q_JI=Q_JUZ.map(x=>st[x[0]]+x[1]-1);return a}).catch(e=>{Q_P=null;throw e});
+ return Q_P}
+function qJuz(i){let j=0;for(let x=0;x<Q_JI.length;x++)if(Q_JI[x]<=i)j=x;return j+1}
+function khGet(){try{return JSON.parse(localStorage.getItem('khatma'))||null}catch(e){return null}}
+function khSet(k){k?localStorage.setItem('khatma',JSON.stringify(k)):localStorage.removeItem('khatma')}
+function qRenderK(){let box=$('khCard');if(!box)return;let k=khGet(),cnt=+localStorage.getItem('khCount')||0,h='';
+ if(!k)h=`<div class="card"><h3>📿 ختمة القرآن</h3><p class="xs">اختار المدة اللي عايز تختم فيها، وأنا هحسبلك ورد كل يوم.</p><select id="khDays" class="ai">${[15,30,60,90,180,365].map(d=>`<option value="${d}"${d===30?' selected':''}>${d} يوم</option>`).join('')}</select><button class="xb" style="width:100%" onclick="khStart()">🚀 ابدأ الختمة</button>${cnt?`<p class="xs">✅ ختمات مكتملة: ${cnt}</p>`:''}</div>`;
+ else{let tot=6236,read=k.pos+1,pct=Math.floor(read/tot*1000)/10,today=dayKey(new Date()),rt=(k.log||{})[today]||0,el=Math.floor((new Date(today+'T00:00:00')-new Date(k.start+'T00:00:00'))/864e5),left=k.days-el,late=left<1,dl=Math.max(1,left),tg=Math.ceil((tot-read+rt)/dl),need=Math.max(0,tg-rt),pg=n=>(n*604/tot).toFixed(1).replace(/\.0$/,''),where='';
+  if(Q_A&&k.pos>=0){let a=Q_A[k.pos];where=`<p class="xs">📍 آخر مكان: سورة ${Q_NAMES[a[0]-1]} آية ${a[1]} · الجزء ${qJuz(k.pos)}</p>`}
+  h=`<div class="card"><h3>📿 ختمة القرآن${cnt?' · ختمات مكتملة: '+cnt:''}</h3><div class="lvl-bar" style="height:12px"><div class="lvl-fill" style="width:${pct}%"></div></div><p class="xs">${pct}% · قرأت ${read} من ${tot} آية</p>${where}<div class="xc" style="margin:8px 0">🎯 ورد النهاردة: حوالي ${tg} آية (≈ ${pg(tg)} صفحة)<br>✅ قرأت النهاردة: ${rt} آية · متبقي: ${need} آية</div><p class="xs">⏳ باقي ${late?0:left} يوم من ${k.days}${late?' — متأخر عن الخطة، الورد اتحسب على يوم واحد':''}</p><button class="xb" style="width:100%" onclick="khContinue()">▶ كمّل القراءة</button><button class="xl" onclick="khCancel()">إلغاء الختمة</button></div>`}
+ box.innerHTML=h}
+function khStart(){khSet({start:dayKey(new Date()),days:+$('khDays').value,pos:-1,log:{}});qRenderK();toast('بدأت الختمة 📿 بالتوفيق')}
+function khCancel(){if(confirm('تلغي الختمة الحالية؟'))khSet(null),qRenderK()}
+function khContinue(){let k=khGet();qOpenIdx(k?Math.min(k.pos+1,6235):0)}
+function qRenderList(){let f=qNorm($('qSearch').value),h='',bm=localStorage.getItem('qBm');
+ $('qBm').innerHTML=(bm!==null&&Q_A&&Q_A[+bm])?`<button class="xb" style="width:100%;margin:0 0 8px" onclick="qOpenIdx(${+bm})">📍 كمّل من علامتك: سورة ${Q_NAMES[Q_A[+bm][0]-1]} آية ${Q_A[+bm][1]}</button>`:'';
+ Q_NAMES.forEach((n,i)=>{if(f&&qNorm(n).indexOf(f)<0&&String(i+1)!==f)return;h+=`<button class="qs" onclick="qOpen(${i+1})"><span class="qnum">${i+1}</span><span>سورة ${n}</span></button>`});
+ $('qList').innerHTML=h||'<p class="xs">مفيش سورة بالاسم ده</p>'}
+function renderQuran(){qRenderK();qRenderList();qLoad().then(()=>{qRenderK();qRenderList()}).catch(()=>{})}
+function qOpenIdx(i){qLoad().then(()=>{let a=Q_A[i];qOpen(a[0],a[1])}).catch(qFail)}
+function qFail(){$('qReader').style.display='flex';$('qBody').innerHTML='<p style="text-align:center;padding:30px 10px;line-height:2">تعذّر تحميل نص القرآن 😕<br>اتأكد إن ملف <b>quran.txt</b> مرفوع على GitHub وإن معاك نت أول مرة.</p>'}
+function qOpen(s,ay){$('qReader').style.display='flex';document.body.style.overflow='hidden';$('qBody').innerHTML='<p style="text-align:center;padding:30px">⏳ جاري التحميل...</p>';qLoad().then(()=>qDraw(s,ay)).catch(qFail)}
+function qDraw(s,ay){Q_CUR=s;Q_SEL=null;$('qBar').style.display='none';$('qTitle').textContent='سورة '+Q_NAMES[s-1];
+ let i0=Q_ST[s],i1=s<114?Q_ST[s+1]:Q_A.length,bm=localStorage.getItem('qBm'),h='';
+ if(s!==1&&s!==9)h+='<div class="qbis">'+Q_BSM+'</div>';
+ h+=`<div class="qtxt" style="font-size:${qFs}px">`;
+ for(let i=i0;i<i1;i++){let a=Q_A[i];h+=`<span class="qa${bm!==null&&+bm===i?' bm':''}" data-i="${i}">${a[2]} <span class="qe">﴿${qn(a[1])}﴾</span></span> `}
+ h+='</div><div class="qnav">'+(s>1?`<button class="mini-btn" onclick="qDraw(${s-1})">‹ ${Q_NAMES[s-2]}</button>`:'<span></span>')+(s<114?`<button class="mini-btn" onclick="qDraw(${s+1})">${Q_NAMES[s]} ›</button>`:'<span></span>')+'</div>';
+ $('qBody').innerHTML=h;$('qBody').scrollTop=0;
+ if(ay){let el=$('qBody').querySelector('[data-i="'+(Q_ST[s]+ay-1)+'"]');if(el){el.classList.add('tg');el.scrollIntoView({block:'center'})}}}
+$('qBody').addEventListener('click',e=>{let el=e.target.closest('.qa');if(!el)return;document.querySelectorAll('.qa.sel').forEach(x=>x.classList.remove('sel'));let i=+el.dataset.i;if(Q_SEL===i){Q_SEL=null;$('qBar').style.display='none';return}Q_SEL=i;el.classList.add('sel');$('qBarT').textContent='سورة '+Q_NAMES[Q_A[i][0]-1]+' — آية '+Q_A[i][1];$('qBar').style.display='flex'});
+function qMark(){let i=Q_SEL;if(i===null)return;localStorage.setItem('qBm',i);
+ document.querySelectorAll('.qa.bm').forEach(x=>x.classList.remove('bm'));let el=$('qBody').querySelector('[data-i="'+i+'"]');if(el)el.classList.add('bm');
+ let k=khGet();if(k){let old=k.pos;k.pos=i;if(i>old){k.log=k.log||{};let t=dayKey(new Date());k.log[t]=(k.log[t]||0)+(i-old)}
+  if(i>=6235){localStorage.setItem('khCount',(+localStorage.getItem('khCount')||0)+1);khSet(null);qRenderK();toast('🎉 ما شاء الله! ختمت القرآن، تقبّل الله منك');return}khSet(k)}
+ toast('📍 تم حفظ مكانك'+(k?' في الختمة':''))}
+function qClose(){$('qReader').style.display='none';document.body.style.overflow='';renderQuran()}
+function qFont(d){qFs=Math.max(16,Math.min(48,qFs+d));localStorage.setItem('qFs',qFs);let t=document.querySelector('.qtxt');if(t)t.style.fontSize=qFs+'px'}
+$('qSearch').oninput=qRenderList;
 updateSrcUI();updateRemindUI();updateGeoUI();
 let ses=localStorage.getItem('rafiq_session'),cu=ses&&USERS()[ses];if(cu){setGender(cu.gender);$('accName').textContent='👤 '+cu.name}else showAuth('auHome');
 renderTracking();ensureTimes();
