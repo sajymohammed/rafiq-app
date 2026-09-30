@@ -137,6 +137,12 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <div class="hint">نص المصحف (الرسم العثماني) من مشروع تنزيل — tanzil.net</div>
 </div>
 
+<!-- القضاء -->
+<div class="page" id="page-qada">
+  <header><h1 id="qadaH1">🤲 القضاء</h1></header>
+  <div id="qadaPage"></div>
+</div>
+
 <!-- الإحصائيات -->
 <div class="page" id="page-stats">
   <header><h1>📊 الإحصائيات</h1></header>
@@ -187,6 +193,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <div class="card">
     <h3>👤 الحساب</h3>
     <div class="xc"><div class="trow"><span class="pn" id="accName">—</span><button class="mini-btn" id="logoutBtn">تسجيل الخروج</button></div><div id="useTime" class="xs"></div><input class="ai" id="acName" placeholder="الاسم"><input class="ai" id="acAge" type="number" inputmode="numeric" placeholder="العمر"><select class="ai" id="acGender"><option value="man">ذكر</option><option value="woman">أنثى</option></select><input class="ai" id="acPass" type="password" placeholder="كلمة مرور جديدة (سيبها فاضية لو مش عايز تغيّرها)" autocomplete="new-password"><div class="xs">الأهداف</div><div id="acGoals"></div><div class="au-err" id="acErr"></div><button class="xb" id="acSave" style="width:100%;padding:12px">💾 حفظ بيانات الحساب</button><div class="xs" style="margin-top:14px">🌐 اللغة / Language</div><div class="seg" id="langSeg"><button data-l="ar">العربية</button><button data-l="en">English</button></div><button class="xb" style="width:100%;margin-top:14px" onclick="openGuide()">📘 شرح التطبيق</button><div class="xs" style="margin-top:14px">🎨 لون البرنامج</div><div id="skyScope" style="margin-bottom:8px"></div><div id="thmRow"></div></div>
+    <div class="xc" id="qadaSet"></div><div class="xc" id="bkCard"></div>
     <div class="trow"><span class="pn">الجنس</span><button class="mini-btn" id="genderChange">تغيير</button></div>
   </div>
 
@@ -200,6 +207,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <button class="tab" data-page="tracking"><span class="ti">📋</span>التتبع</button>
   <button class="tab" data-page="quran"><span class="ti">📖</span>القرآن</button>
   <button class="tab" data-page="stats"><span class="ti">📊</span>الإحصائيات</button>
+  <button class="tab" data-page="qada" id="tabQada" style="display:none"></button>
   <button class="tab" data-page="settings"><span class="ti">⚙️</span>الإعدادات</button>
 </nav>
 
@@ -499,7 +507,7 @@ function renderExtras(){let box=$('extras');if(!box||box.contains(document.activ
  h+=`<div class="xc"><b>🌌 قيام الليل</b>${prayerTimeArrived('isha')?`<div class="xr"><span>${[2,4,6,8].map(x=>b(d.qy===x,`setQy(${x})`,x+' ركعة (+'+{2:5,4:10,6:15,8:20}[x]+')')).join('')}${b(d.qy==='n',"setQy('n')",'❌ لا')}</span></div>`:'<p class="xs">⏳ لسه وقته ما جاش (بعد صلاة العشاء)</p>'}</div>`;
  h+=quranCard(q,d,k);
  if(f.show)h+=`<div class="xc"><b>🌿 صيام ${f.label}</b><div class="xr"><span>صمت النهاردة؟ <small>(+${f.pts||10})</small></span><span>${b(d.f==='y',"setFast('y')",'✅ صمت')}${b(d.f==='n',"setFast('n')",'❌ لا')}</span></div></div>`;
- box.innerHTML=h}
+ h+=qadaCard()+zakatCard();box.innerHTML=h}
 function setNaf(x,v){if(!prayerTimeArrived(x))return toast('⏳ لسه وقت الصلاة ما دخلش');let k=dayKey(currentDate),d=XEX(k);d.n=d.n||{};d.n[x]=d.n[x]===v?undefined:v;XSX(k,d);renderTracking()}
 function setFast(v){let k=dayKey(currentDate),d=XEX(k);d.f=d.f===v?undefined:v;XSX(k,d);renderTracking()}
 function setQy(v){if(!prayerTimeArrived('isha'))return toast('⏳ لسه وقته ما جاش');let k=dayKey(currentDate),d=XEX(k);d.qy=d.qy===v?undefined:v;XSX(k,d);renderTracking()}
@@ -631,7 +639,7 @@ function renderStats(){try{stkCheck();renderStk()}catch(e){}
  let now=new Date(),yr=now.getFullYear(),months=[];for(let mo=0;mo<12;mo++){let sum=0,dm=new Date(yr,mo+1,0).getDate();for(let dd=1;dd<=dm;dd++){let d=new Date(yr,mo,dd);if(d>now)break;sum+=dayStats(dayKey(d)).pts}months.push({v:sum,l:new Date(yr,mo,1).toLocaleDateString((LANG==='en'?'en-US':'ar-EG'),{month:'short'})})}renderBars($('yearBars'),months);
  document.querySelectorAll('#stSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.r===stRange));
  let r=statRange(stRange),fm=v=>(v>0?'+':'')+v,row=(ic,n,det,p)=>`<div class="trow"><span class="pn">${ic} ${n}<br><small style="opacity:.6;font-weight:400">${det}</small></span><span class="pt" style="${p<0?'color:#ff9a9a':''}">${fm(p)}</span></div>`,kh=khGet(),kc=+localStorage.getItem('khCount')||0;
- $('stBreak').innerHTML=row('🕌','الصلوات',r.cnt+' صلاة ('+r.full+' يوم مكتمل)',r.pr)+row('🌙','النوافل',r.nafC+' نافلة',r.naf)+row('🌌','قيام الليل',r.qyC+' ليلة',r.qy)+row('📖','ورد القرآن','قرأت في '+r.qC+' يوم',r.q)+row('🌿','الصيام',r.fC+' يوم',r.f)+row('🔥',tl('مكافآت الستريك','Streak bonuses'),'',r.bn)+`<div class="trow"><span class="pn">🏆 المجموع</span><span class="pt">${r.pts}</span></div><div class="xs">📿 ختمات مكتملة: ${kc}${kh?' · الختمة الحالية: '+(Math.floor((kh.pos+1)/6236*1000)/10)+'%':''}</div>`}
+ $('stBreak').innerHTML=row('🕌','الصلوات',r.cnt+' صلاة ('+r.full+' يوم مكتمل)',r.pr)+row('🌙','النوافل',r.nafC+' نافلة',r.naf)+row('🌌','قيام الليل',r.qyC+' ليلة',r.qy)+row('📖','ورد القرآن','قرأت في '+r.qC+' يوم',r.q)+row('🌿','الصيام',r.fC+' يوم',r.f)+row('🔥',tl('المكافآت','Bonuses'),'',r.bn)+`<div class="trow"><span class="pn">🏆 المجموع</span><span class="pt">${r.pts}</span></div><div class="xs">📿 ختمات مكتملة: ${kc}${kh?' · الختمة الحالية: '+(Math.floor((kh.pos+1)/6236*1000)/10)+'%':''}</div>`}
 document.querySelectorAll('#stSeg button').forEach(b=>b.onclick=()=>{stRange=+b.dataset.r;renderStats()});
 
 /* ===== شاشة القرآن + الختمة ===== */
@@ -732,7 +740,7 @@ var SKYT={sunrise:{bg1:'#2f2158',bg2:'#b8507f',bg3:'#f59e5b',ac:'#ffe08a',ac2:'#
 function curPeriod(){var n=new Date(),m=n.getHours()*60+n.getMinutes(),best=null,bs=-1,any=false;
  PRAYERS.forEach(function(p){var s=getPrayerStartMinutes(p.id);if(s===null)return;any=true;if(s<=m&&s>bs){bs=s;best=p.id}});
  return any?(best||'isha'):null}
-var THPG=[['home','الرئيسية','Home'],['tracking','التتبع','Tracking'],['quran','القرآن','Quran'],['stats','الإحصائيات','Stats'],['settings','الإعدادات','Settings']];
+var THPG=[['home','الرئيسية','Home'],['tracking','التتبع','Tracking'],['quran','القرآن','Quran'],['stats','الإحصائيات','Stats'],['qada','القضاء','Qada'],['settings','الإعدادات','Settings']];
 function pageThemes(){try{return JSON.parse(localStorage.getItem('pageThemes')||'{}')||{}}catch(e){return{}}}
 function pageNow(){var a=document.querySelector('.page.active');return a?a.id.replace('page-',''):'home'}
 function baseTh(){return localStorage.getItem('theme')||'green'}
@@ -782,13 +790,13 @@ function remCheck(){
  document.body.appendChild(o);
  $('rqX').onclick=remClose;$('rqGo').onclick=function(){remClose();var t=document.querySelector('.tab[data-page=tracking]');if(t)t.click()};
  o.onclick=function(e){if(e.target===o)remClose()}}
-function celebrate(big,title,sub){
+function celebrate(big,title,sub,ms){
  var o=document.createElement('div');o.className='cel-ov',cf='',cl=['#ffd54a','#7CFC9A','#4fc3f7','#ff8a8a','#e0a3ff'];
  for(var i=0;i<36;i++)cf+='<i style="left:'+(Math.random()*100)+'%;background:'+cl[i%5]+';animation-delay:'+(Math.random()*1.2)+'s;animation-duration:'+(2.2+Math.random()*1.6)+'s"></i>';
  o.innerHTML=cf+'<div class="cel-box"><div class="cel-em">'+big+'</div><div class="cel-t">'+title+'</div><div class="cel-s">'+sub+'</div></div>';
  o.onclick=function(){o.remove()};document.body.appendChild(o);
  try{navigator.vibrate&&navigator.vibrate([80,40,80])}catch(e){}
- setTimeout(function(){o.remove()},5200)}
+ setTimeout(function(){o.remove()},ms||5200)}
 var _rc=0,_rt=setInterval(function(){_rc++;applySky();remCheck();if(_rc>=10)clearInterval(_rt)},1500);
 setInterval(applySky,60000);
 document.addEventListener('visibilitychange',function(){if(!document.hidden){applySky();remCheck()}});
@@ -801,6 +809,115 @@ fastInfo=function(d){var r=_fi0(d),hm=hijriMonth(d);r.pts=10;
   return{show:true,must:hm===9?false:r.must,pts:hm===9?20:15,mon:hm,label:nm}}
  return r};
 try{var _us=USERS(),_ch=false;Object.keys(_us).forEach(function(u){var g=_us[u].goals,i=g?g.indexOf('أصوم الاثنين والخميس كل شهر'):-1;if(i>-1){g[i]='أصوم الاثنين والخميس كل أسبوع';_ch=true}});if(_ch)saveUsers(_us)}catch(e){}
+/* ===== شاشة القضاء (صيام/صلاة/زكاة) + كارت الزكاة + النسخة الاحتياطية ===== */
+var QP=[['fajr','الفجر','Fajr'],['dhuhr','الظهر','Dhuhr'],['asr','العصر','Asr'],['maghrib','المغرب','Maghrib'],['isha','العشاء','Isha']];
+var qdEdit=false;
+function nz(v){var n=parseFloat(String(v).replace(/[^\d.]/g,''));return isFinite(n)&&n>0?n:0}
+function fm(n){return(Math.round(n*100)/100).toLocaleString('en')}
+function hijriYear(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{year:'numeric'}).format(d))}catch(e){return d.getFullYear()}}
+function qdG(){try{var q=XU().qada;return q&&q.on?q:null}catch(e){return null}}
+function qdTot(q){return QP.reduce(function(a,p){return a+(+q[p[0]]||0)},0)}
+function qdName(p){return tl(p[1],p[2])}
+function qsOn(){try{return !!XU().qs}catch(e){return false}}
+function qsApply(){var on=qsOn(),t=$('tabQada');if(t)t.style.display=on?'':'none';var pg=$('page-qada');if(!on&&pg&&pg.classList.contains('active')){var h=document.querySelector('.tab[data-page=home]');if(h)h.click()}}
+function qsToggle(){XUP(function(x){x.qs=!x.qs});qsApply();renderQadaSet()}
+function zkG(){try{var z=XU().zk;return z&&z.on?z:null}catch(e){return null}}
+function zkToggle(){XUP(function(x){x.zk=x.zk||{};x.zk.on=!x.zk.on});renderQadaSet();renderTracking()}
+function qRefresh(){renderQadaSet();renderQadaPage();renderTracking()}
+function cel2(e,ar,en,sa,sen){celebrate(e,tl(ar,en),tl(sa,sen))}
+/* --- كارت قضاء الصلاة في التتبع --- */
+function qadaCard(){try{qAutoSync();qsApply();renderQadaSet()}catch(e){}var q=qdG();if(!q)return'';var tot=qdTot(q);if(tot<=0)return'';var c=XEX(dayKey(new Date())).qd||0;
+ var rows=QP.filter(function(p){return(+q[p[0]]||0)>0}).map(function(p){return '<div class="xr"><span>'+qdName(p)+' <small>('+tl('متبقي','left')+' '+q[p[0]]+')</small></span><span><button class="xb" onclick="qdDo(\''+p[0]+'\')">'+tl('✅ قضيت','✅ Done')+'</button>'+(c>0?'<button class="xb" onclick="qdUndo(\''+p[0]+'\')">↩</button>':'')+'</span></div>'}).join('');
+ return '<div class="xc"><b>'+tl('🕌 قضاء الصلوات','🕌 Missed prayers (qada)')+'</b> <small>('+tl('المتبقي','left')+' '+tot+')</small>'+rows+'<div class="xs">'+tl('قضيت النهاردة: ','Made up today: ')+c+'</div></div>'}
+function qdFinish(cel){XUP(function(x){x.qada.on=false});if(qAllDone())celFinal();else if(cel)cel2('🕌','ما شاء الله! خلّصت قضاء صلواتك','Mashaa Allah! You finished your qada','تقبّل الله منك 🤍','May Allah accept from you 🤍');else toast(tl('القضاء خلص ✅','Qada finished ✅'))}
+function qdDo(id){var q=qdG();if(!q||!(+q[id]>0))return;XUP(function(x){x.qada[id]=Math.max(0,(+x.qada[id]||0)-1)});var k=dayKey(new Date()),d=XEX(k);d.qd=(d.qd||0)+1;XSX(k,d);
+ if(qdTot(qdG())<=0)qdFinish(true);qRefresh()}
+function qdUndo(id){var k=dayKey(new Date()),d=XEX(k);if(!(d.qd>0)||!qdG())return;d.qd--;XSX(k,d);XUP(function(x){x.qada[id]=(+x.qada[id]||0)+1});qRefresh()}
+function qdStart(){var y=nz($('qdY').value),m=nz($('qdM').value),d=nz($('qdD').value),days=Math.round(y*365+m*30+d);if(!days)return toast(tl('اكتب المدة','Enter the duration'));if(days>36500)return toast(tl('المدة كبيرة أوي','Duration too large'));
+ XUP(function(x){x.qada={on:true,fajr:days,dhuhr:days,asr:days,maghrib:days,isha:days}});toast(tl('تم حساب القضاء ✅ وهيظهر في التتبع','Calculated ✅ shown in Tracking'));qRefresh()}
+function qdSet(id,v){var n=Math.max(0,Math.floor(+v||0));XUP(function(x){x.qada[id]=n});if(qdTot(qdG())<=0)qdFinish(false);qRefresh()}
+function qdAdj(id,dl){var q=qdG();if(!q)return;qdSet(id,(+q[id]||0)+dl)}
+function qdOff(){if(!confirm(tl('تلغي عداد قضاء الصلوات؟','Remove the prayer qada counter?')))return;XUP(function(x){delete x.qada});qRefresh()}
+function qdEditToggle(){qdEdit=!qdEdit;renderQadaPage()}
+/* --- احتفال إنهاء كل القضاء + الإضافة التلقائية للقضاء --- */
+function qAllDone(){var u=XU();return !qdG()&&!(u.qsaum&&+u.qsaum.n>0)&&!u.qzk}
+function celFinal(){var w=XU().gender==='woman',ar=w?'«عُدتِ إلى ربِّكِ الغفور الرحيم، فلا ترجعي إلى ما كنتِ عليه لأنه طريق الشيطان»':'«عُدتَ إلى ربِّكَ الغفور الرحيم، فلا ترجع إلى ما كنتَ عليه لأنه طريق الشيطان»',
+ en='You have returned to your Lord, the Most Forgiving, the Most Merciful. Do not go back to what you were, for it is the path of Satan.';
+ celebrate('🤍',tl('ما شاء الله! خلّصت كل القضاء اللي عليك','Mashaa Allah! You completed all your qada'),'<span style="display:block;font-size:19px;line-height:2;max-width:330px;margin:8px auto 0">'+tl(ar,en)+'</span>',15000)}
+function qBlank(){return{on:true,fajr:0,dhuhr:0,asr:0,maghrib:0,isha:0}}
+function qAutoSync(){var u=XU();if(!u.name)return;var cur={},m,i,k,d;
+ for(i=0;i<localStorage.length;i++){k=localStorage.key(i);
+  if((m=/^prayers_(\d{4}-\d{2}-\d{2})$/.exec(k))){try{d=JSON.parse(localStorage.getItem(k))||{};PRAYERS.forEach(function(p){if(d[p.id]&&d[p.id].opt==='missed')cur[m[1]+':'+p.id]=1})}catch(e){}}
+  else if((m=/^extras_(\d{4}-\d{2}-\d{2})$/.exec(k))){try{d=JSON.parse(localStorage.getItem(k))||{};if(d.f==='n'&&hijriMonth(new Date(m[1]+'T00:00:00'))===9)cur[m[1]+':ramadan']=1}catch(e){}}}
+ var old=u.qauto;if(!old){XUP(function(x){x.qauto=cur});return}
+ var add=Object.keys(cur).filter(function(x){return !old[x]}),rem=Object.keys(old).filter(function(x){return !cur[x]});if(!add.length&&!rem.length)return;
+ XUP(function(x){x.qauto=cur;
+  add.forEach(function(a){var t=a.split(':')[1];if(t==='ramadan'){x.qsaum=x.qsaum||{n:0};x.qsaum.n=(+x.qsaum.n||0)+1}else{x.qada=x.qada||qBlank();x.qada.on=true;x.qada[t]=(+x.qada[t]||0)+1}});
+  rem.forEach(function(a){var t=a.split(':')[1];if(t==='ramadan'){if(x.qsaum){x.qsaum.n=Math.max(0,(+x.qsaum.n||0)-1);if(x.qsaum.n<=0)delete x.qsaum}}else if(x.qada){x.qada[t]=Math.max(0,(+x.qada[t]||0)-1);if(QP.every(function(p){return !(+x.qada[p[0]]>0)}))x.qada.on=false}});
+  if(add.length&&x.qs===undefined)x.qs=true});
+ if(add.length)setTimeout(function(){toast(tl('اتضافت للقضاء 🤲','Added to your qada 🤲'));try{qsApply();renderQadaSet()}catch(e){}},700)}
+/* --- قضاء صيام رمضان --- */
+function qsStart(){var n=Math.floor(nz($('qsN').value));if(!n)return toast(tl('اكتب عدد الأيام','Enter the number of days'));if(n>3650)return toast(tl('العدد كبير أوي','Number too large'));XUP(function(x){x.qsaum={n:n}});qRefresh()}
+function qsFinish(){XUP(function(x){delete x.qsaum});if(qAllDone())celFinal();else cel2('🌙','ما شاء الله! خلّصت قضاء رمضان','Mashaa Allah! You finished your Ramadan qada','تقبّل الله منك 🤍','May Allah accept from you 🤍')}
+function qsSet(v){var n=Math.max(0,Math.floor(+v||0));XUP(function(x){if(x.qsaum)x.qsaum.n=n});if(n<=0)qsFinish();qRefresh()}
+function qsAdj(dl){var s=XU().qsaum;if(s)qsSet((+s.n||0)+dl)}
+function qsOff(){if(!confirm(tl('تلغي عداد قضاء الصيام؟','Remove the fasting qada counter?')))return;XUP(function(x){delete x.qsaum});qRefresh()}
+/* --- قضاء الزكاة (سنين فاتت) --- */
+function qzCalc(){var y=nz($('qzY').value),a=nz($('qzA').value);if(!y||!a)return toast(tl('اكتب عدد السنين والمبلغ','Enter years and amount'));y=Math.min(Math.max(1,Math.round(y)),100);XUP(function(x){x.qzk={years:y,amt:a,due:Math.round(a*0.025*y*100)/100,paid:0,log:[]}});renderQadaPage()}
+function qzPay(){var q=XU().qzk;if(!q)return;var v=nz($('qzP').value);if(!v)return toast(tl('اكتب المبلغ','Enter the amount'));v=Math.min(v,Math.max(0,q.due-q.paid));
+ XUP(function(x){x.qzk.paid=Math.round((x.qzk.paid+v)*100)/100;(x.qzk.log=x.qzk.log||[]).push(v)});var n=XU().qzk;
+ if(n.due-n.paid<=0.005){XUP(function(x){delete x.qzk});if(qAllDone())celFinal();else cel2('💰','ما شاء الله! أخرجت زكاة السنين اللي فاتت','Mashaa Allah! You paid your past zakat','تقبّل الله منك 🤍','May Allah accept from you 🤍')}renderQadaPage()}
+function qzUndo(){XUP(function(x){if(!x.qzk)return;var l=x.qzk.log||[],v=l.pop()||0;x.qzk.paid=Math.max(0,Math.round((x.qzk.paid-v)*100)/100)});renderQadaPage()}
+function qzOff(){if(!confirm(tl('تلغي حساب زكاة السنين الفايتة؟','Remove the past-zakat calculation?')))return;XUP(function(x){delete x.qzk});renderQadaPage()}
+/* --- زكاة السنة دلوقتي (كارت التتبع) --- */
+function zkFld(id,ph,fn,bt){return '<div style="display:flex;gap:8px;margin-top:8px"><input class="ai" id="'+id+'" type="number" inputmode="decimal" placeholder="'+ph+'" style="flex:1;min-width:0;margin:0"><button class="xb" onclick="'+fn+'">'+bt+'</button></div>'}
+function zakatCard(){var z=zkG();if(!z)return'';var t='<b>'+tl('💰 الزكاة','💰 Zakat')+'</b>';
+ if(!z.amt)return '<div class="xc">'+t+'<div class="xs">'+tl('معاك كام؟ هنحسب الزكاة (2.5%).','How much do you have? We will calculate zakat (2.5%).')+'</div>'+zkFld('zkA',tl('المبلغ','Amount'),'zkCalc()',tl('احسب','Calculate'))+'</div>';
+ var due=z.due||0,paid=z.paid||0,rem=Math.max(0,due-paid),r=function(a,b,bo){return '<div class="xr"><span>'+(bo?'<b>':'')+a+(bo?'</b>':'')+'</span><span>'+(bo?'<b>':'')+b+(bo?'</b>':'')+'</span></div>'};
+ return '<div class="xc">'+t+r(tl('معاك','You have'),fm(z.amt))+r(tl('عليك زكاة','Zakat due'),fm(due))+r(tl('صرفت منها','Paid so far'),fm(paid))+r(tl('المتبقي','Remaining'),fm(rem),1)+zkFld('zkP',tl('صرفت كام؟','Amount paid'),'zkPay()',tl('سجّل','Add'))
+  +'<div style="display:flex;gap:8px;margin-top:8px">'+((z.log&&z.log.length)?'<button class="xb" onclick="zkUndo()">'+tl('↩ تراجع عن آخر صرف','↩ Undo last')+'</button>':'')+'<button class="xb" onclick="zkReset()">'+tl('✏️ تعديل المبلغ','✏️ Change amount')+'</button></div></div>'}
+function zkCalc(){var a=nz($('zkA').value);if(!a)return toast(tl('اكتب المبلغ','Enter the amount'));XUP(function(x){x.zk.amt=a;x.zk.due=Math.round(a*0.025*100)/100;x.zk.paid=0;x.zk.log=[]});renderTracking()}
+function zkFinish(){var yr=hijriYear(new Date()),first=XU().zkYr!==yr;XUP(function(x){x.zk={on:false};x.zkYr=yr});if(first)stkBonus(500);
+ cel2('💰','ما شاء الله! أخرجت زكاتك','Mashaa Allah! You paid your zakat',first?'+500 نقطة 🎉 تقبّل الله منك':'تقبّل الله منك 🤍',first?'+500 points 🎉 May Allah accept from you':'May Allah accept from you 🤍')}
+function zkPay(){var z=zkG();if(!z||!z.amt)return;var v=nz($('zkP').value);if(!v)return toast(tl('اكتب المبلغ','Enter the amount'));v=Math.min(v,Math.max(0,(z.due||0)-(z.paid||0)));
+ XUP(function(x){x.zk.paid=Math.round(((x.zk.paid||0)+v)*100)/100;(x.zk.log=x.zk.log||[]).push(v)});var n=zkG();if(n.due-n.paid<=0.005)zkFinish();renderTracking()}
+function zkUndo(){XUP(function(x){if(!x.zk)return;var l=x.zk.log||[],v=l.pop()||0;x.zk.paid=Math.max(0,Math.round(((x.zk.paid||0)-v)*100)/100)});renderTracking()}
+function zkReset(){XUP(function(x){x.zk={on:true}});renderTracking()}
+/* --- الإعدادات: تفعيل شاشة القضاء + هل عليك زكاة --- */
+function renderQadaSet(){var b=$('qadaSet');if(!b)return;var so=qsOn(),zo=!!zkG(),sig=(so?1:0)+''+(zo?1:0);if(b.dataset.sig===sig&&b.innerHTML)return;b.dataset.sig=sig;
+ b.innerHTML='<div class="trow"><span class="pn">'+tl('🤲 شاشة القضاء','🤲 Qada screen')+'</span><button class="mini-btn'+(so?' on':'')+'" onclick="qsToggle()">'+tl(so?'مفعلة':'غير مفعلة',so?'On':'Off')+'</button></div><div class="xs">'+tl('قضاء الصيام والصلاة والزكاة في شاشة مستقلة.','Fasting, prayer and zakat qada in their own screen.')+'</div><div class="trow" style="margin-top:12px"><span class="pn">'+tl('💰 هل عليك زكاة الآن؟','💰 Do you owe zakat now?')+'</span><button class="mini-btn'+(zo?' on':'')+'" onclick="zkToggle()">'+tl(zo?'نعم':'لا',zo?'Yes':'No')+'</button></div>'}
+/* --- شاشة القضاء --- */
+function qInp(id,ph){return '<input class="ai" id="'+id+'" type="number" inputmode="numeric" min="0" placeholder="'+ph+'" style="flex:1;min-width:0;margin:0">'}
+function qcStep(fa,fs,val,id){var a=id?"'"+id+"',":'';return '<span style="display:flex;gap:6px;align-items:center"><button class="xb" onclick="'+fa+'('+a+'-1)">−</button><input class="ai" type="number" inputmode="numeric" min="0" value="'+val+'" style="width:78px;text-align:center;margin:0" onchange="'+fs+'('+a+'this.value)"><button class="xb" onclick="'+fa+'('+a+'1)">+</button></span>'}
+function renderQadaPage(){var b=$('qadaPage');if(!b)return;try{qAutoSync()}catch(e){}var u=XU(),s=u.qsaum,q=qdG(),z=u.qzk,h='',H=function(t,body){return '<div class="card"><h3>'+t+'</h3>'+body+'</div>'},W='style="width:100%;padding:12px;margin-top:8px"';
+ var h1=$('qadaH1');if(h1)h1.textContent=tl('🤲 القضاء','🤲 Qada');
+ /* صيام رمضان */
+ h+=H(tl('🌙 قضاء صيام رمضان','🌙 Ramadan fasting qada'),s?'<div class="xr"><span>'+tl('المتبقي','Remaining')+'</span><span><b>'+(+s.n||0)+'</b> '+tl('يوم','days')+'</span></div><button class="xb" '+W+' onclick="qsAdj(-1)">'+tl('✅ قضيت يوم','✅ I made up a day')+'</button><div class="xr" style="margin-top:8px"><span>'+tl('تعديل العدد','Edit count')+'</span>'+qcStep('qsAdj','qsSet',+s.n||0)+'</div><button class="xb" style="width:100%;margin-top:8px" onclick="qsOff()">'+tl('🗑 إلغاء','🗑 Remove')+'</button>'
+  :'<div class="xs">'+tl('مصمتش كام يوم من رمضان؟','How many Ramadan days did you miss?')+'</div><div style="display:flex;gap:8px;margin-top:8px">'+qInp('qsN',tl('عدد الأيام','Days'))+'<button class="xb" onclick="qsStart()">'+tl('ابدأ','Start')+'</button></div>');
+ /* الصلاة */
+ var pb;
+ if(!q)pb='<div class="xs">'+tl('بقالك قد إيه مش بتصلي؟','How long have you not been praying?')+'</div><div style="display:flex;gap:8px;margin-top:8px">'+qInp('qdY',tl('سنة','Years'))+qInp('qdM',tl('شهر','Months'))+qInp('qdD',tl('يوم','Days'))+'</div><button class="xb" '+W+' onclick="qdStart()">'+tl('احسب وابدأ','Calculate & start')+'</button><div class="xs">'+tl('السنة 365 يوم والشهر 30 يوم، وبيتحسب لكل صلاة من الخمس.','Year = 365 days, month = 30 days, counted for each of the five prayers.')+'</div>';
+ else{var c=XEX(dayKey(new Date())).qd||0;pb='<div class="xr"><span>'+tl('المتبقي','Remaining')+'</span><span><b>'+qdTot(q)+'</b></span></div>'
+  +QP.filter(function(p){return qdEdit||(+q[p[0]]||0)>0}).map(function(p){return '<div class="xr"><span>'+qdName(p)+(qdEdit?'':' <small>('+q[p[0]]+')</small>')+'</span>'+(qdEdit?qcStep('qdAdj','qdSet',+q[p[0]]||0,p[0]):'<span><button class="xb" onclick="qdDo(\''+p[0]+'\')">'+tl('✅ قضيت','✅ Done')+'</button>'+(c>0?'<button class="xb" onclick="qdUndo(\''+p[0]+'\')">↩</button>':'')+'</span>')+'</div>'}).join('')
+  +'<div class="xs">'+tl('قضيت النهاردة: ','Made up today: ')+c+'</div><div style="display:flex;gap:8px;margin-top:8px"><button class="xb" style="flex:1" onclick="qdEditToggle()">'+(qdEdit?tl('تم','Done'):tl('✏️ تعديل الأعداد','✏️ Edit counts'))+'</button><button class="xb" style="flex:1" onclick="qdOff()">'+tl('🗑 إلغاء','🗑 Remove')+'</button></div>'}
+ h+=H(tl('🕌 قضاء الصلاة','🕌 Prayer qada'),pb);
+ /* الزكاة */
+ h+=H(tl('💰 قضاء الزكاة','💰 Past zakat'),z?'<div class="xs">'+tl('زكاة','Zakat for')+' '+z.years+' '+tl('سنة على مبلغ','years on')+' '+fm(z.amt)+'</div>'+'<div class="xr"><span>'+tl('عليك','Due')+'</span><span>'+fm(z.due)+'</span></div><div class="xr"><span>'+tl('صرفت منها','Paid so far')+'</span><span>'+fm(z.paid)+'</span></div><div class="xr"><span><b>'+tl('المتبقي','Remaining')+'</b></span><span><b>'+fm(Math.max(0,z.due-z.paid))+'</b></span></div><div style="display:flex;gap:8px;margin-top:8px"><input class="ai" id="qzP" type="number" inputmode="decimal" placeholder="'+tl('صرفت كام؟','Amount paid')+'" style="flex:1;min-width:0;margin:0"><button class="xb" onclick="qzPay()">'+tl('سجّل','Add')+'</button></div><div style="display:flex;gap:8px;margin-top:8px">'+((z.log&&z.log.length)?'<button class="xb" style="flex:1" onclick="qzUndo()">'+tl('↩ تراجع','↩ Undo')+'</button>':'')+'<button class="xb" style="flex:1" onclick="qzOff()">'+tl('🗑 إلغاء','🗑 Remove')+'</button></div>'
+  :'<div class="xs">'+tl('كام سنة مطلعتش زكاة؟ ومعاك كام؟ هنحسب: المبلغ × 2.5% × عدد السنين.','How many years did you not pay zakat, and how much do you have? We calculate: amount × 2.5% × years.')+'</div><div style="display:flex;gap:8px;margin-top:8px">'+qInp('qzY',tl('عدد السنين','Years'))+'<input class="ai" id="qzA" type="number" inputmode="decimal" placeholder="'+tl('معاك كام؟','Amount')+'" style="flex:1;min-width:0;margin:0"></div><button class="xb" '+W+' onclick="qzCalc()">'+tl('احسب','Calculate')+'</button><div class="xs">'+tl('الحساب تقريبي على أساس إن المبلغ ثابت والنصاب متحقق. اسأل أهل العلم لو حالتك مختلفة.','This is an estimate assuming a fixed amount that reaches the nisab. Ask a scholar if your case differs.')+'</div>');
+ b.innerHTML=h}
+function bkExport(){try{var st={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(!SKIP.test(k))st[k]=localStorage.getItem(k)}
+ var pr=Object.assign({},XU());delete pr.pw;var fn='rafiqi-backup-'+dayKey(new Date())+'.json',blob=new Blob([JSON.stringify({app:'rafiqi',v:1,at:new Date().toISOString(),profile:pr,store:st})],{type:'application/json'}),f=new File([blob],fn,{type:'application/json'});
+ if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],title:fn}).catch(function(){});
+ else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500)}
+ toast(tl('تم تجهيز النسخة ✅','Backup ready ✅'))}catch(e){toast('⚠️ '+tl('حصلت مشكلة','Something went wrong'))}}
+function bkImport(inp){var f=inp.files&&inp.files[0];if(!f)return;var r=new FileReader();
+ r.onload=function(){try{var d=JSON.parse(r.result);if(d.app!=='rafiqi'||!d.store||typeof d.store!=='object')throw 0;
+  if(!confirm(tl('هيتم دمج النسخة مع بياناتك الحالية، والملف له الأولوية. تكمل؟','The backup will be merged with your current data (the file wins). Continue?'))){inp.value='';return}
+  Object.keys(d.store).forEach(function(k){if(!SKIP.test(k)&&typeof d.store[k]==='string')localStorage.setItem(k,d.store[k])});
+  if(d.profile&&typeof d.profile==='object')XUP(function(x){Object.keys(d.profile).forEach(function(k){if(k!=='pw'&&k!=='name'&&k!=='__proto__'&&k!=='constructor'&&k!=='prototype')x[k]=d.profile[k]})});
+  toast(tl('تم الاسترجاع ✅ — بيتم التحديث','Restored ✅ reloading'));setTimeout(function(){location.reload()},2800)}catch(e){toast(tl('الملف مش صالح','Invalid file'))}inp.value=''};r.readAsText(f)}
+function renderBk(){var b=$('bkCard');if(!b)return;b.innerHTML='<b>'+tl('💾 نسخة احتياطية','💾 Backup')+'</b><div class="xs">'+tl('احفظ ملف بكل بياناتك، واسترجعه لو حسابك ضاع أو غيّرت الجهاز.','Save a file with all your data and restore it if you lose your account or switch devices.')+'</div><button class="xb" style="width:100%;padding:12px;margin-top:8px" onclick="bkExport()">'+tl('📤 حفظ نسخة','📤 Save backup')+'</button><label class="xb" style="display:block;width:100%;padding:12px;margin-top:8px;text-align:center;box-sizing:border-box"><span>'+tl('📥 استرجاع نسخة','📥 Restore backup')+'</span><input type="file" accept=".json,application/json" style="display:none" onchange="bkImport(this)"></label>'}
+$('tabQada').innerHTML='<span class="ti">🤲</span>'+tl('القضاء','Qada');$('tabQada').addEventListener('click',renderQadaPage);qsApply();renderQadaSet();renderBk();renderQadaPage();
 updateSrcUI();updateRemindUI();updateGeoUI();
 let ses=localStorage.getItem('rafiq_session'),cu=ses&&USERS()[ses];if(cu){setGender(cu.gender);$('accName').textContent='👤 '+cu.name}else showAuth('auHome');
 renderTracking();ensureTimes();
