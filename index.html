@@ -1167,11 +1167,12 @@ function pvRender(){var p=pvG(),b=function(k,l){return '<div class="xr"><span>'+
 function srInit(){pvRender();pubDir();$('srCount').textContent='';srTotal=null;
  if(!fbOK()){$('srRes').innerHTML='<div class="xs">'+tl('سجّل دخول الأول.','Please log in first.')+'</div>';return}
  FB.db.collection('directory').get().then(function(s){srTotal=s.size;$('srCount').textContent=tl('يوجد ','There are ')+srTotal+tl(' حساب',' accounts')}).catch(function(){})}
-function srGo(){var n=$('srName').value.trim().toLowerCase(),a=+$('srAge').value;if(!fbOK())return toast(tl('سجّل دخول الأول','Log in first'));if(!n||!a)return toast(tl('اكتب الاسم والعمر','Enter name and age'));
+function srNorm(s){return qNorm(s||'').toLowerCase().replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/\s+/g,' ').trim()}
+function srGo(){var n=srNorm($('srName').value),a=+$('srAge').value;if(!fbOK())return toast(tl('سجّل دخول الأول','Log in first'));if(!n)return toast(tl('اكتب الاسم','Enter a name'));
  var me=FB.auth.currentUser.uid;$('srRes').innerHTML='…';
- FB.db.collection('directory').where('nl','==',n).where('age','==',a).get().then(function(s){var L=[];s.forEach(function(d){var v=d.data();if(d.id!==me&&v.on!==false)L.push([d.id,v])});
+ FB.db.collection('directory').get().then(function(s){var L=[],self=false;srTotal=s.size;s.forEach(function(d){var v=d.data();if(v.on===false)return;if(srNorm(v.name||v.nl).indexOf(n)<0)return;if(a&&+v.age!==a)return;if(d.id===me){self=true;return}L.push([d.id,v])});
   var tot=tl('يعرض لك ','Showing ')+L.length+tl(' من أصل ',' of ')+(srTotal===null?'؟':srTotal)+tl(' حساب',' accounts');
-  if(!L.length){$('srRes').innerHTML='<div class="xs">'+tot+'<br>'+tl('مفيش حساب بالاسم والعمر ده.','No account with this name and age.')+'</div>';return}
+  if(!L.length){$('srRes').innerHTML='<div class="xs">'+tot+'<br>'+(self?tl('ده حسابك إنت 🙂 ابحث عن شخص تاني.','That is your own account 🙂 Search for someone else.'):tl('مفيش حساب بالاسم ده (أو ظهوره في البحث مقفول).','No account with this name (or their search visibility is off).'))+'</div>';return}
   Promise.all(L.map(function(x){return Promise.all([FB.db.collection('requests').doc(me+'_'+x[0]).get(),FB.db.collection('requests').doc(x[0]+'_'+me).get()]).then(function(r){return[x,r[0].exists?r[0].data().st:null,r[1].exists?r[1].data().st:null]})})).then(function(R){
    $('srRes').innerHTML='<div class="xs">'+tot+'</div>'+R.map(function(z){var v=z[0][1],id=z[0][0],s='';
     if(v.lvl)s+=' · 🏆 '+v.lvl;if(v.pts!==undefined)s+=' · ⭐ '+v.pts;if(v.stk!==undefined)s+=' · 🔥 '+v.stk;
