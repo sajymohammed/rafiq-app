@@ -402,7 +402,7 @@ function pickOption(o){
  if(!prayerTimeArrived(activePrayer)){toast('⏳ لسه وقت الصلاة ما دخلش');return}
  currentOpt=o;
  if(o.id==='missed'){$('opts').innerHTML=`<div style="grid-column:1/-1;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.5);border-radius:16px;padding:18px;text-align:center;line-height:1.8"><div style="font-size:28px">⚠️</div><b>متأكد إنك ما صليتهاش؟</b><p style="font-size:13px;opacity:.75;margin:10px 0">${tl('كل عباداتك المسجلة (صلوات ونوافل وقيام وقرآن وصيام ونقاط وبادجات) هتتمسح، وكل الأيام والصلوات اللي قبلها هتتقفل. الصلوات اللي سجلتها «ما صليتهاش» هتفضل للقضاء. التطبيق بيحفظ نسخة ترجع لو قلت «أقسم بالله صليتها».','All your recorded worship (prayers, sunnah, night prayer, Quran, fasting, points, badges) will be erased and all earlier days and prayers locked. Prayers logged as not prayed stay for qada. A copy is kept and returns if you swear you prayed it.')}</p><div style="display:flex;gap:10px"><button class="btn-back" style="flex:1;padding:12px;border:0;border-radius:12px;color:#fff" onclick="openSheet(activePrayer)">رجوع</button><button style="flex:1;padding:12px;border:0;border-radius:12px;background:#dc2626;color:#fff" onclick="confirmMissed()">نعم، لم أصلِّها</button></div></div>`;return}
- if(o.simple){d[activePrayer]={opt:o.id,points:o.base*mult(activePrayer),d:{}};saveDay(d);renderTracking();$('overlay').classList.remove('open');toast('تم التسجيل — '+o.base*mult(activePrayer)+' نقطة ⭐');return}
+ if(o.simple){d[activePrayer]={opt:o.id,points:o.base*mult(activePrayer),d:{}};saveDay(d);let actual=d[activePrayer].points;renderTracking();$('overlay').classList.remove('open');toast('تم التسجيل — '+actual+' نقطة ⭐');return}
  showStep(2);buildQuestions(o)
 }
 function wipeAll(){Object.keys(localStorage).filter(k=>k.startsWith('prayers_')).forEach(k=>localStorage.removeItem(k))}
@@ -469,8 +469,8 @@ function buildQuestions(o){
  $('qSave').onclick=()=>saveWithPoints(o,st)
 }
 function collectData(o,st){let q=id=>$(id),d={mode:st.mode};if(o.id==='imam_group')d.people=+(q('inPeople').value||0);else{if(st.mode==='meters')d.meters=+(q('inDist').value||0);else d.steps=+(q('inDist').value||0);if(o.id!=='mosque'){d.waited=st.waited;if(st.waited)d.minutes=+(q('inMin').value||0)}if(o.id==='mosque_imam'){d.knowCount=st.knowCount;d.people=+(q('inCount').value||0);d.rows=+(q('inCount').value||0)}}return d}
-function updatePreview(o,st){let d=collectData(o,st);if(o.id==='imam_group'&&!d.people)return $('ptsPrev').style.display='none';if(o.id!=='imam_group'&&!(d.steps||d.meters))return $('ptsPrev').style.display='none';let pts=calcPoints(o.id,d)*mult(activePrayer);$('ptsPrev').style.display='block';$('ptsPrev').innerHTML='⭐ النقاط المتوقعة: '+pts+' نقطة'}
-function saveWithPoints(o,st){let check=loadDay();if(isLockedByMissed(activePrayer,check))return toast('🔒 الصلاة دي مقفولة');if(!prayerTimeArrived(activePrayer))return toast('⏳ لسه وقت الصلاة ما دخلش');let d=collectData(o,st);if(o.id==='imam_group'&&!d.people)return toast('اكتب عدد الأشخاص الأول');if(o.id!=='imam_group'&&!(d.steps||d.meters))return toast('اكتب المسافة الأول');let pts=calcPoints(o.id,d)*mult(activePrayer);check[activePrayer]={opt:o.id,points:pts,d};saveDay(check);renderTracking();$('overlay').classList.remove('open');toast('تم تسجيل '+pts+' نقطة ⭐')}
+function updatePreview(o,st){let d=collectData(o,st);if(o.id==='imam_group'&&!d.people)return $('ptsPrev').style.display='none';if(o.id!=='imam_group'&&!(d.steps||d.meters))return $('ptsPrev').style.display='none';let raw=calcPoints(o.id,d)*mult(activePrayer),tmp={};tmp[activePrayer]={opt:o.id,points:raw,d:d};applyGoals(tmp);let pts=tmp[activePrayer].points;$('ptsPrev').style.display='block';$('ptsPrev').innerHTML='⭐ النقاط المتوقعة: '+pts+' نقطة'}
+function saveWithPoints(o,st){let check=loadDay();if(isLockedByMissed(activePrayer,check))return toast('🔒 الصلاة دي مقفولة');if(!prayerTimeArrived(activePrayer))return toast('⏳ لسه وقت الصلاة ما دخلش');let d=collectData(o,st);if(o.id==='imam_group'&&!d.people)return toast('اكتب عدد الأشخاص الأول');if(o.id!=='imam_group'&&!(d.steps||d.meters))return toast('اكتب المسافة الأول');let pts=calcPoints(o.id,d)*mult(activePrayer);check[activePrayer]={opt:o.id,points:pts,d};saveDay(check);let actual=check[activePrayer].points;renderTracking();$('overlay').classList.remove('open');toast('تم تسجيل '+actual+' نقطة ⭐')}
 
 $('qBack').onclick=()=>openSheet(activePrayer);
 $('closeSheet').onclick=()=>$('overlay').classList.remove('open');
@@ -524,7 +524,7 @@ function updateRemindUI(){$('remToggle').textContent=remindOn()?'شغال ✅':'
 $('remToggle').onclick=async()=>{if(remindOn())localStorage.setItem('remindOn','0');else{if('Notification'in window&&Notification.permission!=='granted'){if(await Notification.requestPermission()!=='granted')return toast('الإذن اترفض — التنبيهات مش هتشتغل')}localStorage.setItem('remindOn','1');toast('🔔 التنبيهات شغالة')}updateRemindUI()};
 $('remMinBtn').onclick=()=>{let i=REM_MINS.indexOf(remindMin());localStorage.setItem('remindMin',REM_MINS[(i+1)%REM_MINS.length]);updateRemindUI()};$('warnX').onclick=()=>$('warnBanner').style.display='none';
 
-function dayStats0(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
+function dayStats0(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed'&&r.opt!=='late')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
 function renderBars(el,items){let max=Math.max(...items.map(i=>i.v),1);el.innerHTML='';items.forEach(i=>{let w=document.createElement('div');w.className='bar-w';w.innerHTML=`<div class="bar-v">${i.v||''}</div><div class="bar" style="height:${Math.round(i.v/max*100)}%"></div><div class="bar-l">${i.l}</div>`;el.appendChild(w)})}
 
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats()});
@@ -554,7 +554,7 @@ const GOALS=["أحافظ على صلواتي","أصلي صلواتي في معا
 const THEMES={green:{n:'أخضر',bg1:'#0f2027',bg2:'#203a43',bg3:'#2c5364',ac:'#7CFC9A',ac2:'#2e9e4f',ac3:'#2e7d52',fg:'255,255,255',tx:'#ffffff'},white:{n:'أبيض',bg1:'#f4f6f8',bg2:'#e9edf1',bg3:'#dde3ea',ac:'#1f8a4c',ac2:'#2e9e4f',ac3:'#2e7d52',fg:'0,0,0',tx:'#111111'},black:{n:'أسود',bg1:'#000000',bg2:'#0d0d0d',bg3:'#1c1c1c',ac:'#e5e5e5',ac2:'#9ca3af',ac3:'#6b7280',fg:'255,255,255',tx:'#ffffff'},red:{n:'أحمر',bg1:'#2a0a0a',bg2:'#4a1010',bg3:'#7f1d1d',ac:'#ff8a8a',ac2:'#dc2626',ac3:'#b91c1c',fg:'255,255,255',tx:'#ffffff'},blue:{n:'أزرق',bg1:'#071a33',bg2:'#0b2a55',bg3:'#1e4d91',ac:'#7dc4ff',ac2:'#2f7de1',ac3:'#1d5fbf',fg:'255,255,255',tx:'#ffffff'},yellow:{n:'أصفر',bg1:'#2b2200',bg2:'#4a3a00',bg3:'#7a6100',ac:'#ffe066',ac2:'#e6c229',ac3:'#b8860b',fg:'255,255,255',tx:'#ffffff'},purple:{n:'بنفسجي',bg1:'#1a0b2e',bg2:'#2e1450',bg3:'#4c2a85',ac:'#d0b3ff',ac2:'#8b5cf6',ac3:'#6d28d9',fg:'255,255,255',tx:'#ffffff'},pink:{n:'بينك',bg1:'#2e0a1e',bg2:'#500f36',bg3:'#8a1c5c',ac:'#ffb3d9',ac2:'#ec4899',ac3:'#be185d',fg:'255,255,255',tx:'#ffffff'}};
 function applyTheme(k){let t=THEMES[k]||THEMES.green,r=document.documentElement.style;['bg1','bg2','bg3','ac','ac2','ac3','fg','tx'].forEach(p=>r.setProperty('--'+p,t[p]));localStorage.setItem('theme',k);let m=document.querySelector('meta[name=theme-color]');if(m)m.content=t.bg1;document.querySelectorAll('.thm').forEach(b=>b.classList.toggle('on2',b.dataset.t===k))}
 $('thmRow').innerHTML=Object.entries(THEMES).map(([k,t])=>`<button class="thm" data-t="${k}" onclick="applyTheme('${k}')"><i style="background:${t.ac2}"></i>${t.n}</button>`).join('');
-const XU=()=>USERS()[localStorage.getItem('rafiq_session')]||{},XG=()=>XU().goals||[],hasG=(x,k)=>{let u=XU(),gs=u.goals||[],sn=u.gsince||{},cr=u.created?dayKey(new Date(u.created)):'0000-00-00';return gs.some(g=>g.includes(x)&&(!k||k>=(sn[g]||cr)))};
+const XU=()=>USERS()[localStorage.getItem('rafiq_session')]||{},XG=()=>XU().goals||[],hasG=(x,k)=>{if(getGender()==='woman'&&String(x).includes('في المسجد'))return false;let u=XU(),gs=u.goals||[],sn=u.gsince||{},cr=u.created?dayKey(new Date(u.created)):'0000-00-00';return gs.some(g=>g.includes(x)&&(!k||k>=(sn[g]||cr)))};
 function XUP(f){let s=localStorage.getItem('rafiq_session'),us=USERS();if(us[s]){f(us[s]);saveUsers(us)}}
 const XEX=k=>{try{return JSON.parse(localStorage.getItem('extras_'+k))||{}}catch(e){return{}}},XSX=(k,o)=>{let m=lastMark();if(m&&k<m.day)return;localStorage.setItem('extras_'+k,JSON.stringify(o))};
 const QU={pages:'صفحة',juz:'جزء',quarter:'ربع',ayah:'آية'};
@@ -567,23 +567,23 @@ function fastInfo(d){let hd=hijriDay(d),wd=d.getDay(),w=hd>=13&&hd<=15,m=wd===1|
 function extraParts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),n=d.n||{},P={naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0,bn:0,zk:0,sd:0,sdC:0,ad:0};
  const NP={fajr:20,dhuhr:5,maghrib:5,isha:10};
  for(const x in NP){if(n[x]==='y'){P.naf+=NP[x];P.nafC++}else if(hasG('النوافل',k)&&(n[x]==='n'||(past&&!n[x])))P.naf-=2}
-  for(const x of['ishraq','witr'])if(n[x]==='y'){P.naf+=10;P.nafC++}
+  for(const x of['ishraq','witr']){if(n[x]==='y'){P.naf+=10;P.nafC++}else if(hasG('النوافل',k)&&(n[x]==='n'||(past&&!n[x])))P.naf-=2}
  if(d.qy&&d.qy!=='n'){P.qy+={2:5,4:10,6:15,8:20}[d.qy]||0;P.qyC++}else if(hasG('قيام الليل',k)&&(d.qy==='n'||(past&&!d.qy)))P.qy-=3;
- let q=u.quran;if(q&&(d.q!==undefined||(past&&k>=(q.since||dayKey(new Date()))))){let r=d.q||0,tg=d.qt||q.n,p=r===0?-3:r<tg?2:r===tg?5:8;P.q+=hasG('القرآن',k)?p*2:p;if(r>0)P.qC++}
- let f=fastInfo(dt);if(f.show){if(d.f==='y'){P.f+=(f.pts||10);P.fC++}else if(f.must&&(d.f==='n'||(past&&!d.f)))P.f-=15}
- if(d.kok&&!q){P.q+=hasG('القرآن',k)?10:5;P.qC++}P.bn=d.bn||0;P.zk=d.zk||0;P.ad=d.ad||0;P.sd=d.sd||0;P.sdC=(d.sdl||[]).length;try{P.fo=focusDelta(k)+(d.fz||0)}catch(e){P.fo=d.fz||0}return P}
+ let q=u.quran,qa=q?qAutoAmount(k,q):null;if(q&&(d.q!==undefined||qa!==null||(past&&k>=(q.since||dayKey(new Date()))))){let r=Math.max(+d.q||0,qa||0),tg=d.qt||q.n,p=r===0?-3:r<tg?2:r===tg?5:8;P.q+=hasG('القرآن',k)?p*2:p;if(r>0)P.qC++}
+ let f=fastInfo(dt);if(f.show){if(d.f==='y'){P.f+=(f.pts||10);P.fC++}else if(f.mon===9?(d.f==='n'||(past&&!d.f)):(f.must&&(d.f==='n'||(past&&!d.f))))P.f-=f.mon===9?50:15}
+ if(d.kok&&!q){P.q+=hasG('القرآن',k)?10:5;P.qC++}P.bn=d.bn||0;P.zk=d.zk||0;P.ad=d.ad||0;var sdl=d.sdl||[];P.sd=sdl.length?sdPoints(sdAmount(sdl)):(d.sd||0);P.sdC=sdl.length;try{P.fo=focusDelta(k)+(d.fz||0)}catch(e){P.fo=d.fz||0}return P}
 function extraPts(k){let P=extraParts(k);return P.naf+P.qy+P.q+P.f+P.bn+P.zk+P.ad+P.sd+(P.fo||0)}
 function dayStats(k){let s=dayStats0(k);s.pts+=extraPts(k);return s}
 function renderExtras(){let box=$('extras');if(!box||box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT')return;let k=dayKey(currentDate),d=XEX(k),n=d.n||{},q=XU().quran,f=fastInfo(new Date(k+'T00:00:00')),b=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`,h='';
  h+='<div class="xc"><b>🌙 النوافل</b>'+[['fajr','الفجر',20],['ishraq',tl('الشروق','Ishraq'),10],['dhuhr','الظهر',5],['maghrib','المغرب',5],['isha','العشاء',10],['witr',tl('الوتر','Witr'),10]].map(([x,l,p])=>`<div class="xr"><span>${l} <small>(+${p})</small></span><span>${prayerTimeArrived(x)?b(n[x]==='y',`setNaf('${x}','y')`,'✅ صليت')+b(n[x]==='n',`setNaf('${x}','n')`,'❌ لا'):'<small>⏳ لسه وقتها ما دخلش</small>'}</span></div>`).join('')+'</div>';
  h+=`<div class="xc"><b>🌌 قيام الليل</b>${prayerTimeArrived('isha')?`<div class="xr"><span>${[2,4,6,8].map(x=>b(d.qy===x,`setQy(${x})`,x+' ركعة (+'+{2:5,4:10,6:15,8:20}[x]+')')).join('')}${b(d.qy==='n',"setQy('n')",'❌ لا')}</span></div>`:'<p class="xs">⏳ لسه وقته ما جاش (بعد صلاة العشاء)</p>'}</div>`;
  h+=quranCard(q,d,k);
- if(f.show)h+=`<div class="xc"><b>🌿 صيام ${f.label}</b><div class="xr"><span>صمت النهاردة؟ <small>(+${f.pts||10})</small></span><span>${b(d.f==='y',"setFast('y')",'✅ صمت')}${b(d.f==='n',"setFast('n')",'❌ لا')}</span></div></div>`;
+ if(f.show)h+=`<div class="xc"><b>🌿 صيام ${f.label}</b>${f.mon===9?'<div class="xs">'+tl('لو اليوم عدى من غير صيام: −50 نقطة.','A missed fast on this day: −50 points.')+'</div>':''}<div class="xr"><span>صمت النهاردة؟ <small>(+${f.pts||10})</small></span><span>${b(d.f==='y',"setFast('y')",'✅ صمت')}${b(d.f==='n',"setFast('n')",'❌ لا')}</span></div></div>`;
  h+=qadaCard()+zakatCard()+sadaqaCard();box.innerHTML=h}
 function setNaf(x,v){if(dayBeforeMark())return toast(LOCK_MSG());if(!prayerTimeArrived(x))return toast('⏳ لسه وقت الصلاة ما دخلش');let k=dayKey(currentDate),d=XEX(k);d.n=d.n||{};d.n[x]=d.n[x]===v?undefined:v;XSX(k,d);renderTracking()}
 function setFast(v){if(dayBeforeMark())return toast(LOCK_MSG());let k=dayKey(currentDate),d=XEX(k);d.f=d.f===v?undefined:v;XSX(k,d);renderTracking()}
 function setQy(v){if(dayBeforeMark())return toast(LOCK_MSG());if(!prayerTimeArrived('isha'))return toast('⏳ لسه وقته ما جاش');let k=dayKey(currentDate),d=XEX(k);d.qy=d.qy===v?undefined:v;XSX(k,d);renderTracking()}
-function qAdjust(k){let q=XU().quran;if(!q)return'';let rs=[];for(let i=0;i<5;i++){let dt=new Date(k+'T00:00:00');dt.setDate(dt.getDate()-i);let kk=dayKey(dt);if(kk<(q.since||'0000'))return'';let r=XEX(kk).q;if(r===undefined)return'';rs.push(r)}
+function qAdjust(k){let q=XU().quran;if(!q)return'';let rs=[];for(let i=0;i<5;i++){let dt=new Date(k+'T00:00:00');dt.setDate(dt.getDate()-i);let kk=dayKey(dt);if(kk<(q.since||'0000'))return'';let ex=XEX(kk),auto=qAutoAmount(kk,q),r=ex.q!==undefined?+ex.q:auto;if(r===undefined||r===null)return'';rs.push(Math.max(+r||0,auto||0))}
  let up=rs.every(r=>r>q.n),dn=rs.every(r=>r<q.n);if(!up&&!dn)return'';let avg=rs.reduce((a,b)=>a+b,0)/5,nn=up?Math.ceil(avg):Math.max(1,Math.floor(avg));if(nn===q.n)return'';
  let nx=new Date(k+'T00:00:00');nx.setDate(nx.getDate()+1);XUP(x=>{x.quran.n=nn;x.quran.since=dayKey(nx)});return(up?'📈 وردك زاد لـ ':'📉 وردك قل لـ ')+nn+' '+QU[q.u]+' يوميًا'}
 function saveQTarget(){let n=+$('qN').value,u=$('qU').value;if(!(n>0))return toast('اكتب عدد صح');XUP(x=>x.quran={n,u,since:dayKey(new Date())});localStorage.removeItem('qSetT');renderTracking();toast('تم حفظ الورد ✅')}
@@ -945,13 +945,26 @@ function qzUndo(){XUP(function(x){if(!x.qzk)return;var l=x.qzk.log||[],v=l.pop()
 function qzOff(){if(!confirm(tl('تلغي حساب زكاة السنين الفايتة؟','Remove the past-zakat calculation?')))return;XUP(function(x){delete x.qzk});renderQadaPage()}
 
 /* --- الصدقة (كارت التتبع) --- */
+function sdAmount(logs){return(logs||[]).reduce(function(a,e){return a+(+e.a||0)},0)}
+function sdPoints(amount){return Math.floor(((+amount||0)+1e-9)/5)}
+function sdNormalize(logs){
+ var total=0,points=0;
+ (logs||[]).forEach(function(e){var before=sdPoints(total);total+=(+e.a||0);points=sdPoints(total);e.p=Math.max(0,points-before)});
+ return{total:total,points:points}
+}
 function sadaqaCard(){var k=dayKey(currentDate),d=XEX(k),l=d.sdl||[],tot=0;l.forEach(function(e){tot+=e.a});
  var r=function(a,b){return '<div class="xr"><span>'+a+'</span><span>'+b+'</span></div>'};
- return '<div class="xc"><b>'+tl('🤲 الصدقة','🤲 Sadaqah')+'</b>'+(l.length?r(tl('تصدقت في اليوم ده','Given this day'),fm(tot))+r(tl('النقاط','Points'),'+'+(d.sd||0)):'<div class="xs">'+tl('كل 5 من المبلغ = نقطة (وأقل حاجة نقطتين).','Every 5 of the amount = 1 point (minimum 2).')+'</div>')+zkFld('sdA',tl('المبلغ','Amount'),'sdAdd()',tl('سجّل','Add'))+(l.length?'<div style="display:flex;gap:8px;margin-top:8px"><button class="xb" onclick="sdUndo()">'+tl('↩ تراجع عن آخر صدقة','↩ Undo last')+'</button></div>':'')+'</div>'}
-function sdAdd(){if(dayBeforeMark())return toast(LOCK_MSG());var a=nz($('sdA').value);if(!a)return toast(tl('اكتب المبلغ','Enter the amount'));var k=dayKey(currentDate),d=XEX(k),p=Math.max(2,Math.floor(a/5));(d.sdl=d.sdl||[]).push({a:a,p:p});d.sd=(d.sd||0)+p;XSX(k,d);toast(tl('🤲 تقبّل الله منك +','🤲 May Allah accept +')+p+tl(' نقطة',' pts'));renderTracking()}
-function sdUndo(){if(dayBeforeMark())return toast(LOCK_MSG());var k=dayKey(currentDate),d=XEX(k),l=d.sdl||[];if(!l.length)return;var e=l.pop();d.sd=Math.max(0,(d.sd||0)-e.p);d.sdl=l;XSX(k,d);renderTracking()}
+ return '<div class="xc"><b>'+tl('🤲 الصدقة','🤲 Sadaqah')+'</b>'+(l.length?r(tl('تصدقت في اليوم ده','Given this day'),fm(tot))+r(tl('النقاط','Points'),'+'+sdPoints(tot)):'<div class="xs">'+tl('كل 5 من إجمالي صدقات اليوم = نقطة؛ أقل من 5 = صفر.','Every 5 of today’s total donations = 1 point; less than 5 = 0.')+'</div>')+zkFld('sdA',tl('المبلغ','Amount'),'sdAdd()',tl('سجّل','Add'))+'<div class="xs" id="sdPreview">'+tl('اكتب المبلغ عشان تشوف النقاط المتوقعة.','Enter an amount to preview its points.')+'</div>'+(l.length?'<div style="display:flex;gap:8px;margin-top:8px"><button class="xb" onclick="sdUndo()">'+tl('↩ تراجع عن آخر صدقة','↩ Undo last')+'</button></div>':'')+'</div>'}
+function sdAdd(){
+ if(dayBeforeMark())return toast(LOCK_MSG());
+ var a=nz($('sdA').value);if(!a)return toast(tl('اكتب مبلغًا أكبر من صفر','Enter an amount greater than zero'));
+ var k=dayKey(currentDate),d=XEX(k),l=d.sdl||[],before=sdNormalize(l),p=sdPoints(before.total+a)-before.points;
+ l.push({a:a,p:p});d.sdl=l;d.sd=sdPoints(before.total+a);XSX(k,d);
+ toast(tl('🤲 تقبّل الله منك +','🤲 May Allah accept +')+p+tl(' نقطة؛ إجمالي نقاط الصدقة اليوم ',' pts; sadaqah points today ')+d.sd);renderTracking()
+}
+function sdUndo(){if(dayBeforeMark())return toast(LOCK_MSG());var k=dayKey(currentDate),d=XEX(k),l=d.sdl||[];if(!l.length)return;l.pop();var rec=sdNormalize(l);d.sd=rec.points;d.sdl=l;XSX(k,d);renderTracking()}
 /* --- زكاة السنة دلوقتي (كارت التتبع) --- */
-function zkFld(id,ph,fn,bt){return '<div style="display:flex;gap:8px;margin-top:8px"><input class="ai" id="'+id+'" type="number" inputmode="decimal" placeholder="'+ph+'" style="flex:1;min-width:0;margin:0"><button class="xb" onclick="'+fn+'">'+bt+'</button></div>'}
+function zkFld(id,ph,fn,bt){return '<div style="display:flex;gap:8px;margin-top:8px"><input class="ai" id="'+id+'" type="number" inputmode="decimal" placeholder="'+ph+'" '+(id==='sdA'?'oninput="sdEstimate(this.value)"':'')+' style="flex:1;min-width:0;margin:0"><button class="xb" onclick="'+fn+'">'+bt+'</button></div>'}
 function zakatCard(){var z=zkG();if(!z)return'';var t='<b>'+tl('💰 الزكاة','💰 Zakat')+'</b>';
  if(!z.amt)return '<div class="xc">'+t+'<div class="xs">'+tl('معاك كام؟ هنحسب الزكاة (2.5%).','How much do you have? We will calculate zakat (2.5%).')+'</div>'+zkFld('zkA',tl('المبلغ','Amount'),'zkCalc()',tl('احسب','Calculate'))+'</div>';
  var due=z.due||0,paid=z.paid||0,rem=Math.max(0,due-paid),r=function(a,b,bo){return '<div class="xr"><span>'+(bo?'<b>':'')+a+(bo?'</b>':'')+'</span><span>'+(bo?'<b>':'')+b+(bo?'</b>':'')+'</span></div>'};
@@ -1287,8 +1300,179 @@ applyTd();tdSetR();setInterval(function(){if($('page-today').classList.contains(
 GUIDE.ar.push(['🏠 مركز اليوم','شاشة تلخّص يومك: الصلاة القادمة والوقت المتبقي، ونسبة هدف اليوم (الصلوات والورد والأذكار والنوافل والقيام والصيام)، والستريك والنقاط. من الإعدادات ← الشاشات تقدر تخليه بدل الرئيسية، أو يفضل شريط صغير فوق المواقيت.']);
 GUIDE.en.push(['🏠 Today center','One screen that sums up your day: next prayer and time left, today goal %, streak and points. In Settings → Screens make it replace Home, or keep a small strip above the prayer times.']);
 
+/* ===== إصلاحات النقاط والورد والنسخة الاحتياطية ===== */
+function qAutoAmount(k,q){
+ if(!q)return null;
+ var pages=XEX(k).qap;
+ if(!pages||typeof pages!=='object')return null;
+ var ids=Object.keys(pages).filter(function(p){return /^\d+$/.test(p)&&+p>=1&&+p<=604});
+ if(!ids.length)return null;
+ var count=ids.length;
+ if(q.u==='pages')return count;
+ if(q.u==='juz')return Math.round(count/20*10)/10;
+ if(q.u==='quarter')return Math.round(count/(604/240)*10)/10;
+ if(q.u==='ayah')return ids.reduce(function(a,p){return a+(+pages[p]||0)},0);
+ return null
+}
+var qReadTimer=null,qViewedPage=null;
+function qRecordPage(p){
+ if(!Q_PS||!Q_A||p<1||p>604)return false;
+ var k=dayKey(new Date()),d=XEX(k),pages=d.qap||{};
+ if(pages[p])return false;
+ var start=Q_PS[p-1],end=p<604?Q_PS[p]:Q_A.length;
+ pages[p]=Math.max(0,end-start);d.qap=pages;
+ if(XU().quran&&d.qt===undefined)d.qt=XU().quran.n;
+ localStorage.setItem('extras_'+k,JSON.stringify(d));
+ var msg='';try{msg=qAdjust(k)}catch(e){}
+ if(msg)toast(msg);
+ try{renderTracking()}catch(e){}
+ try{qRenderK()}catch(e){}
+ return true
+}
+function qArmReadTimer(p){
+ clearTimeout(qReadTimer);
+ qReadTimer=setTimeout(function(){var reader=$('qReader');if(reader&&reader.style.display==='flex'&&Q_PAGE===p)qRecordPage(p)},20000)
+}
+var _qShowAuto=qShow;
+qShow=function(){clearTimeout(qReadTimer);qViewedPage=null;_qShowAuto.apply(this,arguments)};
+var _qGoPageAuto=qGoPage;
+qGoPage=function(p,hi){
+ var reader=$('qReader'),open=reader&&reader.style.display==='flex',target=Math.max(1,Math.min(604,Math.round(+p)||1));
+ if(open&&qViewedPage!==null&&target===qViewedPage+1)qRecordPage(qViewedPage);
+ _qGoPageAuto.apply(this,arguments);
+ if(open){qViewedPage=Q_PAGE;qArmReadTimer(Q_PAGE)}
+};
+var _qCloseAuto=qClose;
+qClose=function(){clearTimeout(qReadTimer);qViewedPage=null;_qCloseAuto.apply(this,arguments)};
+var _stkOKWird=stkOK;
+stkOK=function(t,k){
+ if(t!=='q')return _stkOKWird.apply(this,arguments);
+ var d=XEX(k),q=XU().quran;
+ if(d.kok)return true;
+ if(!q)return false;
+ var auto=qAutoAmount(k,q),read=Math.max(+d.q||0,auto||0),target=+(d.qt||q.n);
+ return read>=target
+};
+var _stkBonusToday=stkBonus;
+stkBonus=function(a){
+ var k=dayKey(new Date()),d=XEX(k);
+ d.bn=(d.bn||0)+a;
+ localStorage.setItem('extras_'+k,JSON.stringify(d))
+};
+var _calcPointsImam=calcPoints;
+calcPoints=function(id,d){
+ var pts=_calcPointsImam.apply(this,arguments);
+ if(id!=='mosque_imam')return pts;
+ var previous=d.knowCount?(d.people||0):(d.rows||0)*ROW_PTS;
+ var followers=d.knowCount?(d.people||0):(d.rows||0)*ROW_PTS;
+ return pts-previous+followers*GROUP_PTS
+};
+function refreshMosqueGoalOptions(){
+ var mosqueGoal='أصلي كل الصلوات في المسجد',woman=sg==='woman';
+ document.querySelectorAll('[data-goal]').forEach(function(b){if(b.dataset.goal===mosqueGoal){b.style.display=woman?'none':'';if(woman)b.classList.remove('sel')}});
+ var ag=$('acGender'),accountWoman=ag?ag.value==='woman':getGender()==='woman';
+ document.querySelectorAll('[data-sg2]').forEach(function(b){if(b.dataset.sg2===mosqueGoal){b.style.display=accountWoman?'none':'';if(accountWoman)b.classList.remove('on2')}})
+}
+document.querySelectorAll('[data-sg]').forEach(function(b){b.addEventListener('click',refreshMosqueGoalOptions)});
+var _fillAccMosque=fillAcc;
+fillAcc=function(){_fillAccMosque.apply(this,arguments);refreshMosqueGoalOptions()};
+var _loginAsMosque=loginAs;
+loginAs=function(u){_loginAsMosque.apply(this,arguments);if($('acGender'))$('acGender').value=u.gender||'man';refreshMosqueGoalOptions()};
+if($('acGender'))$('acGender').addEventListener('change',refreshMosqueGoalOptions);
+var _buildQuestionsImam=buildQuestions;
+buildQuestions=function(o){
+ _buildQuestionsImam.apply(this,arguments);
+ if(o.id==='mosque_imam'){
+  var n=$('cntNote'),know=$('segKnow'),rows=$('segRows');
+  if(n)n.textContent=tl('كل مصلٍّ = 27 نقطة','27 points per follower');
+  if(know)know.addEventListener('click',function(){if(n)n.textContent=tl('كل مصلٍّ = 27 نقطة','27 points per follower')});
+  if(rows)rows.addEventListener('click',function(){if(n)n.textContent=tl('كل صف تقديريًا 25 مصلّي × 27 نقطة','Estimate: 25 followers per row × 27 points')})
+ }
+};
+var _renderTrackingLate=renderTracking;
+renderTracking=function(){
+ _renderTrackingLate.apply(this,arguments);
+ try{var data=loadDay(),done=PRAYERS.filter(function(p){var r=data[p.id];return r&&r.opt!=='missed'&&r.opt!=='late'}).length;$('doneCount').textContent=done+'/5'}catch(e){}
+};
+function sdEstimate(v){
+ var a=nz(v),el=$('sdPreview');if(!el)return;
+ if(!a){el.textContent=tl('اكتب المبلغ عشان تشوف النقاط المتوقعة.','Enter an amount to preview its points.');return}
+ var k=dayKey(currentDate),d=XEX(k),before=sdNormalize(d.sdl||[]),after=sdPoints(before.total+a),p=after-before.points;
+ el.textContent=tl('للتبرع ده: +'+p+' نقطة · إجمالي اليوم بعده: '+after,'This donation: +'+p+' points · today’s total after it: '+after)
+}
+var _renderBkInfo=renderBk;
+renderBk=function(){
+ _renderBkInfo.apply(this,arguments);
+ var b=$('bkCard');if(b)b.insertAdjacentHTML('beforeend','<div class="xs">'+tl('لاسترجاع النسخة، سجّل دخولك أو أنشئ حسابًا أولًا. الملف لا يتضمن كلمة المرور.','To restore a backup, sign in or create an account first. The file does not include your password.')+'</div>')
+};
+function bkDownloadFixed(blob,fn){
+ var a=document.createElement('a'),url=URL.createObjectURL(blob);
+ a.href=url;a.download=fn;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();
+ setTimeout(function(){URL.revokeObjectURL(url);a.remove()},60000);
+ toast(tl('لو المتصفح ما نزّلش الملف، اختار حفظ في الملفات من المشاركة.','If the file did not download, choose Save to Files from Share.'))
+}
+bkDl=bkDownloadFixed;
+function bkExportFixed(){
+ try{
+  var st={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(!BK_SKIP.test(k))st[k]=localStorage.getItem(k)}
+  var pr=Object.assign({},XU());delete pr.pw;
+  var fn='rafiqi-backup-'+dayKey(new Date())+'.json';
+  var blob=new Blob([JSON.stringify({app:'rafiqi',v:2,at:new Date().toISOString(),profile:pr,store:st})],{type:'application/json'}),f=null,canFile=false;
+  try{f=new File([blob],fn,{type:'application/json'})}catch(e){}
+  try{canFile=!!(f&&navigator.share&&navigator.canShare&&navigator.canShare({files:[f]}))}catch(e){}
+  if(canFile){
+   navigator.share({files:[f],title:fn}).then(function(){toast(tl('تمت مشاركة ملف النسخة؛ احفظه في الملفات أو Drive.','Backup shared; save it to Files or Drive.'))}).catch(function(e){if(e&&e.name==='AbortError')toast(tl('اتلغت المشاركة؛ اضغط حفظ نسخة وجرب تاني.','Share canceled; tap Save backup to try again.'));else bkDl(blob,fn)});
+  }else bkDl(blob,fn)
+ }catch(e){console.error(e);toast(tl('تعذّر تجهيز النسخة. تأكد من وجود مساحة كافية وجرب تاني.','Could not prepare backup. Check available storage and try again.'))}
+}
+bkExport=bkExportFixed;
+function bkImportFixed(inp){
+ var f=inp.files&&inp.files[0];if(!f)return;
+ if(f.size>20*1024*1024){toast(tl('ملف النسخة أكبر من 20 ميجابايت.','Backup file is larger than 20 MB.'));inp.value='';return}
+ if(!XU().name){toast(tl('سجّل دخولك أو أنشئ حسابًا قبل استرجاع النسخة.','Sign in or create an account before restoring.'));inp.value='';return}
+ var reader=new FileReader();
+ reader.onload=function(){
+  var oldProfile=Object.assign({},XU()),oldStore={};
+  try{
+   var data=JSON.parse(reader.result);
+   if(data.app!=='rafiqi'||!data.store||typeof data.store!=='object'||Array.isArray(data.store))throw new Error('invalid');
+   if(!confirm(tl('هيتم دمج بيانات الملف مع بياناتك الحالية، والملف له الأولوية للمفاتيح المتطابقة. تكمل؟','The backup will merge with current data; file values replace matching keys. Continue?'))){inp.value='';return}
+   Object.keys(data.store).forEach(function(k){
+    if(BK_SKIP.test(k)||typeof data.store[k]!=='string')return;
+    oldStore[k]=localStorage.getItem(k);
+    localStorage.setItem(k,data.store[k])
+   });
+   if(data.profile&&typeof data.profile==='object')XUP(function(x){
+    Object.keys(data.profile).forEach(function(k){if(k!=='pw'&&k!=='name'&&k!=='__proto__'&&k!=='constructor'&&k!=='prototype')x[k]=data.profile[k]})
+   });
+   toast(tl('تم الاسترجاع ✅ — بيتم التحديث','Restored ✅ reloading'));
+   setTimeout(function(){location.reload()},1800)
+  }catch(e){
+   Object.keys(oldStore).forEach(function(k){try{if(oldStore[k]===null)localStorage.removeItem(k);else localStorage.setItem(k,oldStore[k])}catch(x){}});
+   try{XUP(function(x){Object.keys(x).forEach(function(k){if(k!=='pw'&&k!=='name')delete x[k]});Object.keys(oldProfile).forEach(function(k){if(k!=='pw'&&k!=='name')x[k]=oldProfile[k]})})}catch(x){}
+   console.error(e);toast(tl('الملف غير صالح أو المساحة ممتلئة؛ لم يكتمل الاسترجاع.','Invalid file or storage is full; restore was not completed.'))
+  }
+  inp.value=''
+ };
+ reader.onerror=function(){toast(tl('تعذّر قراءة الملف.','Could not read the file.'));inp.value=''};
+ reader.readAsText(f)
+}
+bkImport=bkImportFixed;
+var _quranCardAuto=quranCard;
+quranCard=function(q,d,k){
+ var html=_quranCardAuto.apply(this,arguments),today=dayKey(new Date()),u=q||{u:'pages'},auto=qAutoAmount(k,u);
+ if(k===today&&auto!==null){
+  var read=Math.max(+d.q||0,auto),field=String(read);
+  html=html.replace(/(<input class="ai" id="qR"[^>]*value=")[^"]*(")/,'$1'+field+'$2');
+  html=html.replace('<input class="ai" id="qR"','<p class="xs">'+tl('صفحات المصحف التي قرأتها اليوم تُضاف تلقائيًا بعد تقليب الصفحة أو البقاء عليها 20 ثانية.','Pages read in the Mushaf count automatically after turning the page or staying for 20 seconds.')+'</p><input class="ai" id="qR"')
+ }
+ return html
+};
+GUIDE.ar.push(['📖 احتساب قراءة المصحف','الصفحة تُحسب ضمن وردك اليومي تلقائيًا بعد تقليبها أو البقاء عليها 20 ثانية. تقدر تراجع العدد أو تعدّله من التتبع.']);
+GUIDE.en.push(['📖 Mushaf reading tracking','A page counts toward your daily wird after you turn it or stay on it for 20 seconds. You can review or adjust the total in Tracking.']);
+refreshMosqueGoalOptions();
 updateSrcUI();updateRemindUI();updateGeoUI();
-let ses=localStorage.getItem('rafiq_session'),cu=ses&&USERS()[ses];if(cu){setGender(cu.gender);$('accName').textContent='👤 '+cu.name}else showAuth('auHome');
+let ses=localStorage.getItem('rafiq_session'),cu=ses&&USERS()[ses];if(cu){setGender(cu.gender);$('acGender').value=cu.gender||'man';refreshMosqueGoalOptions();$('accName').textContent='👤 '+cu.name}else showAuth('auHome');
 renderTracking();ensureTimes();
 
 setInterval(()=>{let ov=$('overlay');if(!ov.classList.contains('open')&&$('page-tracking').classList.contains('active'))renderTracking()},30000);
