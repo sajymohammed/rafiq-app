@@ -96,6 +96,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <button class="gear" id="bellBtn" style="left:60px" onclick="ntOpen()">🔔<span id="bellN" style="display:none;position:absolute;top:-4px;right:-4px;background:#e53935;color:#fff;border-radius:9px;font-size:11px;min-width:17px;line-height:17px">0</span></button>
   <header><h1>🕌 رفيقي</h1><div class="bism">اللهم أعني على ذكرك وشكرك وحسن عبادتك</div></header>
 
+  <div class="card" id="tdStrip" onclick="openToday()" style="cursor:pointer;padding:10px 14px;text-align:center;font-size:14px"></div>
   <div class="loc-bar">
     <div class="ln">📍 <span id="locName">المكان مش محدد</span></div>
     <button class="mini-btn" id="locChange">تغيير</button>
@@ -158,6 +159,12 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <div id="qadaPage"></div>
 </div>
 
+<div class="page" id="page-today">
+  <header><h1>🏠 مركز اليوم</h1></header>
+  <button class="mini-btn" id="tdBack" onclick="tdHome()">← الرئيسية</button>
+  <div id="tdBody"></div>
+</div>
+
 <!-- الأذكار -->
 <div class="page" id="page-adhkar">
   <header><h1>📿 الأذكار</h1></header>
@@ -209,7 +216,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 
   </div>
 <div class="sset" id="ss-theme" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-theme"></b></div><div class="card"><h3>🎨 لون البرنامج</h3><div id="skyScope" style="margin-bottom:8px"></div><div id="thmRow"></div></div></div>
-<div class="sset" id="ss-screens" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-screens"></b></div><div class="card"><div class="xc" id="qadaSet"></div></div><div class="card">
+<div class="sset" id="ss-screens" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-screens"></b></div><div class="card"><div class="xc" id="tdSet"></div></div><div class="card"><div class="xc" id="qadaSet"></div></div><div class="card">
     <h3>🔔 التنبيهات</h3>
     <div class="trow"><span class="pn">تنبيه قبل كل صلاة</span><button class="tog" id="remToggle">مغلق</button></div>
     <div class="trow"><span class="pn">قبل الصلاة بـ</span><button class="tog on" id="remMinBtn">10 دقائق</button></div>
@@ -615,7 +622,7 @@ function stkMode(){return localStorage.getItem('stkMode')||'all'}
 function stkOK(t,k){
  if(t==='p'){let d;try{d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}')}catch(e){return false}
   let m=stkMode(),re=m==='mosque'?/^mosque/:m==='jamaa'?/^(mosque|group|imam_group)/:null;
-  return['fajr','dhuhr','asr','maghrib','isha'].every(i=>{let r=d[i];return r&&r.opt&&r.opt!=='missed'&&(!re||re.test(r.opt))})}
+  return['fajr','dhuhr','asr','maghrib','isha'].every(i=>{let r=d[i];return r&&r.opt&&r.opt!=='missed'&&r.opt!=='late'&&(!re||re.test(r.opt))})}
  let d=XEX(k);
  if(t==='y')return!!d.qy&&d.qy!=='n';
  if(t==='s'){let n=d.n||{};return['fajr','dhuhr','maghrib','isha'].every(x=>n[x]==='y')}
@@ -1011,7 +1018,7 @@ var HFP=null;
 function hParts(dt){try{HFP=HFP||new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{year:'numeric',month:'numeric',day:'numeric'});var o={};HFP.formatToParts(dt).forEach(function(p){if(p.type==='year'||p.type==='month'||p.type==='day')o[p.type]=parseInt(p.value)});return o}catch(e){return{year:0,month:0,day:0}}}
 function bdDay(k){var rp=localStorage.getItem('prayers_'+k)||'',re=localStorage.getItem('extras_'+k)||'',sig=rp+'|'+re+'|'+(XU().goals||[]).join(','),c=BDC[k];if(c&&c.s===sig)return c.v;
  var dt=new Date(k+'T00:00:00'),dp={},ex={},h=hParts(dt),fi=fastInfo(dt);try{dp=JSON.parse(rp||'{}')}catch(e){}try{ex=JSON.parse(re||'{}')}catch(e){}var n=ex.n||{},ids=['fajr','dhuhr','asr','maghrib','isha'];
- var pr=function(i){var r=dp[i];return!!(r&&r.opt&&r.opt!=='missed')},jm=function(i){var r=dp[i];return!!(r&&/^(mosque|group|imam_group)/.test(r.opt||''))},ms=function(i){var r=dp[i];return!!(r&&/^mosque/.test(r.opt||''))};
+ var pr=function(i){var r=dp[i];return!!(r&&r.opt&&r.opt!=='missed'&&r.opt!=='late')},jm=function(i){var r=dp[i];return!!(r&&/^(mosque|group|imam_group)/.test(r.opt||''))},ms=function(i){var r=dp[i];return!!(r&&/^mosque/.test(r.opt||''))};
  var all5=ids.every(pr),jc=ids.filter(jm).length,sunan=['fajr','dhuhr','maghrib','isha'].every(function(x){return n[x]==='y'}),fReq=fi.show&&(fi.must||fi.mon===9);
  var v={k:k,dt:dt,hy:h.year,hm:h.month,hd:h.day,wd:dt.getDay(),fajr:pr('fajr'),all5:all5,jam5:jc===5,mos5:ids.every(ms),witr:n.witr==='y',ishraq:n.ishraq==='y',sunan:sunan,f:ex.f==='y',fPts:fi.pts||10,
   pts5:Math.max(0,ids.reduce(function(a,i){return a+((dp[i]&&dp[i].points)||0)},0)),ptsF:Math.max(0,(dp.fajr&&dp.fajr.points)||0),complete:all5&&jc>=3&&sunan&&(!fReq||ex.f==='y')};
@@ -1157,13 +1164,23 @@ var MYIP=null,srTotal=null,NT=[],pvT=null;
 function fbOK(){try{return !!(FB&&FB.auth.currentUser)}catch(e){return false}}
 function lvlOf(t){var l=1;for(var i=0;i<LEVELS.length;i++)if(t>=LEVELS[i])l=i+1;return l}
 function pvG(){return Object.assign({on:true,lvl:true,pts:false,stk:false},(XU()||{}).pv||{})}
+var SRC={},PVI=[['lvl','🏆','المستوى','Level'],['pts','⭐','إجمالي النقاط','Total points'],['wk','📈','نقاط آخر 7 أيام','Points, last 7 days'],['stk','🔥','ستريك الصلوات','Prayer streak'],['full','🕌','أيام الصلوات الخمس كاملة (آخر 30 يوم)','Full-prayer days (30d)'],['bdg','🎖️','عدد البادجات','Badges earned'],['fast','🌙','أيام الصيام (آخر 30 يوم)','Fasting days (30d)'],['qr','📖','أيام وردك من القرآن (آخر 30 يوم)','Quran days (30d)'],['city','📍','المدينة','City'],['since','📅','تاريخ الانضمام','Joined']];
+function srEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function pubDir(){if(!fbOK())return;var u=XU(),p=pvG(),uid=FB.auth.currentUser.uid,o={name:u.name||'',nl:(u.name||'').trim().toLowerCase(),age:+u.age||0,on:!!p.on,ts:Date.now()};
- try{if(p.lvl)o.lvl=lvlOf(totalAllDays());if(p.pts)o.pts=totalAllDays();if(p.stk)o.stk=stkInfo('p').n}catch(e){}
+ try{if(p.lvl)o.lvl=lvlOf(totalAllDays());if(p.pts)o.pts=totalAllDays();if(p.stk)o.stk=stkInfo('p').n;if(p.wk)o.wk=statRange(7).pts;
+  if(p.full||p.fast||p.qr){var r=statRange(30);if(p.full)o.full=r.full;if(p.fast)o.fast=r.fC;if(p.qr)o.qr=r.qC}
+  if(p.bdg)o.bdg=Object.keys(u.bd||{}).filter(function(k){return(u.bd[k]||{}).earned}).length;
+  if(p.city){var c=localStorage.getItem('city');if(c)o.city=c}if(p.since&&u.created)o.since=u.created}catch(e){}
  FB.db.collection('directory').doc(uid).set(o).catch(function(){})}
 function pubSched(){clearTimeout(pvT);pvT=setTimeout(pubDir,8000)}
 function pvSet(k){XUP(function(x){x.pv=Object.assign({on:true,lvl:true,pts:false,stk:false},x.pv||{});x.pv[k]=!x.pv[k]});pvRender();pubDir()}
-function pvRender(){var p=pvG(),b=function(k,l){return '<div class="xr"><span>'+l+'</span><button class="xb '+(p[k]?'on2':'')+'" onclick="pvSet(\''+k+'\')">'+(p[k]?tl('نعم','Yes'):tl('لا','No'))+'</button></div>'};
- $('pvBox').innerHTML='<div class="xs">'+tl('اختار إيه اللي يظهر للي يبحث عنك (الاسم والعمر بيظهروا دايمًا لو ظهورك في البحث شغال):','Choose what searchers can see (name and age always show if search visibility is on):')+'</div>'+b('on',tl('🔍 أظهر في البحث','🔍 Appear in search'))+b('lvl',tl('🏆 المستوى','🏆 Level'))+b('pts',tl('⭐ النقاط','⭐ Points'))+b('stk',tl('🔥 ستريك الصلوات','🔥 Prayer streak'))}
+function pvRender(){var p=pvG(),b=function(k,l){return '<div class="xr"><span>'+l+'</span><button class="xb" onclick="pvSet(\''+k+'\')">'+(p[k]?'✅ '+tl('ظاهر','Shown'):'🚫 '+tl('مخفي','Hidden'))+'</button></div>'};
+ $('pvBox').innerHTML='<div class="xs">'+tl('اختار إيه اللي يظهر للي يفتح حسابك (الاسم والعمر بيظهروا دايمًا لو ظهورك في البحث شغال):','Choose what people see when they open your profile (name and age always show if search visibility is on):')+'</div>'+b('on',tl('🔍 أظهر في البحث','🔍 Appear in search'))+PVI.map(function(x){return b(x[0],x[1]+' '+tl(x[2],x[3]))}).join('')}
+function srShow(id){var z=SRC[id];if(!z)return;var v=z[0][1],el=$('srProf');if(!el){el=document.createElement('div');el.id='srProf';el.style.cssText='position:fixed;inset:0;z-index:60;overflow:auto;padding:16px 16px 40px;background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));color:var(--tx)';document.body.appendChild(el)}
+ var n=0,rows=PVI.map(function(x){var val=v[x[0]],sh=val!==undefined&&val!==null;if(sh){n++;if(x[0]==='since')val=new Date(val).toLocaleDateString('en-GB');else if(x[0]==='stk'||x[0]==='full'||x[0]==='fast'||x[0]==='qr')val=val+tl(' يوم',' d')}
+  return '<div class="xr" style="padding:10px 0;border-bottom:1px solid rgba(var(--fg),.1);'+(sh?'':'opacity:.45')+'"><span>'+x[1]+' '+tl(x[2],x[3])+'</span><b>'+(sh?srEsc(val):'🔒 '+tl('مخفي','Hidden'))+'</b></div>'}).join('');
+ var bt=(z[1]==='a'||z[2]==='a')?'<div class="xs">✅ '+tl('أصدقاء','Friends')+'</div>':z[1]==='p'?'<div class="xs">⏳ '+tl('تم إرسال الطلب','Request sent')+'</div>':z[2]==='p'?'<div class="xs">🔔 '+tl('عنده طلب منك؟ رد عليه من الإشعارات','Reply to their request in notifications')+'</div>':'<button class="xb" style="width:100%" onclick="srAdd(\''+id+'\')">➕ '+tl('إضافة صديق','Add friend')+'</button>';
+ el.innerHTML='<button class="mini-btn" onclick="$(\'srProf\').remove()">✕ '+tl('رجوع','Back')+'</button><div style="text-align:center;margin:18px 0"><div style="width:72px;height:72px;border-radius:50%;background:rgba(var(--fg),.15);font-size:32px;line-height:72px;margin:0 auto 8px">'+srEsc((v.name||'?').charAt(0))+'</div><h2>'+srEsc(v.name)+'</h2><div class="xs">'+v.age+tl(' سنة',' y')+' · '+n+'/'+PVI.length+' '+tl('معلومة ظاهرة','shown')+'</div></div><div class="card">'+rows+'</div>'+bt}
 function srInit(){pvRender();pubDir();$('srCount').textContent='';srTotal=null;
  if(!fbOK()){$('srRes').innerHTML='<div class="xs">'+tl('سجّل دخول الأول.','Please log in first.')+'</div>';return}
  FB.db.collection('directory').get().then(function(s){srTotal=s.size;$('srCount').textContent=tl('يوجد ','There are ')+srTotal+tl(' حساب',' accounts')}).catch(function(){})}
@@ -1175,11 +1192,8 @@ function srGo(){var n=srNorm($('srName').value),a=+$('srAge').value;if(!fbOK())r
   if(!L.length){$('srRes').innerHTML='<div class="xs">'+tot+'<br>'+(self?tl('ده حسابك إنت 🙂 ابحث عن شخص تاني.','That is your own account 🙂 Search for someone else.'):tl('مفيش حساب بالاسم ده (أو ظهوره في البحث مقفول).','No account with this name (or their search visibility is off).'))+'</div>';return}
   var rg=function(id){return FB.db.collection('requests').doc(id).get().catch(function(){return{exists:false}})};
   return Promise.all(L.map(function(x){return Promise.all([rg(me+'_'+x[0]),rg(x[0]+'_'+me)]).then(function(r){return[x,r[0].exists?r[0].data().st:null,r[1].exists?r[1].data().st:null]})})).then(function(R){
-   $('srRes').innerHTML='<div class="xs">'+tot+'</div>'+R.map(function(z){var v=z[0][1],id=z[0][0],s='';
-    if(v.lvl)s+=' · 🏆 '+v.lvl;if(v.pts!==undefined)s+=' · ⭐ '+v.pts;if(v.stk!==undefined)s+=' · 🔥 '+v.stk;
-    var bt=(z[1]==='a'||z[2]==='a')?'✅ '+tl('أصدقاء','Friends'):z[1]==='p'?'⏳ '+tl('تم الإرسال','Request sent'):z[2]==='p'?tl('🔔 رد من الإشعارات','🔔 Reply in notifications'):'<button class="xb" onclick="srAdd(\''+id+'\')">➕ '+tl('إضافة صديق','Add friend')+'</button>';
-    return '<div class="xc"><b>'+v.name.replace(/</g,'&lt;')+'</b> · '+v.age+tl(' سنة',' y')+s+'<div class="xr">'+bt+'</div></div>'})})}).catch(function(){$('srRes').innerHTML='<div class="xs">'+tl('تعذّر البحث. تأكد من تحديث قواعد Firestore.','Search failed. Make sure Firestore rules are updated.')+'</div>'})}
-function srAdd(id){var me=FB.auth.currentUser.uid,u=XU();FB.db.collection('requests').doc(me+'_'+id).set({from:me,to:id,fn:u.name||'',fa:+u.age||0,st:'p',at:Date.now()}).then(function(){toast(tl('اتبعت طلب الصداقة ✅','Friend request sent ✅'));srGo()}).catch(function(){toast(tl('تعذّر الإرسال','Could not send'))})}
+   $('srRes').innerHTML='<div class="xs">'+tot+'</div>'+R.map(function(z){var v=z[0][1],id=z[0][0];SRC[id]=z;return '<div class="xc" onclick="srShow(\''+id+'\')" style="cursor:pointer"><b>'+srEsc(v.name)+'</b> · '+v.age+tl(' سنة',' y')+'<div class="xs">👤 '+tl('عرض الحساب','View profile')+' ›'+(z[1]==='a'||z[2]==='a'?' · ✅':z[1]==='p'?' · ⏳':z[2]==='p'?' · 🔔':'')+'</div></div>'}).join('')})}).catch(function(){$('srRes').innerHTML='<div class="xs">'+tl('تعذّر البحث. تأكد من تحديث قواعد Firestore.','Search failed. Make sure Firestore rules are updated.')+'</div>'})}
+function srAdd(id){var me=FB.auth.currentUser.uid,u=XU();FB.db.collection('requests').doc(me+'_'+id).set({from:me,to:id,fn:u.name||'',fa:+u.age||0,st:'p',at:Date.now()}).then(function(){toast(tl('اتبعت طلب الصداقة ✅','Friend request sent ✅'));if(SRC[id]){SRC[id][1]='p';srShow(id)}}).catch(function(){toast(tl('تعذّر الإرسال','Could not send'))})}
 function ntLoad(){if(!fbOK())return;FB.db.collection('requests').where('to','==',FB.auth.currentUser.uid).where('st','==','p').get().then(function(s){NT=[];s.forEach(function(d){NT.push([d.id,d.data()])});var b=$('bellN');b.textContent=NT.length;b.style.display=NT.length?'block':'none'}).catch(function(){})}
 function ntOpen(){ntLoad();setTimeout(ntRender,400);$('ntOv').classList.add('open');ntRender()}
 function ntRender(){$('ntSheet').innerHTML='<h2>🔔 '+tl('الإشعارات','Notifications')+'</h2>'+(NT.length?NT.map(function(x){return '<div class="xc"><b>'+String(x[1].fn).replace(/</g,'&lt;')+'</b> '+tl('يريد إضافتك كصديق','wants to add you as a friend')+'<div class="xr"><button class="xb" onclick="ntAns(\''+x[0]+'\',\'a\')">'+tl('نعم','Yes')+'</button><button class="xb" onclick="ntAns(\''+x[0]+'\',\'d\')">'+tl('لا','No')+'</button></div></div>'}).join(''):'<div class="xs">'+tl('مفيش إشعارات.','No notifications.')+'</div>')}
@@ -1192,6 +1206,43 @@ try{fetch('https://api.ipify.org?format=json').then(function(r){return r.json()}
 setTimeout(function(){pubDir();ntLoad()},6000);setInterval(ntLoad,60000);
 GUIDE.ar.push(['🔍 البحث والأصدقاء','من الإعدادات ← البحث: اكتب اسم الشخص وعمره لتظهر لك صفحته (حسب ما سمح بإظهاره) ثم أضِفه كصديق. طلبات الصداقة تصلك في 🔔 أعلى الرئيسية. من نفس الشاشة تتحكم في ما يراه الباحثون عنك.'],['🌿 صيام المناسبات','تاسوعاء وعاشوراء وعرفة وست شوال والتسع الأوائل من ذي الحجة وشهر محرم تظهر في كارت الصيام في أيامها بنقاطها، وأيام العيدين والتشريق مقفولة.']);
 GUIDE.en.push(['🔍 Search & friends','Settings → Search: enter a person\'s name and age to see their profile (as much as they allow) and add them as a friend. Friend requests arrive under 🔔 on Home. You control what searchers see on the same screen.'],['🌿 Occasion fasts','Tasu\'a, Ashura, Arafah, Six of Shawwal, the first 9 days of Dhul Hijjah and Muharram appear in the fasting card on their days with points; Eid and Tashreeq days are locked.']);
+
+/* ===== مركز اليوم ===== */
+function tdOn(){return localStorage.getItem('rafiq_today')==='on'}
+function tdFmt(m){return((m/60|0)%12||12)+':'+('0'+m%60).slice(-2)}
+function tdLeft(l){return(l>=60?Math.floor(l/60)+tl(' س ',' h '):'')+(l%60)+tl(' د',' m')}
+function tdNext(){var n=new Date(),m=n.getHours()*60+n.getMinutes();for(var i=0;i<5;i++){var s=getPrayerStartMinutes(PRAYERS[i].id);if(s!==null&&s>m)return{name:PRAYERS[i].name,left:s-m}}var f=getPrayerStartMinutes('fajr');return f===null?null:{name:PRAYERS[0].name,left:1440-m+f,tom:true}}
+function tdData(){var now=new Date(),k=dayKey(now),pd={},d=XEX(k),u=XU(),q=u.quran,I=[];try{pd=JSON.parse(localStorage.getItem('prayers_'+k)||'{}')}catch(e){}
+ var pr=PRAYERS.filter(function(p){var r=pd[p.id];return r&&r.opt&&r.opt!=='missed'&&r.opt!=='late'}).length;
+ I.push({i:'🕌',l:tl('الصلوات','Prayers'),v:pr+'/5',d:pr===5});
+ if(q){var r=d.q||0;I.push({i:'📖',l:tl('ورد القرآن','Quran'),v:r+'/'+q.n,d:r>=q.n||!!d.kok})}
+ var aw=adG().aw||{},na=Object.keys(aw).length;I.push({i:'📿',l:tl('الأذكار','Adhkar'),v:na+'/5',d:!!(aw.morn&&aw.eve)});
+ var n=d.n||{},nc=['fajr','ishraq','dhuhr','maghrib','isha','witr'].filter(function(x){return n[x]==='y'}).length;I.push({i:'🌙',l:tl('النوافل','Nawafil'),v:nc+'/6',d:nc===6});
+ I.push({i:'🌃',l:tl('قيام الليل','Qiyam'),v:d.qy&&d.qy!=='n'?'✅':'—',d:!!(d.qy&&d.qy!=='n')});
+ var f=fastInfo(now);if(f.show)I.push({i:'🌿',l:f.label||tl('صيام','Fasting'),v:d.f==='y'?'✅':'—',d:d.f==='y'});
+ var dn=I.filter(function(x){return x.d}).length;return{I:I,pct:Math.round(dn/I.length*100),stk:stkInfo('p').n,pts:dayStats(k).pts,nx:tdNext()}}
+function tdShow(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});$(id).classList.add('active')}
+function openToday(){tdShow('page-today');renderToday()}
+function tdHome(){tdShow('page-home');ensureTimes()}
+function renderTdStrip(){var s=$('tdStrip');if(!s)return;var D=tdData(),nx=D.nx;s.innerHTML='<span>🏠 <b>'+tl('مركز اليوم','Today')+'</b> · '+(nx?'🕌 '+nx.name+' '+tl('بعد ','in ')+tdLeft(nx.left):'')+' · '+D.pct+'% ›</span>'}
+function renderToday(){var el=$('tdBody');if(!el)return;ensureTimes();var D=tdData(),nx=D.nx,now=new Date(),h='';
+ h+='<div class="card" style="text-align:center"><div class="xs">'+now.toLocaleDateString(LANG==='en'?'en-US':'ar-EG',{weekday:'long',day:'numeric',month:'long'})+'</div>'+(nx?'<div style="font-size:15px;margin:6px 0">🕌 '+tl('الصلاة القادمة','Next prayer')+(nx.tom?tl(' (غدًا)',' (tomorrow)'):'')+'</div><div style="font-size:30px;font-weight:800">'+nx.name+'</div><div class="xs">⏱️ '+tl('باقي ','in ')+tdLeft(nx.left)+'</div>':'<div class="xs">'+tl('المواقيت مش متاحة بعد','Times not available yet')+'</div>')+'</div>';
+ h+='<div class="card"><div class="xr"><b>🎯 '+tl('هدف اليوم','Today goal')+'</b><b>'+D.pct+'%</b></div><div style="height:8px;border-radius:5px;background:rgba(var(--fg),.15);margin:8px 0"><div style="height:8px;border-radius:5px;background:var(--ac);width:'+D.pct+'%"></div></div>'+D.I.map(function(x){return '<div class="xr" style="padding:7px 0"><span>'+x.i+' '+x.l+'</span><span>'+x.v+(x.d?' ✅':'')+'</span></div>'}).join('')+'</div>';
+ h+='<div class="card"><div class="xr"><span>🔥 '+tl('ستريك الصلوات','Prayer streak')+'</span><b>'+D.stk+tl(' يوم',' d')+'</b></div><div class="xr"><span>⭐ '+tl('نقاط اليوم','Points today')+'</span><b>'+D.pts+'</b></div></div>';
+ h+='<div class="card"><div class="xs" style="margin-bottom:6px">🕘 '+tl('المواقيت','Prayer times')+'</div>'+PRAYERS.map(function(p){var s=getPrayerStartMinutes(p.id);return '<div class="xr" style="padding:4px 0"><span>'+p.name+'</span><span>'+(s===null?'—':tdFmt(s))+'</span></div>'}).join('')+'</div>';
+ h+='<div class="xr" style="gap:8px"><button class="xb" onclick="ntOpen()">🔔 '+tl('الإشعارات','Notifications')+'</button>'+(tdOn()?'<button class="xb" onclick="tdHome()">🕌 '+tl('الشاشة الرئيسية','Home screen')+'</button>':'')+'</div>';
+ $('tdBack').style.display=tdOn()?'none':'inline-block';el.innerHTML=h}
+function applyTd(){var t=document.querySelector('.tab[data-page=home],.tab[data-page=today]'),on=tdOn();t.dataset.page=on?'today':'home';t.innerHTML=on?'<span class="ti">🏠</span>'+tl('اليوم','Today'):'<span class="ti">🕌</span>'+tl('الرئيسية','Home');
+ var ph=$('page-home'),pt=$('page-today');if(on&&ph.classList.contains('active')){tdShow('page-today');renderToday()}else if(!on&&pt.classList.contains('active')&&t.classList.contains('on')){tdShow('page-home');ensureTimes()}
+ $('tdStrip').style.display=on?'none':'block';renderTdStrip()}
+function tdSetR(){var b=$('tdSet'),on=tdOn();if(!b)return;b.innerHTML='<div class="trow"><span class="pn">'+tl('🏠 مركز اليوم بدل الرئيسية','🏠 Today center instead of Home')+'</span><button class="mini-btn'+(on?' on':'')+'" onclick="tdToggle()">'+(on?tl('مفعّل','On'):tl('غير مفعّل','Off'))+'</button></div><div class="xs">'+tl('لو مفعّل: التاب الأول يفتح مركز اليوم بدل الرئيسية. لو غير مفعّل: بيظهر شريط صغير فوق المواقيت، ولما تدوس عليه تفتح شاشة مركز اليوم.','On: the first tab opens Today instead of Home. Off: a small strip shows above the prayer times and opens the Today screen.')+'</div>'}
+function tdToggle(){localStorage.setItem('rafiq_today',tdOn()?'off':'on');applyTd();tdSetR()}
+document.querySelector('.tab[data-page=home]').addEventListener('click',function(){if(tdOn())renderToday();else renderTdStrip()});
+var _so2=setOpen;setOpen=function(n){_so2.apply(this,arguments);if(n==='screens')tdSetR()};
+var _rt4=renderTracking;renderTracking=function(){_rt4.apply(this,arguments);try{var fd=focusDelta(dayKey(currentDate));if(fd&&ptsMode()!=='all')$('ptsLbl').textContent+=' · 🎯 '+tl('منها تركيز: ','incl. focus: ')+(fd>0?'+':'')+fd}catch(e){}};
+applyTd();tdSetR();setInterval(function(){if($('page-today').classList.contains('active'))renderToday();else renderTdStrip()},30000);
+GUIDE.ar.push(['🏠 مركز اليوم','شاشة تلخّص يومك: الصلاة القادمة والوقت المتبقي، ونسبة هدف اليوم (الصلوات والورد والأذكار والنوافل والقيام والصيام)، والستريك والنقاط. من الإعدادات ← الشاشات تقدر تخليه بدل الرئيسية، أو يفضل شريط صغير فوق المواقيت.']);
+GUIDE.en.push(['🏠 Today center','One screen that sums up your day: next prayer and time left, today goal %, streak and points. In Settings → Screens make it replace Home, or keep a small strip above the prayer times.']);
 
 updateSrcUI();updateRemindUI();updateGeoUI();
 let ses=localStorage.getItem('rafiq_session'),cu=ses&&USERS()[ses];if(cu){setGender(cu.gender);$('accName').textContent='👤 '+cu.name}else showAuth('auHome');
