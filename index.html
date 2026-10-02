@@ -294,8 +294,14 @@ const dayKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${
 const loadDay=()=>{try{return JSON.parse(localStorage.getItem('prayers_'+dayKey(currentDate)))||{}}catch(e){return{}}};
 const saveDay=d=>{applyGoals(d);localStorage.setItem('prayers_'+dayKey(currentDate),JSON.stringify(d))};
 const prayerIndex=id=>PRAYERS.findIndex(p=>p.id===id);
-const getMissedIndex=d=>PRAYERS.findIndex(p=>d[p.id]?.opt==='missed');
-const isLockedByMissed=(id,d)=>{let a=prayerIndex(id),m=getMissedIndex(d);return m!==-1&&a<=m};
+const getMissedIndex=d=>{let r=-1;PRAYERS.forEach((p,i)=>{if(d[p.id]?.opt==='missed')r=i});return r};
+const MISS_KEY='missed_marks';
+const getMarks=()=>{try{return JSON.parse(localStorage.getItem(MISS_KEY)||'[]')||[]}catch(e){return[]}};
+const lastMark=()=>{let a=getMarks();return a.length?a[a.length-1]:null};
+const dayBeforeMark=()=>{let m=lastMark();return !!m&&dayKey(currentDate)<m.day};
+const canRevoke=pid=>{let m=lastMark();return !m||(m.day===dayKey(currentDate)&&m.prayer===pid)};
+const LOCK_MSG=()=>tl('🔒 الأيام اللي قبل «ما صليتهاش» مقفولة','🔒 Days before a "did not pray" are locked');
+const isLockedByMissed=(id,d)=>{let a=prayerIndex(id),m=getMissedIndex(d);return dayBeforeMark()||(m!==-1&&a<=m)};
 
 function mult(pid){let g=getGender();if(g==='woman')return pid==='fajr'?5:pid==='isha'?4:2;return pid==='fajr'?3:pid==='isha'?2:1}
 function calcPoints(id,d){
@@ -355,7 +361,7 @@ function renderTracking(){try{stkCheck()}catch(e){}
   let lockedMissed=isLockedByMissed(p.id,data),lockedTime=!prayerTimeArrived(p.id),locked=lockedMissed||lockedTime;
   if(sel&&sel.id!=='missed'){done++;if(sel.id.startsWith('mosque'))mosque++;else if(sel.id!=='late')home++;total+=rec.points||0}
   let status=sel?sel.short:'لم تُسجَّل بعد';
-  if(!sel&&lockedMissed)status='🔒 مقفولة — لم تُصلَّ '+PRAYERS[missedIdx].name;
+  if(!sel&&lockedMissed)status=missedIdx===-1?'🔒 مقفولة — قبل «ما صليتهاش»':'🔒 مقفولة — لم تُصلَّ '+PRAYERS[missedIdx].name;
   else if(!sel&&lockedTime)status='⏳ لم يدخل وقتها بعد';
   let icon=sel?sel.icon:(locked?'🔒':'○');
   let row=document.createElement('div');row.className='prayer'+(locked?' locked':'');
@@ -376,40 +382,75 @@ function attachPressHandlers(){
 
 function openSheet(pid){
  let data=loadDay(),idx=prayerIndex(pid),missed=getMissedIndex(data);
+ if(dayBeforeMark()){toast(LOCK_MSG());return}
  if(missed!==-1&&idx<missed){toast('🔒 الصلاة دي مقفولة لأنك اخترت «ما صليتهاش» في '+PRAYERS[missed].name);return}
- if(missed!==-1&&idx===missed){activePrayer=pid;showMissedRecovery(pid);return}
+ if(missed!==-1&&idx===missed){if(!canRevoke(pid)){toast(tl('🔒 دي مسجلة «ما صليتهاش» وفاتت','🔒 Recorded as not prayed'));return}activePrayer=pid;showMissedRecovery(pid);return}
  if(!prayerTimeArrived(pid)){if(getPrayerStartMinutes(pid)===null){ensureTimes();toast('⏰ لازم المواقيت تكون متاحة الأول')}else toast('⏳ لسه وقت صلاة '+PRAYERS[idx].name+' ما دخلش');return}
  activePrayer=pid;$('sheetTitle').textContent='صلاة '+PRAYERS[idx].name;showStep(1);$('opts').innerHTML='';
  OPTIONS.filter(o=>getGender()!=='woman'||!o.id.startsWith('mosque')).forEach(o=>{let b=document.createElement('button');b.className='opt'+(data[pid]?.opt===o.id?' selected':'');b.innerHTML=`<span class="ic" style="background:${o.bg}">${o.icon}</span><span>${o.label}</span>`;b.onclick=()=>pickOption(o);$('opts').appendChild(b)});$('overlay').classList.add('open')
 }
 function showStep(n){$('step1').style.display=n===1?'block':'none';$('detail').style.display=n===2?'block':'none';$('mainRow').style.display=n===1?'flex':'none';$('sheetSub').textContent=n===1?'اختر أين وكيف صليت':'جاوب عشان نحسب نقاطك'}
 function showMissedRecovery(pid){
- let p=PRAYERS.find(x=>x.id===pid),backup=localStorage.getItem('missed_backup_'+dayKey(currentDate));$('sheetTitle').textContent='صلاة '+p.name;$('sheetSub').textContent='الصلاة دي متسجلة «ما صليتهاش»';$('mainRow').style.display='none';$('detail').style.display='none';$('step1').style.display='block';
- $('opts').innerHTML=`<div style="grid-column:1/-1;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.5);border-radius:18px;padding:20px;text-align:center;line-height:1.8"><div style="font-size:36px">⚠️</div><b style="font-size:18px">أنت مسجل إنك ما صليتش ${p.name}</b><p style="font-size:13px;opacity:.8;margin:12px 0">لو أنت متأكد إنك صليتها فعلًا، أكد الاختيار التالي.</p><div style="background:rgba(255,255,255,.07);padding:12px;border-radius:12px;font-weight:800">أقسم بالله إني صليتها</div><div style="font-size:12px;opacity:.65;margin:12px 0">${backup?'الصلوات السابقة هترجع بنفس تسجيلاتها.':'الصلاة هتتحول إلى «صليتها متأخر».'}</div><div style="display:flex;gap:10px"><button class="btn-back" style="flex:1;padding:12px;border:0;border-radius:12px;color:#fff" onclick="document.getElementById('overlay').classList.remove('open')">رجوع</button><button class="btn-done" style="flex:1;padding:12px;border:0;border-radius:12px" onclick="confirmPrayedAfterMissed()">نعم، أقسم بالله</button></div></div>`;
+ let p=PRAYERS.find(x=>x.id===pid),backup=readBackup(dayKey(currentDate),pid);$('sheetTitle').textContent='صلاة '+p.name;$('sheetSub').textContent='الصلاة دي متسجلة «ما صليتهاش»';$('mainRow').style.display='none';$('detail').style.display='none';$('step1').style.display='block';
+ $('opts').innerHTML=`<div style="grid-column:1/-1;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.5);border-radius:18px;padding:20px;text-align:center;line-height:1.8"><div style="font-size:36px">⚠️</div><b style="font-size:18px">أنت مسجل إنك ما صليتش ${p.name}</b><p style="font-size:13px;opacity:.8;margin:12px 0">لو أنت متأكد إنك صليتها فعلًا، أكد الاختيار التالي.</p><div style="background:rgba(255,255,255,.07);padding:12px;border-radius:12px;font-weight:800">أقسم بالله إني صليتها</div><div style="font-size:12px;opacity:.65;margin:12px 0">${backup?tl('كل عباداتك اللي اتمسحت (صلوات ونوافل وقيام وقرآن وصيام ونقاط وبادجات) هترجع.','All your wiped worship will be restored.'):'الصلاة هتتحول إلى «صليتها متأخر».'}</div><div style="display:flex;gap:10px"><button class="btn-back" style="flex:1;padding:12px;border:0;border-radius:12px;color:#fff" onclick="document.getElementById('overlay').classList.remove('open')">رجوع</button><button class="btn-done" style="flex:1;padding:12px;border:0;border-radius:12px" onclick="confirmPrayedAfterMissed()">نعم، أقسم بالله</button></div></div>`;
  $('overlay').classList.add('open')
 }
 function pickOption(o){
  let d=loadDay(),idx=prayerIndex(activePrayer),missed=getMissedIndex(d);
- if(missed!==-1){if(idx===missed)return showMissedRecovery(activePrayer);toast('🔒 الصلاة دي مقفولة');return}
+ if(dayBeforeMark()){toast(LOCK_MSG());return}
+ if(missed!==-1){if(idx===missed){if(!canRevoke(activePrayer)){toast(tl('🔒 دي مسجلة «ما صليتهاش» وفاتت','🔒 Recorded as not prayed'));return}return showMissedRecovery(activePrayer)}if(idx<missed){toast('🔒 الصلاة دي مقفولة');return}}
  if(!prayerTimeArrived(activePrayer)){toast('⏳ لسه وقت الصلاة ما دخلش');return}
  currentOpt=o;
- if(o.id==='missed'){$('opts').innerHTML=`<div style="grid-column:1/-1;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.5);border-radius:16px;padding:18px;text-align:center;line-height:1.8"><div style="font-size:28px">⚠️</div><b>متأكد إنك ما صليتهاش؟</b><p style="font-size:13px;opacity:.75;margin:10px 0">الصلاة دي وكل الصلوات اللي قبلها هتتقفل. التطبيق هيحفظ تسجيلات الصلوات السابقة مؤقتًا.</p><div style="display:flex;gap:10px"><button class="btn-back" style="flex:1;padding:12px;border:0;border-radius:12px;color:#fff" onclick="openSheet(activePrayer)">رجوع</button><button style="flex:1;padding:12px;border:0;border-radius:12px;background:#dc2626;color:#fff" onclick="confirmMissed()">نعم، لم أصلِّها</button></div></div>`;return}
+ if(o.id==='missed'){$('opts').innerHTML=`<div style="grid-column:1/-1;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.5);border-radius:16px;padding:18px;text-align:center;line-height:1.8"><div style="font-size:28px">⚠️</div><b>متأكد إنك ما صليتهاش؟</b><p style="font-size:13px;opacity:.75;margin:10px 0">${tl('كل عباداتك المسجلة (صلوات ونوافل وقيام وقرآن وصيام ونقاط وبادجات) هتتمسح، وكل الأيام والصلوات اللي قبلها هتتقفل. الصلوات اللي سجلتها «ما صليتهاش» هتفضل للقضاء. التطبيق بيحفظ نسخة ترجع لو قلت «أقسم بالله صليتها».','All your recorded worship (prayers, sunnah, night prayer, Quran, fasting, points, badges) will be erased and all earlier days and prayers locked. Prayers logged as not prayed stay for qada. A copy is kept and returns if you swear you prayed it.')}</p><div style="display:flex;gap:10px"><button class="btn-back" style="flex:1;padding:12px;border:0;border-radius:12px;color:#fff" onclick="openSheet(activePrayer)">رجوع</button><button style="flex:1;padding:12px;border:0;border-radius:12px;background:#dc2626;color:#fff" onclick="confirmMissed()">نعم، لم أصلِّها</button></div></div>`;return}
  if(o.simple){d[activePrayer]={opt:o.id,points:o.base*mult(activePrayer),d:{}};saveDay(d);renderTracking();$('overlay').classList.remove('open');toast('تم التسجيل — '+o.base*mult(activePrayer)+' نقطة ⭐');return}
  showStep(2);buildQuestions(o)
 }
 function wipeAll(){Object.keys(localStorage).filter(k=>k.startsWith('prayers_')).forEach(k=>localStorage.removeItem(k))}
+const bkKey=(day,pid)=>'missed_backup_'+day+'_'+pid;
+function readBackup(day,pid){try{let v=localStorage.getItem(bkKey(day,pid));if(v)return JSON.parse(v);v=localStorage.getItem('missed_backup_'+day);return v?JSON.parse(v):null}catch(e){return null}}
+function wipeWorship(){
+ Object.keys(localStorage).forEach(k=>{let m=/^(prayers|extras)_(\d{4}-\d\d-\d\d)$/.exec(k);if(!m)return;let v;try{v=JSON.parse(localStorage.getItem(k))||{}}catch(e){v={}}
+  if(m[1]==='prayers'){let keep={};PRAYERS.forEach(p=>{if(v[p.id]&&v[p.id].opt==='missed')keep[p.id]=v[p.id]});if(Object.keys(keep).length)localStorage.setItem(k,JSON.stringify(keep));else localStorage.removeItem(k)}
+  else{if(v.f==='n'&&hijriMonth(new Date(m[2]+'T00:00:00'))===9)localStorage.setItem(k,JSON.stringify({f:'n'}));else localStorage.removeItem(k)}});
+ XUP(x=>{delete x.awd;delete x.bd;delete x.bFocus})
+}
+function mergeEx(a,b){let r=Object.assign({},a,b);['bn','ad','sd','qd','zk'].forEach(f=>{if(typeof a[f]==='number'&&typeof b[f]==='number')r[f]=a[f]+b[f]});
+ if(a.n&&b.n)r.n=Object.assign({},a.n,b.n);if(a.aw&&b.aw)r.aw=Object.assign({},a.aw,b.aw);if(Array.isArray(a.sdl)&&Array.isArray(b.sdl))r.sdl=a.sdl.concat(b.sdl);return r}
 function confirmMissed(){
- let before=loadDay(),backup={};PRAYERS.forEach((p,i)=>{if(i<prayerIndex(activePrayer)&&before[p.id])backup[p.id]=before[p.id]});
- localStorage.setItem('missed_backup_'+dayKey(currentDate),JSON.stringify({prayer:activePrayer,data:backup}));
- wipeAll();saveDay({[activePrayer]:{opt:'missed',points:0,d:{}}});renderTracking();$('overlay').classList.remove('open');toast('تم تسجيلها «ما صليتهاش» 🔒')
+ let day=dayKey(currentDate),snap={};
+ Object.keys(localStorage).forEach(k=>{if(/^(prayers|extras)_\d{4}-\d\d-\d\d$/.test(k))snap[k]=localStorage.getItem(k)});
+ let u=XU();
+ localStorage.setItem(bkKey(day,activePrayer),JSON.stringify({v:2,prayer:activePrayer,day:day,snap:snap,u:{awd:u.awd||null,bd:u.bd||null,bFocus:u.bFocus||null}}));
+ wipeWorship();
+ let nd=loadDay();nd[activePrayer]={opt:'missed',points:0,d:{}};saveDay(nd);
+ let mk=getMarks();mk.push({day:day,prayer:activePrayer});localStorage.setItem(MISS_KEY,JSON.stringify(mk));
+ try{BDE=null}catch(e){}
+ renderTracking();$('overlay').classList.remove('open');toast('تم تسجيلها «ما صليتهاش» 🔒')
 }
 function confirmPrayedAfterMissed(){
  let data=loadDay(),mi=getMissedIndex(data),ai=prayerIndex(activePrayer);if(mi===-1||mi!==ai)return;
- let restored={},backup;try{backup=JSON.parse(localStorage.getItem('missed_backup_'+dayKey(currentDate))||'null')}catch(e){}
- if(backup?.data)Object.assign(restored,backup.data);
- restored[activePrayer]={opt:'late',points:-10*mult(activePrayer),d:{}};
- PRAYERS.forEach((p,i)=>{if(i>ai&&data[p.id])restored[p.id]=data[p.id]});
- saveDay(restored);localStorage.removeItem('missed_backup_'+dayKey(currentDate));renderTracking();$('overlay').classList.remove('open');toast('تم تسجيل '+PRAYERS[ai].name+' كصلاة متأخرة ✖️')
+ if(!canRevoke(activePrayer))return toast('🔒');
+ let day=dayKey(currentDate),b=readBackup(day,activePrayer);
+ if(b&&b.v===2){
+  Object.keys(b.snap).forEach(k=>{let sv,cv;try{sv=JSON.parse(b.snap[k])||{}}catch(e){sv={}}try{cv=JSON.parse(localStorage.getItem(k))||{}}catch(e){cv={}}
+   if(k.startsWith('prayers_')){if(k==='prayers_'+day)return;localStorage.setItem(k,JSON.stringify(Object.assign({},sv,cv)))}
+   else localStorage.setItem(k,JSON.stringify(mergeEx(sv,cv)))});
+  let sd={};try{sd=JSON.parse(b.snap['prayers_'+day]||'{}')||{}}catch(e){}
+  let res=Object.assign({},sd,data);res[activePrayer]={opt:'late',points:-10*mult(activePrayer),d:{}};
+  saveDay(res);
+  XUP(x=>{if(b.u){if(b.u.awd)x.awd=Object.assign({},b.u.awd,x.awd||{});if(b.u.bd)x.bd=Object.assign({},b.u.bd,x.bd||{});if(b.u.bFocus&&!x.bFocus)x.bFocus=b.u.bFocus}});
+ }else{
+  let restored={};
+  if(b&&b.data)Object.assign(restored,b.data);
+  restored[activePrayer]={opt:'late',points:-10*mult(activePrayer),d:{}};
+  PRAYERS.forEach((p,i)=>{if(i>ai&&data[p.id])restored[p.id]=data[p.id]});
+  saveDay(restored)
+ }
+ localStorage.removeItem(bkKey(day,activePrayer));localStorage.removeItem('missed_backup_'+day);
+ let mk=getMarks();for(let j=mk.length-1;j>=0;j--)if(mk[j].day===day&&mk[j].prayer===activePrayer){mk.splice(j,1);break}
+ if(mk.length)localStorage.setItem(MISS_KEY,JSON.stringify(mk));else localStorage.removeItem(MISS_KEY);
+ try{BDE=null}catch(e){}
+ renderTracking();$('overlay').classList.remove('open');toast('تم تسجيل '+PRAYERS[ai].name+' كصلاة متأخرة ✖️')
 }
 
 function buildQuestions(o){
@@ -429,13 +470,13 @@ function buildQuestions(o){
 }
 function collectData(o,st){let q=id=>$(id),d={mode:st.mode};if(o.id==='imam_group')d.people=+(q('inPeople').value||0);else{if(st.mode==='meters')d.meters=+(q('inDist').value||0);else d.steps=+(q('inDist').value||0);if(o.id!=='mosque'){d.waited=st.waited;if(st.waited)d.minutes=+(q('inMin').value||0)}if(o.id==='mosque_imam'){d.knowCount=st.knowCount;d.people=+(q('inCount').value||0);d.rows=+(q('inCount').value||0)}}return d}
 function updatePreview(o,st){let d=collectData(o,st);if(o.id==='imam_group'&&!d.people)return $('ptsPrev').style.display='none';if(o.id!=='imam_group'&&!(d.steps||d.meters))return $('ptsPrev').style.display='none';let pts=calcPoints(o.id,d)*mult(activePrayer);$('ptsPrev').style.display='block';$('ptsPrev').innerHTML='⭐ النقاط المتوقعة: '+pts+' نقطة'}
-function saveWithPoints(o,st){let check=loadDay();if(getMissedIndex(check)!==-1)return toast('🔒 الصلاة دي مقفولة');if(!prayerTimeArrived(activePrayer))return toast('⏳ لسه وقت الصلاة ما دخلش');let d=collectData(o,st);if(o.id==='imam_group'&&!d.people)return toast('اكتب عدد الأشخاص الأول');if(o.id!=='imam_group'&&!(d.steps||d.meters))return toast('اكتب المسافة الأول');let pts=calcPoints(o.id,d)*mult(activePrayer);check[activePrayer]={opt:o.id,points:pts,d};saveDay(check);renderTracking();$('overlay').classList.remove('open');toast('تم تسجيل '+pts+' نقطة ⭐')}
+function saveWithPoints(o,st){let check=loadDay();if(isLockedByMissed(activePrayer,check))return toast('🔒 الصلاة دي مقفولة');if(!prayerTimeArrived(activePrayer))return toast('⏳ لسه وقت الصلاة ما دخلش');let d=collectData(o,st);if(o.id==='imam_group'&&!d.people)return toast('اكتب عدد الأشخاص الأول');if(o.id!=='imam_group'&&!(d.steps||d.meters))return toast('اكتب المسافة الأول');let pts=calcPoints(o.id,d)*mult(activePrayer);check[activePrayer]={opt:o.id,points:pts,d};saveDay(check);renderTracking();$('overlay').classList.remove('open');toast('تم تسجيل '+pts+' نقطة ⭐')}
 
 $('qBack').onclick=()=>openSheet(activePrayer);
 $('closeSheet').onclick=()=>$('overlay').classList.remove('open');
-$('clearSel').onclick=()=>{let d=loadDay(),i=prayerIndex(activePrayer),m=getMissedIndex(d);if(m!==-1&&i<=m)return toast('🔒 الصلاة دي مقفولة');if(!prayerTimeArrived(activePrayer))return toast('⏳ لسه وقت الصلاة ما دخلش');delete d[activePrayer];saveDay(d);renderTracking();$('overlay').classList.remove('open')};
+$('clearSel').onclick=()=>{let d=loadDay(),i=prayerIndex(activePrayer);if(isLockedByMissed(activePrayer,d))return toast('🔒 الصلاة دي مقفولة');if(!prayerTimeArrived(activePrayer))return toast('⏳ لسه وقت الصلاة ما دخلش');delete d[activePrayer];saveDay(d);renderTracking();$('overlay').classList.remove('open')};
 $('overlay').onclick=e=>{if(e.target.id==='overlay')$('overlay').classList.remove('open')};
-$('resetDay').onclick=()=>{if(confirm('مسح كل صلوات هذا اليوم؟')){localStorage.removeItem('prayers_'+dayKey(currentDate));localStorage.removeItem('missed_backup_'+dayKey(currentDate));renderTracking();toast('تم مسح اليوم')}};
+$('resetDay').onclick=()=>{if(dayBeforeMark())return toast(LOCK_MSG());if(getMissedIndex(loadDay())!==-1)return toast(tl('🔒 مينفعش تمسح يوم فيه «ما صليتهاش»','🔒 Cannot clear a day with a not-prayed record'));if(confirm('مسح كل صلوات هذا اليوم؟')){localStorage.removeItem('prayers_'+dayKey(currentDate));localStorage.removeItem('missed_backup_'+dayKey(currentDate));renderTracking();toast('تم مسح اليوم')}};
 $('prevDay').onclick=()=>{currentDate.setDate(currentDate.getDate()-1);renderTracking()};
 $('nextDay').onclick=()=>{let t=new Date();t.setHours(0,0,0,0);if(currentDate<t){currentDate.setDate(currentDate.getDate()+1);renderTracking()}};
 
@@ -513,24 +554,24 @@ const GOALS=["أحافظ على صلواتي","أصلي صلواتي في معا
 const THEMES={green:{n:'أخضر',bg1:'#0f2027',bg2:'#203a43',bg3:'#2c5364',ac:'#7CFC9A',ac2:'#2e9e4f',ac3:'#2e7d52',fg:'255,255,255',tx:'#ffffff'},white:{n:'أبيض',bg1:'#f4f6f8',bg2:'#e9edf1',bg3:'#dde3ea',ac:'#1f8a4c',ac2:'#2e9e4f',ac3:'#2e7d52',fg:'0,0,0',tx:'#111111'},black:{n:'أسود',bg1:'#000000',bg2:'#0d0d0d',bg3:'#1c1c1c',ac:'#e5e5e5',ac2:'#9ca3af',ac3:'#6b7280',fg:'255,255,255',tx:'#ffffff'},red:{n:'أحمر',bg1:'#2a0a0a',bg2:'#4a1010',bg3:'#7f1d1d',ac:'#ff8a8a',ac2:'#dc2626',ac3:'#b91c1c',fg:'255,255,255',tx:'#ffffff'},blue:{n:'أزرق',bg1:'#071a33',bg2:'#0b2a55',bg3:'#1e4d91',ac:'#7dc4ff',ac2:'#2f7de1',ac3:'#1d5fbf',fg:'255,255,255',tx:'#ffffff'},yellow:{n:'أصفر',bg1:'#2b2200',bg2:'#4a3a00',bg3:'#7a6100',ac:'#ffe066',ac2:'#e6c229',ac3:'#b8860b',fg:'255,255,255',tx:'#ffffff'},purple:{n:'بنفسجي',bg1:'#1a0b2e',bg2:'#2e1450',bg3:'#4c2a85',ac:'#d0b3ff',ac2:'#8b5cf6',ac3:'#6d28d9',fg:'255,255,255',tx:'#ffffff'},pink:{n:'بينك',bg1:'#2e0a1e',bg2:'#500f36',bg3:'#8a1c5c',ac:'#ffb3d9',ac2:'#ec4899',ac3:'#be185d',fg:'255,255,255',tx:'#ffffff'}};
 function applyTheme(k){let t=THEMES[k]||THEMES.green,r=document.documentElement.style;['bg1','bg2','bg3','ac','ac2','ac3','fg','tx'].forEach(p=>r.setProperty('--'+p,t[p]));localStorage.setItem('theme',k);let m=document.querySelector('meta[name=theme-color]');if(m)m.content=t.bg1;document.querySelectorAll('.thm').forEach(b=>b.classList.toggle('on2',b.dataset.t===k))}
 $('thmRow').innerHTML=Object.entries(THEMES).map(([k,t])=>`<button class="thm" data-t="${k}" onclick="applyTheme('${k}')"><i style="background:${t.ac2}"></i>${t.n}</button>`).join('');
-const XU=()=>USERS()[localStorage.getItem('rafiq_session')]||{},XG=()=>XU().goals||[],hasG=x=>XG().some(g=>g.includes(x));
+const XU=()=>USERS()[localStorage.getItem('rafiq_session')]||{},XG=()=>XU().goals||[],hasG=(x,k)=>{let u=XU(),gs=u.goals||[],sn=u.gsince||{},cr=u.created?dayKey(new Date(u.created)):'0000-00-00';return gs.some(g=>g.includes(x)&&(!k||k>=(sn[g]||cr)))};
 function XUP(f){let s=localStorage.getItem('rafiq_session'),us=USERS();if(us[s]){f(us[s]);saveUsers(us)}}
-const XEX=k=>{try{return JSON.parse(localStorage.getItem('extras_'+k))||{}}catch(e){return{}}},XSX=(k,o)=>localStorage.setItem('extras_'+k,JSON.stringify(o));
+const XEX=k=>{try{return JSON.parse(localStorage.getItem('extras_'+k))||{}}catch(e){return{}}},XSX=(k,o)=>{let m=lastMark();if(m&&k<m.day)return;localStorage.setItem('extras_'+k,JSON.stringify(o))};
 const QU={pages:'صفحة',juz:'جزء',quarter:'ربع',ayah:'آية'};
-function applyGoals(d){const MQ=/^mosque/,JM=/^(mosque|group|imam_group)/;for(const p of PRAYERS){let r=d[p.id];if(r&&r.opt==='missed'){r.points=hasG('أحافظ على صلواتي')?-30:0;continue}if(!r)continue;if(r.raw===undefined)r.raw=r.points;let pts=r.raw;
- if(r.opt==='late'){let b=-10;if(hasG('معادها'))b=-20;if(p.id==='fajr'&&hasG('الفجر كل يوم'))b=Math.min(b,-15);pts=b*mult(p.id)}
- else if((hasG('في المسجد')&&!MQ.test(r.opt))||(hasG('جماعة')&&!JM.test(r.opt)))pts=0;
+function applyGoals(d){const K=dayKey(currentDate),hg=x=>hasG(x,K),MQ=/^mosque/,JM=/^(mosque|group|imam_group)/;for(const p of PRAYERS){let r=d[p.id];if(r&&r.opt==='missed'){r.points=hg('أحافظ على صلواتي')?-30:0;continue}if(!r)continue;if(r.raw===undefined)r.raw=r.points;let pts=r.raw;
+ if(r.opt==='late'){let b=-10;if(hg('معادها'))b=-20;if(p.id==='fajr'&&hg('الفجر كل يوم'))b=Math.min(b,-15);pts=b*mult(p.id)}
+ else if((hg('في المسجد')&&!MQ.test(r.opt))||(hg('جماعة')&&!JM.test(r.opt)))pts=0;
  r.points=pts}}
 function hijriDay(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric'}).format(d))}catch(e){return 0}}
-function fastInfo(d){let hd=hijriDay(d),wd=d.getDay(),w=hd>=13&&hd<=15,m=wd===1||wd===4,all=hasG('كل السنن');return{show:w||m,must:(w&&(hasG('الأيام البيض')||all))||(m&&(hasG('الاثنين')||all)),label:(w?'الأيام البيض ('+hd+' هجري)':'')+(w&&m?' + ':'')+(m?(wd===1?'يوم الاثنين':'يوم الخميس'):'')}}
+function fastInfo(d){let hd=hijriDay(d),wd=d.getDay(),w=hd>=13&&hd<=15,m=wd===1||wd===4,all=hasG('كل السنن',dayKey(d));return{show:w||m,must:(w&&(hasG('الأيام البيض',dayKey(d))||all))||(m&&(hasG('الاثنين',dayKey(d))||all)),label:(w?'الأيام البيض ('+hd+' هجري)':'')+(w&&m?' + ':'')+(m?(wd===1?'يوم الاثنين':'يوم الخميس'):'')}}
 function extraParts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),n=d.n||{},P={naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0,bn:0,zk:0,sd:0,sdC:0,ad:0};
  const NP={fajr:20,dhuhr:5,maghrib:5,isha:10};
- for(const x in NP){if(n[x]==='y'){P.naf+=NP[x];P.nafC++}else if(hasG('النوافل')&&(n[x]==='n'||(past&&!n[x])))P.naf-=2}
+ for(const x in NP){if(n[x]==='y'){P.naf+=NP[x];P.nafC++}else if(hasG('النوافل',k)&&(n[x]==='n'||(past&&!n[x])))P.naf-=2}
   for(const x of['ishraq','witr'])if(n[x]==='y'){P.naf+=10;P.nafC++}
- if(d.qy&&d.qy!=='n'){P.qy+={2:5,4:10,6:15,8:20}[d.qy]||0;P.qyC++}else if(hasG('قيام الليل')&&(d.qy==='n'||(past&&!d.qy)))P.qy-=3;
- let q=u.quran;if(q&&(d.q!==undefined||past)){let r=d.q||0,p=r===0?-3:r<q.n?2:r===q.n?5:8;P.q+=hasG('القرآن')?p*2:p;if(r>0)P.qC++}
+ if(d.qy&&d.qy!=='n'){P.qy+={2:5,4:10,6:15,8:20}[d.qy]||0;P.qyC++}else if(hasG('قيام الليل',k)&&(d.qy==='n'||(past&&!d.qy)))P.qy-=3;
+ let q=u.quran;if(q&&(d.q!==undefined||(past&&k>=(q.since||dayKey(new Date()))))){let r=d.q||0,tg=d.qt||q.n,p=r===0?-3:r<tg?2:r===tg?5:8;P.q+=hasG('القرآن',k)?p*2:p;if(r>0)P.qC++}
  let f=fastInfo(dt);if(f.show){if(d.f==='y'){P.f+=(f.pts||10);P.fC++}else if(f.must&&(d.f==='n'||(past&&!d.f)))P.f-=15}
- if(d.kok&&!q){P.q+=hasG('القرآن')?10:5;P.qC++}P.bn=d.bn||0;P.zk=d.zk||0;P.ad=d.ad||0;P.sd=d.sd||0;P.sdC=(d.sdl||[]).length;try{P.fo=focusDelta(k)}catch(e){P.fo=0}return P}
+ if(d.kok&&!q){P.q+=hasG('القرآن',k)?10:5;P.qC++}P.bn=d.bn||0;P.zk=d.zk||0;P.ad=d.ad||0;P.sd=d.sd||0;P.sdC=(d.sdl||[]).length;try{P.fo=focusDelta(k)+(d.fz||0)}catch(e){P.fo=d.fz||0}return P}
 function extraPts(k){let P=extraParts(k);return P.naf+P.qy+P.q+P.f+P.bn+P.zk+P.ad+P.sd+(P.fo||0)}
 function dayStats(k){let s=dayStats0(k);s.pts+=extraPts(k);return s}
 function renderExtras(){let box=$('extras');if(!box||box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT')return;let k=dayKey(currentDate),d=XEX(k),n=d.n||{},q=XU().quran,f=fastInfo(new Date(k+'T00:00:00')),b=(on,fn,l)=>`<button class="xb ${on?'on2':''}" onclick="${fn}">${l}</button>`,h='';
@@ -539,14 +580,14 @@ function renderExtras(){let box=$('extras');if(!box||box.contains(document.activ
  h+=quranCard(q,d,k);
  if(f.show)h+=`<div class="xc"><b>🌿 صيام ${f.label}</b><div class="xr"><span>صمت النهاردة؟ <small>(+${f.pts||10})</small></span><span>${b(d.f==='y',"setFast('y')",'✅ صمت')}${b(d.f==='n',"setFast('n')",'❌ لا')}</span></div></div>`;
  h+=qadaCard()+zakatCard()+sadaqaCard();box.innerHTML=h}
-function setNaf(x,v){if(!prayerTimeArrived(x))return toast('⏳ لسه وقت الصلاة ما دخلش');let k=dayKey(currentDate),d=XEX(k);d.n=d.n||{};d.n[x]=d.n[x]===v?undefined:v;XSX(k,d);renderTracking()}
-function setFast(v){let k=dayKey(currentDate),d=XEX(k);d.f=d.f===v?undefined:v;XSX(k,d);renderTracking()}
-function setQy(v){if(!prayerTimeArrived('isha'))return toast('⏳ لسه وقته ما جاش');let k=dayKey(currentDate),d=XEX(k);d.qy=d.qy===v?undefined:v;XSX(k,d);renderTracking()}
+function setNaf(x,v){if(dayBeforeMark())return toast(LOCK_MSG());if(!prayerTimeArrived(x))return toast('⏳ لسه وقت الصلاة ما دخلش');let k=dayKey(currentDate),d=XEX(k);d.n=d.n||{};d.n[x]=d.n[x]===v?undefined:v;XSX(k,d);renderTracking()}
+function setFast(v){if(dayBeforeMark())return toast(LOCK_MSG());let k=dayKey(currentDate),d=XEX(k);d.f=d.f===v?undefined:v;XSX(k,d);renderTracking()}
+function setQy(v){if(dayBeforeMark())return toast(LOCK_MSG());if(!prayerTimeArrived('isha'))return toast('⏳ لسه وقته ما جاش');let k=dayKey(currentDate),d=XEX(k);d.qy=d.qy===v?undefined:v;XSX(k,d);renderTracking()}
 function qAdjust(k){let q=XU().quran;if(!q)return'';let rs=[];for(let i=0;i<5;i++){let dt=new Date(k+'T00:00:00');dt.setDate(dt.getDate()-i);let kk=dayKey(dt);if(kk<(q.since||'0000'))return'';let r=XEX(kk).q;if(r===undefined)return'';rs.push(r)}
  let up=rs.every(r=>r>q.n),dn=rs.every(r=>r<q.n);if(!up&&!dn)return'';let avg=rs.reduce((a,b)=>a+b,0)/5,nn=up?Math.ceil(avg):Math.max(1,Math.floor(avg));if(nn===q.n)return'';
  let nx=new Date(k+'T00:00:00');nx.setDate(nx.getDate()+1);XUP(x=>{x.quran.n=nn;x.quran.since=dayKey(nx)});return(up?'📈 وردك زاد لـ ':'📉 وردك قل لـ ')+nn+' '+QU[q.u]+' يوميًا'}
 function saveQTarget(){let n=+$('qN').value,u=$('qU').value;if(!(n>0))return toast('اكتب عدد صح');XUP(x=>x.quran={n,u,since:dayKey(new Date())});localStorage.removeItem('qSetT');renderTracking();toast('تم حفظ الورد ✅')}
-function saveQRead(){let v=$('qR').value;if(v==='')return toast('اكتب العدد');let k=dayKey(currentDate),d=XEX(k),td=k===dayKey(new Date());d.q=+v;XSX(k,d);document.activeElement.blur();
+function saveQRead(){if(dayBeforeMark())return toast(LOCK_MSG());let v=$('qR').value;if(v==='')return toast('اكتب العدد');let k=dayKey(currentDate),d=XEX(k),td=k===dayKey(new Date());{let qq=XU().quran;d.q=+v;if(qq)d.qt=qq.n}XSX(k,d);document.activeElement.blur();
  let kmsg=td&&khGet()&&d.kh==='n'&&Q_PS?khFromRead(+v,(XU().quran||{u:'pages'}).u):'',m=td?qAdjust(k):'';renderTracking();qRenderK();toast(kmsg||m||'تم الحفظ ✅')}
 function resetQ(){XUP(x=>delete x.quran);renderTracking()}
 function fillAcc(){let u=XU();if(!u.name)return;if(!u.created)XUP(x=>x.created=Date.now());$('acName').value=u.name;$('acAge').value=u.age||'';$('acGender').value=u.gender||'man';$('acPass').value='';
@@ -556,7 +597,7 @@ function fillAcc(){let u=XU();if(!u.name)return;if(!u.created)XUP(x=>x.created=D
 $('acSave').onclick=async()=>{let s=localStorage.getItem('rafiq_session'),us=USERS(),u=us[s],e=$('acErr');if(!u)return;let n=$('acName').value.trim(),a=+$('acAge').value,g=[...document.querySelectorAll('[data-sg2].on2')].map(b=>b.dataset.sg2),p=$('acPass').value;
  if(!n)return e.textContent='اكتب الاسم';if(!(a>=3&&a<=120))return e.textContent='اكتب عمرك صح';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p&&p.length<(FB?6:4))return e.textContent='كلمة المرور 4 حروف على الأقل';
  let nk=uKey(n);if(nk!==s&&us[nk])return e.textContent='الاسم ده مستخدم';
- u.name=n;u.age=a;u.gender=$('acGender').value;u.goals=g;if(p){try{if(FB&&FB.auth.currentUser)await FB.auth.currentUser.updatePassword(p);else u.pw=await hashPw(p)}catch(er){e.textContent='لتغيير كلمة المرور سجّل خروج وادخل تاني وحاول';return}}delete us[s];us[nk]=u;saveUsers(us);localStorage.setItem('rafiq_session',nk);setGender(u.gender);$('accName').textContent='👤 '+n;e.textContent='';renderTracking();toast('تم حفظ الحساب ✅')};
+ u.name=n;u.age=a;u.gender=$('acGender').value;{let od=u.goals||[],gs=Object.assign({},u.gsince||{}),td=dayKey(new Date());g.forEach(x=>{if(!od.includes(x))gs[x]=td});Object.keys(gs).forEach(x=>{if(!g.includes(x))delete gs[x]});u.gsince=gs}u.goals=g;if(p){try{if(FB&&FB.auth.currentUser)await FB.auth.currentUser.updatePassword(p);else u.pw=await hashPw(p)}catch(er){e.textContent='لتغيير كلمة المرور سجّل خروج وادخل تاني وحاول';return}}delete us[s];us[nk]=u;saveUsers(us);localStorage.setItem('rafiq_session',nk);setGender(u.gender);$('accName').textContent='👤 '+n;e.textContent='';renderTracking();toast('تم حفظ الحساب ✅')};
 document.querySelector('[data-page="settings"]').addEventListener('click',fillAcc);
 applyTheme(localStorage.getItem('theme')||'green');fillAcc();
 
@@ -720,7 +761,7 @@ function quranCard(q,d,k){let kh=khGet(),useK=!!kh&&k===dayKey(new Date()),bt=(o
  if(q&&!useK)h+='<button class="xl" onclick="resetQ()">تغيير الورد</button>';return h+'</div>'}
 function khToUnit(u,pages,ayat){return u==='ayah'?ayat:Math.round(pages/KPPU[u]*10)/10}
 function khYes(){let pl=khPlan();if(!pl)return toast('⏳ استنى ثواني لحد ما الختمة تجهز');let dk=dayKey(new Date()),d=XEX(dk),np=Math.max(pl.k.pos,pl.endPos),read=khPgOfPos(np)-pl.b.pg,q=XU().quran;
- d.kh='y';d.kok=1;if(q)d.q=khToUnit(q.u,read,np-pl.b.pos);XSX(dk,d);let fin=khApply(np),m=q?qAdjust(dk):'';renderTracking();qRenderK();if(!fin)toast(m||'✅ اتحسبت في الختمة')}
+ d.kh='y';d.kok=1;if(q){d.q=khToUnit(q.u,read,np-pl.b.pos);d.qt=q.n}XSX(dk,d);let fin=khApply(np),m=q?qAdjust(dk):'';renderTracking();qRenderK();if(!fin)toast(m||'✅ اتحسبت في الختمة')}
 function khNo(){let dk=dayKey(new Date()),d=XEX(dk);d.kh='n';XSX(dk,d);renderTracking()}
 function khFromRead(x,u){let pl=khPlan();if(!pl)return'';let b=pl.b,np=x<=0?b.pos:u==='ayah'?Math.min(6235,b.pos+Math.round(x)):khPosOfPg(b.pg+x*KPPU[u]),read=khPgOfPos(np)-b.pg;
  if(read>=(pl.req||0)-0.5){let dk0=dayKey(new Date()),dd0=XEX(dk0);dd0.kok=1;XSX(dk0,dd0)}if(khApply(np))return'';let rem=604-khPgOfPos(np),dt=pl.dl-1,t2=dt<1?Math.ceil(rem):Math.max(1,Math.round(rem/dt)),diff=read-pl.req;
@@ -907,8 +948,8 @@ function qzOff(){if(!confirm(tl('تلغي حساب زكاة السنين الف�
 function sadaqaCard(){var k=dayKey(currentDate),d=XEX(k),l=d.sdl||[],tot=0;l.forEach(function(e){tot+=e.a});
  var r=function(a,b){return '<div class="xr"><span>'+a+'</span><span>'+b+'</span></div>'};
  return '<div class="xc"><b>'+tl('🤲 الصدقة','🤲 Sadaqah')+'</b>'+(l.length?r(tl('تصدقت في اليوم ده','Given this day'),fm(tot))+r(tl('النقاط','Points'),'+'+(d.sd||0)):'<div class="xs">'+tl('كل 5 من المبلغ = نقطة (وأقل حاجة نقطتين).','Every 5 of the amount = 1 point (minimum 2).')+'</div>')+zkFld('sdA',tl('المبلغ','Amount'),'sdAdd()',tl('سجّل','Add'))+(l.length?'<div style="display:flex;gap:8px;margin-top:8px"><button class="xb" onclick="sdUndo()">'+tl('↩ تراجع عن آخر صدقة','↩ Undo last')+'</button></div>':'')+'</div>'}
-function sdAdd(){var a=nz($('sdA').value);if(!a)return toast(tl('اكتب المبلغ','Enter the amount'));var k=dayKey(currentDate),d=XEX(k),p=Math.max(2,Math.floor(a/5));(d.sdl=d.sdl||[]).push({a:a,p:p});d.sd=(d.sd||0)+p;XSX(k,d);toast(tl('🤲 تقبّل الله منك +','🤲 May Allah accept +')+p+tl(' نقطة',' pts'));renderTracking()}
-function sdUndo(){var k=dayKey(currentDate),d=XEX(k),l=d.sdl||[];if(!l.length)return;var e=l.pop();d.sd=Math.max(0,(d.sd||0)-e.p);d.sdl=l;XSX(k,d);renderTracking()}
+function sdAdd(){if(dayBeforeMark())return toast(LOCK_MSG());var a=nz($('sdA').value);if(!a)return toast(tl('اكتب المبلغ','Enter the amount'));var k=dayKey(currentDate),d=XEX(k),p=Math.max(2,Math.floor(a/5));(d.sdl=d.sdl||[]).push({a:a,p:p});d.sd=(d.sd||0)+p;XSX(k,d);toast(tl('🤲 تقبّل الله منك +','🤲 May Allah accept +')+p+tl(' نقطة',' pts'));renderTracking()}
+function sdUndo(){if(dayBeforeMark())return toast(LOCK_MSG());var k=dayKey(currentDate),d=XEX(k),l=d.sdl||[];if(!l.length)return;var e=l.pop();d.sd=Math.max(0,(d.sd||0)-e.p);d.sdl=l;XSX(k,d);renderTracking()}
 /* --- زكاة السنة دلوقتي (كارت التتبع) --- */
 function zkFld(id,ph,fn,bt){return '<div style="display:flex;gap:8px;margin-top:8px"><input class="ai" id="'+id+'" type="number" inputmode="decimal" placeholder="'+ph+'" style="flex:1;min-width:0;margin:0"><button class="xb" onclick="'+fn+'">'+bt+'</button></div>'}
 function zakatCard(){var z=zkG();if(!z)return'';var t='<b>'+tl('💰 الزكاة','💰 Zakat')+'</b>';
@@ -1046,6 +1087,7 @@ function bdgEval(){var u=XU(),st=u.bd||{},arr=bdgDays(),R={};
 function bdgEvalC(){return(BDE&&Date.now()-BDT<60000)?BDE:bdgEval()}
 function bdgCheck(){var u=XU();if(!u.name)return;var R=bdgEval(),st=u.bd||{},nw=BD.filter(function(b){return R[b.id].done&&!(st[b.id]||{}).earned&&!(b.a==='mos'&&getGender()==='woman')});
  if(nw.length){var td=dayKey(new Date()),pts=nw.reduce(function(a,b){return a+b.r},0);
+  try{var _f=XU().bFocus;if(_f&&nw.some(function(b){return b.id===_f.id}))focusBake()}catch(e){}
   XUP(function(x){x.bd=x.bd||{};nw.forEach(function(b){x.bd[b.id]=Object.assign(x.bd[b.id]||{},{earned:td})});if(x.bFocus&&nw.some(function(b){return b.id===x.bFocus.id}))delete x.bFocus});
   stkBonus(pts);
   if(nw.length===1)celebrate('🏅',tl('مبروك! حصلت على بادج','Congratulations! New badge')+'<br>'+bdName(nw[0]),'+'+pts+' '+tl('نقطة 🎉','points 🎉'),7000);
@@ -1077,8 +1119,9 @@ function bdOpen(id){var b=BDM[id],u=XU(),s=(u.bd||{})[id]||{},r=(bdgEvalC()[id])
  if(fo)h+='<p>'+tl('🎯 إنت بتركّز على هذا البادج دلوقتي.','🎯 You are focusing on this badge.')+'</p><div class="row2"><button class="xb" style="padding:12px" onclick="bdUnfocus()">'+tl('إلغاء التركيز','Stop focusing')+'</button></div>';
  h+='<div class="row2"><button class="xb" onclick="bdForget(\''+id+'\')">'+tl('🔄 نسيان (ابدأ من الأول)','🔄 Forget (start over)')+'</button><button class="xb" onclick="bdClose()">'+tl('إغلاق','Close')+'</button></div>';
  var o=document.createElement('div');o.id='bdS';o.className='bds-ov';o.innerHTML='<div class="bds">'+h+'</div>';o.onclick=function(ev){if(ev.target===o)bdClose()};document.body.appendChild(o)}
-function bdFocus(id){XUP(function(x){x.bFocus={id:id,since:dayKey(new Date())}});bdClose();toast(tl('🎯 اتفعّل التركيز','🎯 Focus on'));bdgRender();renderHomeBdg();renderTracking()}
-function bdUnfocus(){XUP(function(x){delete x.bFocus});bdClose();bdgRender();renderHomeBdg();renderTracking()}
+function focusBake(){try{var u=XU(),f=u.bFocus;if(!f||!f.id||!f.since)return;var today=dayKey(new Date()),d=new Date(f.since+'T00:00:00'),n=0;while(n<4000){var k=dayKey(d);if(k>today)break;var dl=focusDelta(k);if(dl){var ex=XEX(k);ex.fz=(ex.fz||0)+dl;localStorage.setItem('extras_'+k,JSON.stringify(ex))}d.setDate(d.getDate()+1);n++}}catch(e){}}
+function bdFocus(id){focusBake();XUP(function(x){x.bFocus={id:id,since:dayKey(new Date())}});bdClose();toast(tl('🎯 اتفعّل التركيز','🎯 Focus on'));bdgRender();renderHomeBdg();renderTracking()}
+function bdUnfocus(){focusBake();XUP(function(x){delete x.bFocus});bdClose();bdgRender();renderHomeBdg();renderTracking()}
 function bdForget(id){if(!confirm(tl('تنسى البادج ده وتبدأ من الأول؟','Forget this badge and start over?')))return;XUP(function(x){x.bd=x.bd||{};x.bd[id]={since:dayKey(new Date())}});BDE=null;bdClose();toast(tl('البادج بدأ من جديد','Badge restarted'));bdgRender();renderHomeBdg();renderTracking()}
 /* --- إضافات الشرح (شرح واحد) --- */
 var GN=[['🏅 البادجات','في الإعدادات ← الحساب: بادجات الصلاة والنوافل والصيام والعامة. بتتمنح تلقائي وتاخد نقاط من 75 لـ500 حسب الصعوبة. اضغط على بادج عشان تركّز عليه (النقاط بتتضاعف وفيه خصم لو اتساب)، أو تنساه وتبدأ من الأول. بادج اليوم الكامل = كل الصلوات (نص جماعة على الأقل) وكل السنن وكل الصيام المطلوب.','🏅 Badges','Settings → Account: prayer, nawafil, fasting and general badges. They are granted automatically for 75 to 500 points by difficulty. Tap one to focus on it (points double, with a deduction if missed) or forget it and start over.'],
