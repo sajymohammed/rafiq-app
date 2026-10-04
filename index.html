@@ -220,7 +220,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 <div class="page" id="page-settings">
   <header><h1>⚙️ الإعدادات</h1></header>
   <div id="setMenu"></div>
-<div class="sset" id="ss-account" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-account"></b></div><div class="card"><div class="xc"><div class="trow"><span class="pn" id="accName">—</span><button class="mini-btn" id="logoutBtn">تسجيل الخروج</button></div><div id="useTime" class="xs"></div><div class="trow"><span class="pn">🆔 رقمك التعريفي</span><button class="mini-btn" id="codeBtn" onclick="copyCode()">—</button></div><div class="xs">رقم من 10 أرقام يميّزك عن أي حساب بنفس الاسم — اضغط عليه للنسخ.</div><input class="ai" id="acName" placeholder="الاسم"><input class="ai" id="acAge" type="number" inputmode="numeric" placeholder="العمر"><select class="ai" id="acGender"><option value="man">ذكر</option><option value="woman">أنثى</option></select><input class="ai" id="acPass" type="password" placeholder="كلمة مرور جديدة (سيبها فاضية لو مش عايز تغيّرها)" autocomplete="new-password"><div class="xs">الأهداف</div><div id="acGoals"></div><div class="au-err" id="acErr"></div><button class="xb" id="acSave" style="width:100%;padding:12px">💾 حفظ بيانات الحساب</button></div><div class="trow"><span class="pn">الجنس</span><button class="mini-btn" id="genderChange">تغيير</button></div></div><div class="card"><h3 id="bdgH">🏅 البادجات</h3><div id="bdgBox"></div></div></div>
+<div class="sset" id="ss-account" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-account"></b></div><div class="card"><div class="xc"><div class="trow"><span class="pn" id="accName">—</span><button class="mini-btn" id="logoutBtn">تسجيل الخروج</button></div><div id="useTime" class="xs"></div><div class="trow"><span class="pn">🆔 رقمك التعريفي</span><button class="mini-btn" id="codeBtn" onclick="copyCode()">—</button></div><div class="xs">رقم من 10 أرقام يميّزك عن أي حساب بنفس الاسم — اضغط عليه للنسخ.</div><input class="ai" id="acName" placeholder="الاسم"><select class="ai" id="acGender"><option value="man">ذكر</option><option value="woman">أنثى</option></select><input class="ai" id="acPass" type="password" placeholder="كلمة مرور جديدة (سيبها فاضية لو مش عايز تغيّرها)" autocomplete="new-password"><div class="xs">الأهداف</div><div id="acGoals"></div><div class="au-err" id="acErr"></div><button class="xb" id="acSave" style="width:100%;padding:12px">💾 حفظ بيانات الحساب</button></div><div class="trow"><span class="pn">الجنس</span><button class="mini-btn" id="genderChange">تغيير</button></div></div><div class="card"><h3 id="bdgH">🏅 البادجات</h3><div id="bdgBox"></div></div></div>
 <div class="sset" id="ss-data" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-data"></b></div><div class="card"><div class="xc" id="bkCard"></div></div></div>
 <div class="sset" id="ss-times" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-times"></b></div><div class="card">
     <h3>🧮 طريقة حساب المواقيت</h3>
@@ -356,7 +356,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 </div></div>
 <div class="gender-ov" id="authOv" style="display:none;z-index:120;overflow-y:auto"><div class="gender-box">
  <div id="auHome"><h1>🕌 أهلًا بيك في رفيقي</h1><p>سجّل دخولك أو أنشئ حساب جديد</p><button class="au-btn" id="goIn">تسجيل الدخول</button><button class="au-btn" id="goUp">إنشاء حساب</button></div>
- <div id="auUp" style="display:none"><h1>إنشاء حساب</h1><br><input class="au-in" id="suName" placeholder="الاسم" autocomplete="username"><input class="au-in" id="suAge" type="number" inputmode="numeric" placeholder="العمر"><div class="au-row"><button class="au-btn" data-sg="man">🧔 ذكر</button><button class="au-btn" data-sg="woman">🧕 أنثى</button></div><p style="margin:4px 0 8px;font-size:14px;opacity:.85">أهدافك (تقدر تختار أكتر من واحد)</p><div id="goalList" style="max-height:230px;overflow-y:auto;margin-bottom:12px"><button type="button" class="au-btn" data-goal="أحافظ على صلواتي" style="margin-bottom:8px;font-size:14px">أحافظ على صلواتي</button><button type="button" class="au-btn" data-goal="أصلي صلواتي في معادها" style="margin-bottom:8px;font-size:14px">أصلي صلواتي في معادها</button><button type="button" class="au-btn" data-goal="أصلي كل الصلوات جماعة" style="margin-bottom:8px;font-size:14px">أصلي كل الصلوات جماعة</button><button type="button" class="au-btn" data-goal="أصلي كل الصلوات في المسجد" style="margin-bottom:8px;font-size:14px">أصلي كل الصلوات في المسجد</button><button type="button" class="au-btn" data-goal="أصلي الفجر كل يوم" style="margin-bottom:8px;font-size:14px">أصلي الفجر كل يوم</button><button type="button" class="au-btn" data-goal="أصلي قيام الليل كل يوم" style="margin-bottom:8px;font-size:14px">أصلي قيام الليل كل يوم</button><button type="button" class="au-btn" data-goal="أقرأ وِرد القرآن كل يوم" style="margin-bottom:8px;font-size:14px">أقرأ وِرد القرآن كل يوم</button><button type="button" class="au-btn" data-goal="أصلي النوافل كل يوم" style="margin-bottom:8px;font-size:14px">أصلي النوافل كل يوم</button><button type="button" class="au-btn" data-goal="أصوم الأيام البيض كل شهر" style="margin-bottom:8px;font-size:14px">أصوم الأيام البيض كل شهر</button><button type="button" class="au-btn" data-goal="أصوم الاثنين والخميس كل أسبوع" style="margin-bottom:8px;font-size:14px">أصوم الاثنين والخميس كل أسبوع</button><button type="button" class="au-btn" data-goal="أصوم كل السنن" style="margin-bottom:8px;font-size:14px">أصوم كل السنن</button></div><input class="au-in" id="suPass" type="password" placeholder="كلمة المرور" autocomplete="new-password"><div class="au-err" id="suErr"></div><button class="au-btn" id="suGo">إنشاء الحساب</button><button class="au-link" data-back>رجوع</button></div>
+ <div id="auUp" style="display:none"><h1>إنشاء حساب</h1><br><input class="au-in" id="suName" placeholder="الاسم" autocomplete="username"><div class="au-row"><button class="au-btn" data-sg="man">🧔 ذكر</button><button class="au-btn" data-sg="woman">🧕 أنثى</button></div><p style="margin:4px 0 8px;font-size:14px;opacity:.85">أهدافك (تقدر تختار أكتر من واحد)</p><div id="goalList" style="max-height:230px;overflow-y:auto;margin-bottom:12px"><button type="button" class="au-btn" data-goal="أحافظ على صلواتي" style="margin-bottom:8px;font-size:14px">أحافظ على صلواتي</button><button type="button" class="au-btn" data-goal="أصلي صلواتي في معادها" style="margin-bottom:8px;font-size:14px">أصلي صلواتي في معادها</button><button type="button" class="au-btn" data-goal="أصلي كل الصلوات جماعة" style="margin-bottom:8px;font-size:14px">أصلي كل الصلوات جماعة</button><button type="button" class="au-btn" data-goal="أصلي كل الصلوات في المسجد" style="margin-bottom:8px;font-size:14px">أصلي كل الصلوات في المسجد</button><button type="button" class="au-btn" data-goal="أصلي الفجر كل يوم" style="margin-bottom:8px;font-size:14px">أصلي الفجر كل يوم</button><button type="button" class="au-btn" data-goal="أصلي قيام الليل كل يوم" style="margin-bottom:8px;font-size:14px">أصلي قيام الليل كل يوم</button><button type="button" class="au-btn" data-goal="أقرأ وِرد القرآن كل يوم" style="margin-bottom:8px;font-size:14px">أقرأ وِرد القرآن كل يوم</button><button type="button" class="au-btn" data-goal="أصلي النوافل كل يوم" style="margin-bottom:8px;font-size:14px">أصلي النوافل كل يوم</button><button type="button" class="au-btn" data-goal="أصوم الأيام البيض كل شهر" style="margin-bottom:8px;font-size:14px">أصوم الأيام البيض كل شهر</button><button type="button" class="au-btn" data-goal="أصوم الاثنين والخميس كل أسبوع" style="margin-bottom:8px;font-size:14px">أصوم الاثنين والخميس كل أسبوع</button><button type="button" class="au-btn" data-goal="أصوم كل السنن" style="margin-bottom:8px;font-size:14px">أصوم كل السنن</button></div><input class="au-in" id="suPass" type="password" placeholder="كلمة المرور" autocomplete="new-password"><div class="au-err" id="suErr"></div><button class="au-btn" id="suGo">إنشاء الحساب</button><button class="au-link" data-back>رجوع</button></div>
  <div id="auIn" style="display:none"><h1>تسجيل الدخول</h1><br><input class="au-in" id="siName" placeholder="الاسم" autocomplete="username"><input class="au-in" id="siPass" type="password" placeholder="كلمة المرور" autocomplete="current-password"><div class="au-err" id="siErr"></div><button class="au-btn" id="siGo">دخول</button><button class="au-link" data-back>رجوع</button></div>
 </div></div>
 
@@ -441,10 +441,12 @@ function prayerTimeArrived(pid){
  let n=new Date();return n.getHours()*60+n.getMinutes()>=start;
 }
 
-function hijriStr(d){try{return new Intl.DateTimeFormat(LANG==='en'?'en-u-ca-islamic-umalqura-nu-latn':'ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}).format(d)}catch(e){return''}}
+function HADJ(){var v=parseInt(localStorage.getItem('hijriAdj'));return isNaN(v)?0:Math.max(-2,Math.min(2,v))}
+function hAd(d){var a=HADJ();if(!a)return d;var n=new Date(d.getTime());n.setDate(n.getDate()+a);return n}
+function hijriStr(d){try{return new Intl.DateTimeFormat(LANG==='en'?'en-u-ca-islamic-umalqura-nu-latn':'ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}).format(hAd(d))}catch(e){return''}}
 function fmtDates(){
  $('gregDate').textContent=currentDate.toLocaleDateString((LANG==='en'?'en-US':'ar-EG'),{weekday:'long',day:'numeric',month:'long'});
- try{$('hijriDate').textContent=new Intl.DateTimeFormat((LANG==='en'?'en-u-ca-islamic-umalqura-nu-latn':'ar-SA-u-ca-islamic-umalqura'),{day:'numeric',month:'long',year:'numeric'}).format(currentDate)}catch(e){$('hijriDate').textContent=''}
+ try{$('hijriDate').textContent=new Intl.DateTimeFormat((LANG==='en'?'en-u-ca-islamic-umalqura-nu-latn':'ar-SA-u-ca-islamic-umalqura'),{day:'numeric',month:'long',year:'numeric'}).format(hAd(currentDate))}catch(e){$('hijriDate').textContent=''}
 }
 
 function renderTracking(){try{stkCheck()}catch(e){}
@@ -638,10 +640,10 @@ document.querySelectorAll('[data-sg]').forEach(b=>b.onclick=()=>{sg=b.dataset.sg
 document.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>b.classList.toggle('sel'));
 document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>showAuth('auHome'));
 $('goUp').onclick=()=>showAuth('auUp');$('goIn').onclick=()=>showAuth('auIn');
-$('suGo').onclick=async()=>{let n=$('suName').value.trim(),a=+$('suAge').value,g=[...document.querySelectorAll('[data-goal].sel')].map(b=>b.dataset.goal),p=$('suPass').value,e=$('suErr');
- if(!n)return e.textContent='اكتب اسمك';if(!(a>=3&&a<=120))return e.textContent='اكتب عمرك صح';if(!sg)return e.textContent='اختر ذكر أو أنثى';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p.length<4)return e.textContent='كلمة المرور 4 حروف على الأقل';
+$('suGo').onclick=async()=>{let n=$('suName').value.trim(),g=[...document.querySelectorAll('[data-goal].sel')].map(b=>b.dataset.goal),p=$('suPass').value,e=$('suErr');
+ if(!n)return e.textContent='اكتب اسمك';if(!sg)return e.textContent='اختر ذكر أو أنثى';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p.length<4)return e.textContent='كلمة المرور 4 حروف على الأقل';
  let us=USERS();if(us[uKey(n)])return e.textContent='الاسم ده مستخدم قبل كده';
- let u={created:Date.now(),name:n,age:a,gender:sg,goals:g,code:rndCode(),pw:await hashPw(p)};us[uKey(n)]=u;saveUsers(us);e.textContent='';loginAs(u)};
+ let u={created:Date.now(),name:n,gender:sg,goals:g,code:rndCode(),pw:await hashPw(p)};us[uKey(n)]=u;saveUsers(us);e.textContent='';loginAs(u)};
 $('siGo').onclick=async()=>{let n=$('siName').value.trim(),e=$('siErr'),u=USERS()[uKey(n)];if(!u||u.pw!==await hashPw($('siPass').value))return e.textContent='الاسم أو كلمة المرور غلط';e.textContent='';loginAs(u)};
 $('logoutBtn').onclick=()=>{localStorage.removeItem('rafiq_session');showAuth('auHome')};
 
@@ -657,7 +659,7 @@ function applyGoals(d){const K=dayKey(currentDate),hg=x=>hasG(x,K),MQ=/^mosque/,
  if(r.opt==='late'){let b=-10;if(hg('معادها'))b=-20;if(p.id==='fajr'&&hg('الفجر كل يوم'))b=Math.min(b,-15);pts=b*mult(p.id)}
  else if((hg('في المسجد')&&!MQ.test(r.opt))||(hg('جماعة')&&!JM.test(r.opt)))pts=0;
  r.points=pts}}
-function hijriDay(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric'}).format(d))}catch(e){return 0}}
+function hijriDay(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric'}).format(hAd(d)))}catch(e){return 0}}
 function fastInfo(d){let hd=hijriDay(d),wd=d.getDay(),w=hd>=13&&hd<=15,m=wd===1||wd===4,all=hasG('كل السنن',dayKey(d));return{show:w||m,must:(w&&(hasG('الأيام البيض',dayKey(d))||all))||(m&&(hasG('الاثنين',dayKey(d))||all)),label:(w?'الأيام البيض ('+hd+' هجري)':'')+(w&&m?' + ':'')+(m?(wd===1?'يوم الاثنين':'يوم الخميس'):'')}}
 function extraParts(k){let d=XEX(k),u=XU(),dt=new Date(k+'T00:00:00'),past=k<dayKey(new Date())&&k>=dayKey(new Date(u.created||Date.now())),n=d.n||{},P={naf:0,nafC:0,qy:0,qyC:0,q:0,qC:0,f:0,fC:0,bn:0,zk:0,sd:0,sdC:0,ad:0};
  const NP={fajr:20,dhuhr:5,maghrib:5,isha:10};
@@ -685,14 +687,14 @@ function saveQTarget(){let n=+$('qN').value,u=$('qU').value;if(!(n>0))return toa
 function saveQRead(){if(dayBeforeMark())return toast(LOCK_MSG());let v=$('qR').value;if(v==='')return toast('اكتب العدد');let k=dayKey(currentDate),d=XEX(k),td=k===dayKey(new Date());{let qq=XU().quran;d.q=+v;if(qq)d.qt=qq.n}XSX(k,d);document.activeElement.blur();
  let kmsg=td&&khGet()&&d.kh==='n'&&Q_PS?khFromRead(+v,(XU().quran||{u:'pages'}).u):'',m=td?qAdjust(k):'';renderTracking();qRenderK();toast(kmsg||m||'تم الحفظ ✅')}
 function resetQ(){XUP(x=>delete x.quran);renderTracking()}
-function fillAcc(){let u=XU();if(!u.name)return;if(!u.created)XUP(x=>x.created=Date.now());$('acName').value=u.name;var _cb=$('codeBtn');if(_cb)_cb.textContent=u.code||'—';$('acAge').value=u.age||'';$('acGender').value=u.gender||'man';$('acPass').value='';
+function fillAcc(){let u=XU();if(!u.name)return;if(!u.created)XUP(x=>x.created=Date.now());if(u.age!==undefined)XUP(x=>{delete x.age});$('acName').value=u.name;var _cb=$('codeBtn');if(_cb)_cb.textContent=u.code||'—';$('acGender').value=u.gender||'man';$('acPass').value='';
  $('acGoals').innerHTML=GOALS.map(g=>`<button type="button" class="xb ${(u.goals||[]).includes(g)?'on2':''}" data-sg2="${g}">${g}</button>`).join('');
  document.querySelectorAll('[data-sg2]').forEach(b=>b.onclick=()=>b.classList.toggle('on2'));
  let ms=Date.now()-(u.created||Date.now()),dd=Math.floor(ms/864e5);$('useTime').textContent='⏱ بتستخدم رفيقي من '+(dd>0?dd+' يوم':Math.max(1,Math.floor(ms/36e5))+' ساعة')}
-$('acSave').onclick=async()=>{let s=localStorage.getItem('rafiq_session'),us=USERS(),u=us[s],e=$('acErr');if(!u)return;let n=$('acName').value.trim(),a=+$('acAge').value,g=[...document.querySelectorAll('[data-sg2].on2')].map(b=>b.dataset.sg2),p=$('acPass').value;
- if(!n)return e.textContent='اكتب الاسم';if(!(a>=3&&a<=120))return e.textContent='اكتب عمرك صح';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p&&p.length<(FB?6:4))return e.textContent='كلمة المرور 4 حروف على الأقل';
+$('acSave').onclick=async()=>{let s=localStorage.getItem('rafiq_session'),us=USERS(),u=us[s],e=$('acErr');if(!u)return;let n=$('acName').value.trim(),g=[...document.querySelectorAll('[data-sg2].on2')].map(b=>b.dataset.sg2),p=$('acPass').value;
+ if(!n)return e.textContent='اكتب الاسم';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p&&p.length<(FB?6:4))return e.textContent='كلمة المرور 4 حروف على الأقل';
  let nk=uKey(n);if(nk!==s&&us[nk])return e.textContent='الاسم ده مستخدم';
- u.name=n;u.age=a;u.gender=$('acGender').value;{let od=u.goals||[],gs=Object.assign({},u.gsince||{}),td=dayKey(new Date());g.forEach(x=>{if(!od.includes(x))gs[x]=td});Object.keys(gs).forEach(x=>{if(!g.includes(x))delete gs[x]});u.gsince=gs}u.goals=g;if(p){try{if(FB&&FB.auth.currentUser)await FB.auth.currentUser.updatePassword(p);else u.pw=await hashPw(p)}catch(er){e.textContent='لتغيير كلمة المرور سجّل خروج وادخل تاني وحاول';return}}delete us[s];us[nk]=u;saveUsers(us);localStorage.setItem('rafiq_session',nk);setGender(u.gender);$('accName').textContent='👤 '+n;e.textContent='';renderTracking();toast('تم حفظ الحساب ✅')};
+ u.name=n;delete u.age;u.gender=$('acGender').value;{let od=u.goals||[],gs=Object.assign({},u.gsince||{}),td=dayKey(new Date());g.forEach(x=>{if(!od.includes(x))gs[x]=td});Object.keys(gs).forEach(x=>{if(!g.includes(x))delete gs[x]});u.gsince=gs}u.goals=g;if(p){try{if(FB&&FB.auth.currentUser)await FB.auth.currentUser.updatePassword(p);else u.pw=await hashPw(p)}catch(er){e.textContent='لتغيير كلمة المرور سجّل خروج وادخل تاني وحاول';return}}delete us[s];us[nk]=u;saveUsers(us);localStorage.setItem('rafiq_session',nk);setGender(u.gender);$('accName').textContent='👤 '+n;e.textContent='';renderTracking();toast('تم حفظ الحساب ✅')};
 document.querySelector('[data-page="settings"]').addEventListener('click',fillAcc);
 applyTheme(localStorage.getItem('theme')||'green');fillAcc();
 
@@ -708,26 +710,58 @@ const sched=k=>{if(!cloudOn||(SKIP.test(k)&&k!=='rafiq_users'))return;_si.call(l
 Storage.prototype.setItem=function(k,v){_si.call(this,k,v);if(this===localStorage)sched(k)};
 Storage.prototype.removeItem=function(k){_ri.call(this,k);if(this===localStorage)sched(k)};
 async function mkEmail(n){let b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('rafiq:'+uKey(n)));return'u'+[...new Uint8Array(b)].slice(0,16).map(x=>x.toString(16).padStart(2,'0')).join('')+'@rafiq-app.com'}
-async function pushNow(){let u=FB.auth.currentUser;if(!u||!cloudOn)return;let p={...XU()};delete p.pw;let d0=localStorage.getItem('rafiq_session_dirty');
-  try{let ts=Date.now(),body={profile:p,store:storeObj(),updated:ts};if(new Blob([JSON.stringify(body)]).size>950000&&!window._bigW){window._bigW=1;toast(tl('⚠️ بياناتك كبرت قوي وممكن المزامنة تفشل — خد نسخة احتياطية','⚠️ Your data is very large and sync may fail — make a backup'))}
-   await FB.db.collection('users').doc(u.uid).set(body);_si.call(localStorage,'rafiq_pushed',String(ts));if(localStorage.getItem('rafiq_session_dirty')===d0)_ri.call(localStorage,'rafiq_session_dirty')}
-  catch(e){if(!window._pushW){window._pushW=1;toast(tl('⚠️ تعذّر حفظ بياناتك على السيرفر، هنحاول تاني','⚠️ Could not sync your data, will retry'))}}}
-async function pullApply(u,snap){snap=snap||await FB.db.collection('users').doc(u.uid).get();
- if(snap.exists){let d=snap.data(),p=d.profile||{},st=d.store||{};Object.keys(storeObj()).forEach(k=>localStorage.removeItem(k));Object.entries(st).forEach(([k,v])=>localStorage.setItem(k,v));let us={};us[uKey(p.name||'')]=p;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(p.name||''));localStorage.setItem('rafiq_pushed',String(d.updated||0))}
- else if(!XU().name){let p={name:'مستخدم',age:18,gender:'man',goals:[],created:Date.now()},us={};us[uKey(p.name)]=p;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(p.name))}
+const PART_MAX=600000;
+let v2Denied=false,lastParts={};
+const isPerm=e=>!!e&&(e.code==='permission-denied'||/permission|insufficient/i.test(e.message||''));
+const dataCol=u=>FB.db.collection('users').doc(u.uid).collection('data');
+/* تقسيم بيانات الحساب: كل شهر في document لوحده + document للإعدادات (core) — وأي جزء يعدّي الحجم يتقسم تاني */
+function splitStore(st){let g={core:{}};
+ Object.keys(st).forEach(k=>{let m=/(\d{4})-(\d{2})/.exec(k),id=m?'m_'+m[1]+'-'+m[2]:'core';(g[id]=g[id]||{})[k]=st[k]});
+ let out={};
+ Object.keys(g).forEach(id=>{let cur={},sz=0,n=0;
+  const flush=()=>{if(Object.keys(cur).length||(id==='core'&&!n)){out[n?id+'_'+n:id]=cur;n++;cur={};sz=0}};
+  Object.keys(g[id]).forEach(k=>{let v=g[id][k],l=(k.length+String(v).length)*3;if(sz&&sz+l>PART_MAX)flush();cur[k]=v;sz+=l});
+  flush()});
+ return out}
+async function pushV2(u,p,ts){
+ let parts=splitStore(storeObj()),ids=Object.keys(parts),col=dataCol(u),ops=[],next={};
+ ids.forEach(id=>{let js=JSON.stringify(parts[id]);next[id]=js;if(lastParts[id]!==js)ops.push(b=>b.set(col.doc('p_'+id),{data:parts[id],updated:ts}))});
+ for(let i=0;i<ops.length;i+=400){let b=FB.db.batch();ops.slice(i,i+400).forEach(f=>f(b));await b.commit()}
+ await col.doc('meta').set({profile:p,updated:ts,v:2,parts:ids});
+ let gone=Object.keys(lastParts).filter(id=>!(id in next));lastParts=next;
+ for(let i=0;i<gone.length;i+=400){let b=FB.db.batch();gone.slice(i,i+400).forEach(id=>b.delete(col.doc('p_'+id)));try{await b.commit()}catch(e){}}}
+let _pushP=Promise.resolve();
+function pushNow(){_pushP=_pushP.catch(function(){}).then(pushNow0);return _pushP}
+async function pushNow0(){let u=FB.auth.currentUser;if(!u||!cloudOn)return;let p={...XU()};delete p.pw;delete p.age;let d0=localStorage.getItem('rafiq_session_dirty');
+ try{let ts=Date.now();
+  if(!v2Denied){try{await pushV2(u,p,ts)}catch(e){if(isPerm(e)){v2Denied=true;console.warn('Firestore rules block users/{uid}/data — falling back to single-document sync')}else throw e}}
+  if(v2Denied){let body={profile:p,store:storeObj(),updated:ts};if(new Blob([JSON.stringify(body)]).size>950000&&!window._bigW){window._bigW=1;toast(tl('⚠️ بياناتك كبرت قوي وممكن المزامنة تفشل — خد نسخة احتياطية','⚠️ Your data is very large and sync may fail — make a backup'))}await FB.db.collection('users').doc(u.uid).set(body)}
+  _si.call(localStorage,'rafiq_pushed',String(ts));if(localStorage.getItem('rafiq_session_dirty')===d0)_ri.call(localStorage,'rafiq_session_dirty')}
+ catch(e){if(!window._pushW){window._pushW=1;toast(tl('⚠️ تعذّر حفظ بياناتك على السيرفر، هنحاول تاني','⚠️ Could not sync your data, will retry'))}}}
+async function remoteMeta(u){
+ if(!v2Denied){try{let s=await dataCol(u).doc('meta').get();if(s.exists)return{mode:'v2',snap:s}}catch(e){if(isPerm(e))v2Denied=true;else throw e}}
+ return{mode:'legacy',snap:await FB.db.collection('users').doc(u.uid).get()}}
+async function loadRemote(u,meta){let d=meta.snap.data()||{};
+ if(meta.mode==='legacy'){lastParts={};return{profile:d.profile||{},store:d.store||{},updated:d.updated||0}}
+ let ids=d.parts||[],st={},docs=await Promise.all(ids.map(id=>dataCol(u).doc('p_'+id).get()));
+ lastParts={};docs.forEach((s,i)=>{if(!s.exists)return;let x=s.data().data||{};Object.assign(st,x);lastParts[ids[i]]=JSON.stringify(x)});
+ return{profile:d.profile||{},store:st,updated:d.updated||0}}
+async function pullApply(u,meta){meta=meta||await remoteMeta(u);
+ if(meta.snap.exists){let r=await loadRemote(u,meta),p=r.profile||{};delete p.age;Object.keys(storeObj()).forEach(k=>localStorage.removeItem(k));Object.entries(r.store).forEach(([k,v])=>localStorage.setItem(k,v));let us={};us[uKey(p.name||'')]=p;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(p.name||''));localStorage.setItem('rafiq_pushed',String(r.updated||0))}
+ else if(!XU().name){let p={name:'مستخدم',gender:'man',goals:[],created:Date.now()},us={};us[uKey(p.name)]=p;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(p.name))}
  localStorage.setItem('rafiq_uid',u.uid)}
 function afterLogin(){let p=XU();setGender(p.gender);applyTheme(localStorage.getItem('theme')||'green');$('authOv').style.display='none';$('accName').textContent='👤 '+(p.name||'');fillAcc();updateSrcUI();updateRemindUI();updateGeoUI();renderTracking();ensureTimes();cloudOn=true;try{ensureCode()}catch(e){}}
-function mergeCloud(u,snap){let d=snap.data(),st=d.store||{},loc=storeObj();
+async function mergeCloud(u,meta){let r=await loadRemote(u,meta),st=r.store,loc=storeObj();
  Object.keys(st).forEach(function(k){let v=st[k];if(typeof v!=='string')return;
   if(!(k in loc)){localStorage.setItem(k,v);return}
-  if(/^(prayers|extras)_/.test(k)){try{let a=JSON.parse(v)||{},b=JSON.parse(loc[k])||{},r=Object.assign({},a,b);if(a.n&&b.n)r.n=Object.assign({},a.n,b.n);localStorage.setItem(k,JSON.stringify(r))}catch(e){}}});
- let p=d.profile||{};XUP(function(x){Object.keys(p).forEach(function(k){if(x[k]===undefined)x[k]=p[k]})});
- localStorage.setItem('rafiq_uid',u.uid);localStorage.setItem('rafiq_pushed',String(d.updated||0))}
-async function checkCloud(){let u=FB.auth.currentUser;if(!u||busy)return;try{let snap=await FB.db.collection('users').doc(u.uid).get();if(snap.exists&&(snap.data().updated||0)>(+localStorage.getItem('rafiq_pushed')||0)){cloudOn=false;let dirty=!!localStorage.getItem('rafiq_session_dirty');if(dirty)mergeCloud(u,snap);else await pullApply(u,snap);afterLogin();if(dirty)pushNow()}}catch(e){}}
-$('suGo').onclick=async()=>{let n=$('suName').value.trim(),a=+$('suAge').value,g=[...document.querySelectorAll('[data-goal].sel')].map(b=>b.dataset.goal),p=$('suPass').value,e=$('suErr');
- if(!n)return e.textContent='اكتب اسمك';if(!(a>=3&&a<=120))return e.textContent='اكتب عمرك صح';if(!sg)return e.textContent='اختر ذكر أو أنثى';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p.length<6)return e.textContent='كلمة المرور 6 حروف على الأقل';
+  if(/^(prayers|extras)_/.test(k)){try{let a=JSON.parse(v)||{},b=JSON.parse(loc[k])||{},r2=Object.assign({},a,b);if(a.n&&b.n)r2.n=Object.assign({},a.n,b.n);localStorage.setItem(k,JSON.stringify(r2))}catch(e){}}});
+ let p=r.profile||{};XUP(function(x){Object.keys(p).forEach(function(k){if(k!=='age'&&x[k]===undefined)x[k]=p[k]})});
+ localStorage.setItem('rafiq_uid',u.uid);localStorage.setItem('rafiq_pushed',String(r.updated||0))}
+async function checkCloud(){let u=FB.auth.currentUser;if(!u||busy)return;try{let meta=await remoteMeta(u),d=meta.snap.exists?meta.snap.data():null;if(d&&(d.updated||0)>(+localStorage.getItem('rafiq_pushed')||0)){cloudOn=false;let dirty=!!localStorage.getItem('rafiq_session_dirty');if(dirty)await mergeCloud(u,meta);else await pullApply(u,meta);afterLogin();if(dirty)pushNow()}}catch(e){}}
+$('suGo').onclick=async()=>{let n=$('suName').value.trim(),g=[...document.querySelectorAll('[data-goal].sel')].map(b=>b.dataset.goal),p=$('suPass').value,e=$('suErr');
+ if(!n)return e.textContent='اكتب اسمك';if(!sg)return e.textContent='اختر ذكر أو أنثى';if(!g.length)return e.textContent='اختر هدف واحد على الأقل';if(p.length<6)return e.textContent='كلمة المرور 6 حروف على الأقل';
  e.textContent='جاري إنشاء الحساب...';busy=true;
- try{let cr=await FB.auth.createUserWithEmailAndPassword(await mkEmail(n),p),cd=await genCode(),u={created:Date.now(),name:n,age:a,gender:sg,goals:g,code:cd},us={};us[uKey(n)]=u;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(n));localStorage.setItem('rafiq_uid',cr.user.uid);cloudOn=true;await pushNow();e.textContent='';afterLogin();toast('أهلًا '+n+' 🌙')}
+ try{let cr=await FB.auth.createUserWithEmailAndPassword(await mkEmail(n),p),cd=await genCode(),u={created:Date.now(),name:n,gender:sg,goals:g,code:cd},us={};us[uKey(n)]=u;localStorage.setItem('rafiq_users',JSON.stringify(us));localStorage.setItem('rafiq_session',uKey(n));localStorage.setItem('rafiq_uid',cr.user.uid);cloudOn=true;await pushNow();e.textContent='';afterLogin();toast('أهلًا '+n+' 🌙')}
  catch(er){e.textContent=er.code==='auth/email-already-in-use'?'الاسم ده مستخدم':er.code==='auth/weak-password'?'كلمة المرور ضعيفة':'مشكلة في الاتصال، حاول تاني'}
  busy=false};
 $('siGo').onclick=async()=>{let n=$('siName').value.trim(),p=$('siPass').value,e=$('siErr');if(!n||!p)return e.textContent='اكتب الاسم وكلمة المرور';e.textContent='جاري الدخول...';busy=true;
@@ -763,6 +797,11 @@ function totalAllDaysRaw(){let u=XU(),now=new Date(),first=new Date(u.created||D
 /* ===== ستريك + لغة + شرح ===== */
 var LANG=localStorage.getItem('lang')||'ar';
 function tl(a,e){return LANG==='en'?e:a}
+/* ===== تعديل التاريخ الهجري (±يومين) في إعدادات ضبط المواقيت ===== */
+(function(){var g=document.getElementById('geoToggle');if(!g)return;var row=g.closest('.trow');if(!row)return;var v=HADJ(),o='';
+ [-2,-1,0,1,2].forEach(function(n){o+='<option value="'+n+'"'+(n===v?' selected':'')+'>'+(n===0?tl('حسب أم القرى (بدون تعديل)','Umm al-Qura (no change)'):(n>0?'+':'−')+Math.abs(n)+' '+tl('يوم','day'))+'</option>'});
+ row.insertAdjacentHTML('afterend','<div class="trow"><span class="pn">'+tl('تعديل التاريخ الهجري','Hijri date adjustment')+'</span><select id="hAdjSel" class="sel">'+o+'</select></div><div class="xs">'+tl('لو التاريخ الهجري مختلف عن بلدك (رؤية الهلال) زوّد أو قلّل يوم. بيأثر على رمضان وشعبان ورجب والأيام البيض.','If the Hijri date differs from your country (moon sighting), shift it by a day. This affects Ramadan, Sha\'ban, Rajab and the White Days.')+'</div>');
+ document.getElementById('hAdjSel').onchange=function(){localStorage.setItem('hijriAdj',this.value);toast(tl('تم التعديل، جاري التحديث...','Saved, refreshing...'));setTimeout(function(){location.reload()},700)}})();
 function STKC(t){return{p:{n:30,pts:1500},q:{n:15,pts:500},y:{n:20,pts:1000},s:{n:20,pts:1000}}[t]}
 function stkMode(){return localStorage.getItem('stkMode')||'all'}
 function stkOK(t,k){
@@ -795,7 +834,7 @@ function renderStk(){let b=$('stkBox');if(!b)return;let m=stkMode(),kh=!!khGet()
  +row('📖',kh?tl('ستريك ورد الختمة','Khatma wird streak'):tl('ستريك ورد القرآن','Quran wird streak'),kh?tl('750 نقطة عند إنهاء الختمة','750 pts on finishing the Khatma'):tl('كل 15 يوم = 500 نقطة','Every 15 days = 500 pts'),'q')
  +row('🌌',tl('ستريك قيام الليل','Night prayer streak'),tl('كل 20 يوم = 1000 نقطة','Every 20 days = 1000 pts'),'y')
  +row('🌙',tl('ستريك السنن','Sunnah streak'),tl('كل 20 يوم = 1000 نقطة','Every 20 days = 1000 pts'),'s')}
-const GUIDE={ar:[["🏠 الرئيسية", "مواقيت الصلاة اليومية حسب موقعك، وتحتها شريط الثلث الأخير (بيبدأ امتى وباقي قد إيه)، وبعده الستريك 🔥 (اضغط مطولًا عشان تشوف كل الستريكات) ومربع صغير للبادج اللي بتركّز عليه. مصدر المواقيت والموقع من الإعدادات ← ضبط المواقيت."], ["🕌 التتبع (الصلوات)", "سجّل كل صلاة بعد دخول وقتها: في البيت، جماعة، إمام، في المسجد، من أول التكبيرة، أو إمام المسجد. في المسجد بتدخل المسافة (خطوات أو متر) والانتظار وعدد المصلين، وكل ده بيحسب نقاط. الصلاة الفايتة بتتقفل ولها خصم لو ده هدفك."], ["⭐ النقاط والمستوى", "كل عبادة ليها نقاط، وبتتجمّع في مستواك. اضغط مطولًا على كارت النقاط عشان تبدّل بين نقاط اليوم ونقاط الحساب (من أول يوم)."], ["🌙 النوافل وقيام الليل والصيام", "تحت الصلوات: سجّل السنن الرواتب (الفجر والظهر والمغرب والعشاء)، وقيام الليل بعدد الركعات (بعد العشاء)، وصيام الأيام البيض والاثنين والخميس. فيه خصم على اللي بتضيّعه لو ده من أهدافك."], ["📖 القرآن", "المصحف على 604 صفحة: اسحب لقلب الصفحة، واكتب رقم الصفحة للذهاب إليها، وكبّر الخط. دوس على أي آية واختار 📍 وقفت هنا عشان تحفظ مكانك."], ["📿 الختمة والورد", "ابدأ ختمة واختار المدة. التطبيق بيقولك اقرأ كام صفحة ومن فين لفين. لما تكون في ختمة، ورد الختمة هو وردك اليومي وورد القرآن العادي بيختفي. اسأل نفسك: هل مشيت على الخطة؟ لو آه بتتحسب. لو لأ اكتب قرأت قد إيه: الناقص بيتزود على الأيام الجاية والزيادة بتتخصم."], ["🔥 الستريك", "الصلوات: كل الصلوات كل يوم (تختار: الكل أو كلها في المسجد أو كلها جماعة)، كل 30 يوم = 1500 نقطة. القرآن: تمشي على وردك أو أكتر؛ في الختمة 750 نقطة عند إنهائها بدون انقطاع، وبدون ختمة 500 نقطة كل 15 يوم. قيام الليل والسنن (الأربعة كلها): كل 20 يوم = 1000 نقطة. اليوم اللي لسه ما خلص ما بيكسرش الستريك."], ["📊 الإحصائيات", "آخر 7 أيام و30 يوم والسنة، وتفصيل كل العبادات (صلوات ونوافل وقيام وقرآن وصيام ومكافآت) بالنقاط، وعدد ختماتك."], ["⚙️ الإعدادات والحساب", "الإعدادات شرايط: الحساب (الاسم والعمر والجنس وكلمة المرور والأهداف والبادجات)، البيانات (النسخة الاحتياطية)، ضبط المواقيت، الثيم (لون لكل صفحة)، الشاشات (القضاء والزكاة والتنبيهات)، وعام (اللغة والشرح). حسابك بيتزامن مع السحابة وبيتحفظ آخر تعديل عند تسجيل الخروج."]],en:[["🏠 Home", "Daily prayer times for your location, then the last-third-of-the-night strip, then your streak 🔥 (hold it to see all streaks) and a small square for the badge you focus on. Times source and location are in Settings → Prayer times."], ["🕌 Tracking (Prayers)", "Log each prayer once its time starts: at home, in congregation, as imam, at the mosque, from the first takbir, or as mosque imam. For the mosque you enter distance (steps or meters), waiting time and congregation size, all of which earn points. A missed prayer gets locked, with a penalty if that is one of your goals."], ["⭐ Points & level", "Every act of worship earns points that build your level. Long-press the points card to switch between today's points and account points (since day one)."], ["🌙 Sunnah, night prayer & fasting", "Below the prayers: log the regular sunnah (Fajr, Dhuhr, Maghrib, Isha), night prayer by rak'ahs (after Isha), and fasting the White Days, Mondays and Thursdays. Missed ones cost points if they are among your goals."], ["📖 Quran", "A 604-page mushaf: swipe to turn pages, type a page number to jump, and resize the font. Tap any verse and choose 📍 to save your place."], ["📿 Khatma & daily wird", "Start a khatma and pick its length. The app tells you how many pages to read and from where to where. While a khatma is active, its wird is your daily wird and the regular Quran wird is hidden. Then answer: did you follow the plan? Yes counts it. No: enter what you read, a shortfall is added to upcoming days and extra is deducted."], ["🔥 Streaks", "Prayers: all prayers every day (choose: all, all at the mosque, or all in congregation), every 30 days = 1500 pts. Quran: follow your wird or more; with a khatma, 750 pts on finishing it unbroken; without one, 500 pts every 15 days. Night prayer and sunnah (all four): every 20 days = 1000 pts. A day that is not over yet never breaks a streak."], ["📊 Stats", "Last 7 days, 30 days and the year, a breakdown of all worship (prayers, sunnah, night prayer, Quran, fasting, bonuses) in points, and your completed khatmas."], ["⚙️ Settings & account", "Settings are sections: Account (name, age, gender, password, goals, badges), Data (backup), Prayer times, Theme (a color per page), Screens (qada, zakat, alerts) and General (language and guide). Your account syncs to the cloud and your latest changes are saved when you log out."]]};
+const GUIDE={ar:[["🏠 الرئيسية", "مواقيت الصلاة اليومية حسب موقعك، وتحتها شريط الثلث الأخير (بيبدأ امتى وباقي قد إيه)، وبعده الستريك 🔥 (اضغط مطولًا عشان تشوف كل الستريكات) ومربع صغير للبادج اللي بتركّز عليه. مصدر المواقيت والموقع من الإعدادات ← ضبط المواقيت."], ["🕌 التتبع (الصلوات)", "سجّل كل صلاة بعد دخول وقتها: في البيت، جماعة، إمام، في المسجد، من أول التكبيرة، أو إمام المسجد. في المسجد بتدخل المسافة (خطوات أو متر) والانتظار وعدد المصلين، وكل ده بيحسب نقاط. الصلاة الفايتة بتتقفل ولها خصم لو ده هدفك."], ["⭐ النقاط والمستوى", "كل عبادة ليها نقاط، وبتتجمّع في مستواك. اضغط مطولًا على كارت النقاط عشان تبدّل بين نقاط اليوم ونقاط الحساب (من أول يوم)."], ["🌙 النوافل وقيام الليل والصيام", "تحت الصلوات: سجّل السنن الرواتب (الفجر والظهر والمغرب والعشاء)، وقيام الليل بعدد الركعات (بعد العشاء)، وصيام الأيام البيض والاثنين والخميس. فيه خصم على اللي بتضيّعه لو ده من أهدافك."], ["📖 القرآن", "المصحف على 604 صفحة: اسحب لقلب الصفحة، واكتب رقم الصفحة للذهاب إليها، وكبّر الخط. دوس على أي آية واختار 📍 وقفت هنا عشان تحفظ مكانك."], ["📿 الختمة والورد", "ابدأ ختمة واختار المدة. التطبيق بيقولك اقرأ كام صفحة ومن فين لفين. لما تكون في ختمة، ورد الختمة هو وردك اليومي وورد القرآن العادي بيختفي. اسأل نفسك: هل مشيت على الخطة؟ لو آه بتتحسب. لو لأ اكتب قرأت قد إيه: الناقص بيتزود على الأيام الجاية والزيادة بتتخصم."], ["🔥 الستريك", "الصلوات: كل الصلوات كل يوم (تختار: الكل أو كلها في المسجد أو كلها جماعة)، كل 30 يوم = 1500 نقطة. القرآن: تمشي على وردك أو أكتر؛ في الختمة 750 نقطة عند إنهائها بدون انقطاع، وبدون ختمة 500 نقطة كل 15 يوم. قيام الليل والسنن (الأربعة كلها): كل 20 يوم = 1000 نقطة. اليوم اللي لسه ما خلص ما بيكسرش الستريك."], ["📊 الإحصائيات", "آخر 7 أيام و30 يوم والسنة، وتفصيل كل العبادات (صلوات ونوافل وقيام وقرآن وصيام ومكافآت) بالنقاط، وعدد ختماتك."], ["⚙️ الإعدادات والحساب", "الإعدادات شرايط: الحساب (الاسم والجنس وكلمة المرور والأهداف والبادجات)، البيانات (النسخة الاحتياطية)، ضبط المواقيت، الثيم (لون لكل صفحة)، الشاشات (القضاء والزكاة والتنبيهات)، وعام (اللغة والشرح). حسابك بيتزامن مع السحابة وبيتحفظ آخر تعديل عند تسجيل الخروج."]],en:[["🏠 Home", "Daily prayer times for your location, then the last-third-of-the-night strip, then your streak 🔥 (hold it to see all streaks) and a small square for the badge you focus on. Times source and location are in Settings → Prayer times."], ["🕌 Tracking (Prayers)", "Log each prayer once its time starts: at home, in congregation, as imam, at the mosque, from the first takbir, or as mosque imam. For the mosque you enter distance (steps or meters), waiting time and congregation size, all of which earn points. A missed prayer gets locked, with a penalty if that is one of your goals."], ["⭐ Points & level", "Every act of worship earns points that build your level. Long-press the points card to switch between today's points and account points (since day one)."], ["🌙 Sunnah, night prayer & fasting", "Below the prayers: log the regular sunnah (Fajr, Dhuhr, Maghrib, Isha), night prayer by rak'ahs (after Isha), and fasting the White Days, Mondays and Thursdays. Missed ones cost points if they are among your goals."], ["📖 Quran", "A 604-page mushaf: swipe to turn pages, type a page number to jump, and resize the font. Tap any verse and choose 📍 to save your place."], ["📿 Khatma & daily wird", "Start a khatma and pick its length. The app tells you how many pages to read and from where to where. While a khatma is active, its wird is your daily wird and the regular Quran wird is hidden. Then answer: did you follow the plan? Yes counts it. No: enter what you read, a shortfall is added to upcoming days and extra is deducted."], ["🔥 Streaks", "Prayers: all prayers every day (choose: all, all at the mosque, or all in congregation), every 30 days = 1500 pts. Quran: follow your wird or more; with a khatma, 750 pts on finishing it unbroken; without one, 500 pts every 15 days. Night prayer and sunnah (all four): every 20 days = 1000 pts. A day that is not over yet never breaks a streak."], ["📊 Stats", "Last 7 days, 30 days and the year, a breakdown of all worship (prayers, sunnah, night prayer, Quran, fasting, bonuses) in points, and your completed khatmas."], ["⚙️ Settings & account", "Settings are sections: Account (name, gender, password, goals, badges), Data (backup), Prayer times, Theme (a color per page), Screens (qada, zakat, alerts) and General (language and guide). Your account syncs to the cloud and your latest changes are saved when you log out."]]};
 function openGuide(){$('guideT').textContent=tl('📘 شرح التطبيق','📘 App guide');$('guideBody').innerHTML=GUIDE[LANG==='en'?'en':'ar'].map(g=>`<div class="card"><h3>${g[0]}</h3><p class="xs" style="line-height:1.9;font-size:14px">${g[1]}</p></div>`).join('');$('guide').style.display='flex';document.body.style.overflow='hidden'}
 function closeGuide(){$('guide').style.display='none';document.body.style.overflow=''}
 const DICT=[["نقاط حسابك (من أول يوم لحد دلوقتي)", "Account points (since day one)"], ["هل مشيت على خطة الختمة؟", "Did you follow the Khatma plan?"], ["حفظ بيانات الحساب", "Save account data"], ["متوسط صلوات/يوم", "Avg prayers/day"], ["تفصيل العبادات", "Worship breakdown"], ["السنة الحالية", "Current year"], ["تسجيل الخروج", "Log out"], ["كمّل القراءة", "Continue reading"], ["إلغاء الختمة", "Cancel Khatma"], ["ورد النهاردة", "Today's wird"], ["مجموع النقاط", "Total points"], ["لون البرنامج", "App color"], ["ابحث عن سورة", "Search surah"], ["جاري التحميل", "Loading"], ["تم حفظ الورد", "Wird saved"], ["نقاطك اليوم", "Your points today"], ["ختمة القرآن", "Quran Khatma"], ["ابدأ الختمة", "Start Khatma"], ["شرح التطبيق", "App guide"], ["أيام مكتملة", "Full days"], ["الإحصائيات", "Stats"], ["ورد القرآن", "Quran wird"], ["ورد الختمة", "Khatma wird"], ["قيام الليل", "Night prayer"], ["آخر 7 أيام", "Last 7 days"], ["آخر 30 يوم", "Last 30 days"], ["الإعدادات", "Settings"], ["حفظ الورد", "Save wird"], ["في المسجد", "At mosque"], ["الرئيسية", "Home"], ["تم الحفظ", "Saved"], ["النوافل", "Sunnah prayers"], ["الصلوات", "Prayers"], ["المجموع", "Total"], ["الأهداف", "Goals"], ["الستريك", "Streaks"], ["التتبع", "Tracking"], ["القرآن", "Quran"], ["المغرب", "Maghrib"], ["العشاء", "Isha"], ["الصيام", "Fasting"], ["الفجر", "Fajr"], ["الظهر", "Dhuhr"], ["العصر", "Asr"], ["حفظ ✓", "Save ✓"], ["السنن", "Sunnah"], ["أسبوع", "Week"], ["الاسم", "Name"], ["العمر", "Age"], ["السور", "Surahs"], ["رجوع", "Back"], ["❌ لا", "❌ No"], ["صفحة", "pages"], ["أنثى", "Female"], ["حفظ", "Save"], ["شهر", "Month"], ["سنة", "Year"], ["ذكر", "Male"], ["آه", "Yes"]];
@@ -942,9 +981,42 @@ Q_AUDS.forEach(function(a){a.preload='auto';
  a.addEventListener('ended',function(e){if(e.target===qCur())qAudDone()});
  a.addEventListener('play',function(e){if(e.target===qCur())qAudPlay()});
  a.addEventListener('pause',function(e){if(e.target===qCur()&&!e.target.ended)qAudPause()});
- a.addEventListener('error',function(e){if(e.target===qCur()&&Q_PLAY_CUR!==null&&e.target._u&&e.target.src.indexOf('data:')!==0){toast('تعذّر تشغيل الصوت 😕');qAudPause()}})});
+ a.addEventListener('error',function(e){if(e.target===qCur()&&Q_PLAY_CUR!==null&&e.target._u&&e.target.src.indexOf('data:')!==0&&e.target.src.indexOf('blob:')!==0){toast('تعذّر تشغيل الصوت 😕');qAudPause()}})});
 /* iOS/Safari: لازم العنصر التاني يتفعّل بلمسة المستخدم مرة */
 function qUnlock(){if(Q_UNLOCKED)return;Q_UNLOCKED=true;var o=Q_AUDS[1-Q_AI];try{o._u=null;o.src=Q_SIL;var p=o.play();if(p&&p.then)p.then(function(){o.pause()}).catch(function(){});}catch(e){}}
+
+/* ===== حفظ صوت التلاوة على الجهاز (Cache Storage): النت مطلوب مرة واحدة بس لكل آية ===== */
+var Q_ACN='rafiqi-quran-audio-v1',Q_BL={},Q_BLO=[],Q_FILL={},Q_FAILS=0,Q_NOSAVE=false,Q_PERSIST=false;
+function qHasCache(){return typeof caches!=='undefined'&&typeof caches.open==='function'}
+function qBlobPut(url,b){if(Q_BL[url])return Q_BL[url];var bu=URL.createObjectURL(b);Q_BL[url]=bu;Q_BLO.push(url);
+ while(Q_BLO.length>24){var idx=-1;for(var k=0;k<Q_BLO.length;k++){var u2=Q_BLO[k];if(!Q_AUDS.some(function(a){return a._u===u2})){idx=k;break}}
+  if(idx<0)break;var ou=Q_BLO.splice(idx,1)[0];try{URL.revokeObjectURL(Q_BL[ou])}catch(e){}delete Q_BL[ou]}
+ return bu}
+function qCacheBlob(url){if(Q_BL[url])return Promise.resolve(Q_BL[url]);if(!qHasCache())return Promise.resolve(null);
+ return caches.open(Q_ACN).then(function(c){return c.match(url,{ignoreVary:true})}).then(function(r){return r?r.blob():null}).then(function(b){return b&&b.size>0?qBlobPut(url,b):null}).catch(function(){return null})}
+function qSetSrc(a,url){a._u=url;
+ var p=qCacheBlob(url).then(function(bu){if(a._u!==url)return;if(bu)a.src=bu;else{a.src=url;qCacheFill(url)}});
+ a._p=p;return p}
+function qSrcReady(a){return a._p||Promise.resolve()}
+function qCacheFill(url){
+ if(Q_NOSAVE||Q_FILL[url]||!qHasCache()||navigator.onLine===false)return;
+ Q_FILL[url]=1;
+ fetch(url,{mode:'cors'}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return caches.open(Q_ACN).then(function(c){return c.put(url,r)})})
+ .then(function(){Q_FAILS=0;qAudStat();if(!Q_PERSIST&&navigator.storage&&navigator.storage.persist){Q_PERSIST=true;navigator.storage.persist().catch(function(){})}})
+ .catch(function(e){if(e&&e.name==='QuotaExceededError'){Q_NOSAVE=true;toast(tl('⚠️ مساحة الجهاز ممتلئة، مش هنقدر نحفظ صوت جديد','⚠️ Device storage is full, new audio can\'t be saved'));qAudStat()}else if(e instanceof TypeError&&++Q_FAILS>=3){Q_NOSAVE=true;qAudStat()}})
+ .then(function(){delete Q_FILL[url]})}
+function qAudStat(){var el=document.getElementById('qAudStat');
+ if(!el){var r0=document.getElementById('qRecSel');r0=r0&&r0.parentNode;if(!r0)return;r0.insertAdjacentHTML('afterend','<div id="qAudStat" class="xs" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0"></div>');el=document.getElementById('qAudStat')}
+ if(!qHasCache()){el.textContent=tl('الجهاز ده مش بيدعم حفظ الصوت','This device can\'t save audio');return}
+ caches.open(Q_ACN).then(function(c){return c.keys()}).then(function(ks){el.innerHTML='<span>'+(Q_NOSAVE?'⚠️ '+tl('تعذّر حفظ الصوت','Audio saving failed')+' · ':'')+'💾 '+tl('محفوظ على الجهاز: ','Saved on device: ')+ks.length+' '+tl('آية','ayahs')+'</span>'+(ks.length?'<button class="mini-btn" onclick="qAudClear()">'+tl('مسح','Clear')+'</button>':'')}).catch(function(){})}
+function qAudClear(){if(!confirm(tl('تمسح الصوت المحفوظ من الجهاز؟','Delete saved audio from this device?')))return;
+ Q_BLO.slice().forEach(function(u){try{URL.revokeObjectURL(Q_BL[u])}catch(e){}});Q_BL={};Q_BLO=[];
+ (qHasCache()?caches.delete(Q_ACN):Promise.resolve()).then(function(){Q_NOSAVE=false;Q_FAILS=0;qAudStat()})}
+Q_AUDS.forEach(function(a){a.addEventListener('error',function(e){var el=e.target,u=el._u;if(!u||!el.src||el.src.indexOf('blob:')!==0)return;
+ if(qHasCache())caches.open(Q_ACN).then(function(c){return c.delete(u,{ignoreVary:true})}).catch(function(){});
+ delete Q_BL[u];var i=Q_BLO.indexOf(u);if(i>-1)Q_BLO.splice(i,1);el.src=u;
+ if(el===qCur()&&Q_PLAY_CUR!==null){var p=el.play();if(p&&p.catch)p.catch(function(){})}})});
+setTimeout(qAudStat,800);
 
 /* تظليل الآية الحالية */
 function qHighlight(i){
@@ -976,7 +1048,7 @@ function qPreloadNext(){
   var st=qNextStep();if(!st||st.type!=='idx')return;
   var o=Q_AUDS[1-Q_AI],ay=Q_A[st.idx];if(!ay)return;
   var url=qAudUrl(ay[0],ay[1]);if(o._u===url)return;
-  o._u=url;o.preload='auto';o.src=url;try{o.load()}catch(e){}
+  o.preload='auto';qSetSrc(o,url).then(function(){if(o._u===url){try{o.load()}catch(e){}}});
 }
 /* تشغيل آية بالإندكس */
 function qPlayIdx(i){
@@ -986,9 +1058,8 @@ function qPlayIdx(i){
   var bt=$('qBarT');if(bt)bt.textContent='سورة '+Q_NAMES[Q_A[i][0]-1]+' — آية '+Q_A[i][1];
   var url=qAudUrl(Q_A[i][0],Q_A[i][1]),old=qCur(),oth=Q_AUDS[1-Q_AI],a;
   if(oth._u===url){Q_AI=1-Q_AI;a=oth;try{a.currentTime=0}catch(e){}old.pause()}
-  else{a=old;if(a._u!==url){a._u=url;a.src=url}else{try{a.currentTime=0}catch(e){}}}
-  var p=a.play();if(p&&p.catch)p.catch(function(){toast('تعذّر تشغيل الصوت 😕');qAudPause()});
-  qPreloadNext();
+  else{a=old;if(a._u!==url){qSetSrc(a,url)}else{try{a.currentTime=0}catch(e){}}}
+  qSrcReady(a).then(function(){if(a._u!==url||Q_PLAY_CUR!==i)return;var p=a.play();if(p&&p.catch)p.catch(function(){toast('تعذّر تشغيل الصوت 😕');qAudPause()});qPreloadNext()});
 }
 /* منطق النهاية والتكرار */
 function qAudDone(){
@@ -1162,7 +1233,7 @@ setInterval(dayRoll,30000);document.addEventListener('visibilitychange',function
 document.addEventListener('visibilitychange',function(){if(!document.hidden){applySky();remCheck()}});
 /* ===== شروق + وتر + صيام رجب/شعبان/رمضان + تعديل هدف الاثنين والخميس ===== */
 PRAYER_TIME_KEYS.ishraq='Sunrise';PRAYER_TIME_KEYS.witr='Isha';
-function hijriMonth(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{month:'numeric'}).format(d))}catch(e){return 0}}
+function hijriMonth(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{month:'numeric'}).format(hAd(d)))}catch(e){return 0}}
 var _fi0=fastInfo;
 fastInfo=function(d){var r=_fi0(d),hm=hijriMonth(d);r.pts=10;
  if(hm===7||hm===8||hm===9){var nm={7:tl('رجب','Rajab'),8:tl('شعبان',"Sha'ban"),9:tl('رمضان','Ramadan')}[hm];
@@ -1174,7 +1245,7 @@ var QP=[['fajr','الفجر','Fajr'],['dhuhr','الظهر','Dhuhr'],['asr','ال
 var qdEdit=false;
 function nz(v){var n=parseFloat(String(v).replace(/[^\d.]/g,''));return isFinite(n)&&n>0?n:0}
 function fm(n){return(Math.round(n*100)/100).toLocaleString('en')}
-function hijriYear(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{year:'numeric'}).format(d))}catch(e){return d.getFullYear()}}
+function hijriYear(d){try{return parseInt(new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{year:'numeric'}).format(hAd(d)))}catch(e){return d.getFullYear()}}
 function qdG(){try{var q=XU().qada;return q&&q.on?q:null}catch(e){return null}}
 function qdTot(q){return QP.reduce(function(a,p){return a+(+q[p[0]]||0)},0)}
 function qdName(p){return tl(p[1],p[2])}
@@ -1355,7 +1426,7 @@ function bdDesc(b){var A={fajr:['تصلي الفجر','pray Fajr'],jam5:['تصل
  return tl('كل يوم في الشهر يكون يوم كامل (كل الصلوات والسنن والصيام)','Every day of the month is a complete day (all prayers, sunnah and fasting)')}
 /* --- حساب أعلام اليوم (مع كاش) --- */
 var HFP=null;
-function hParts(dt){try{HFP=HFP||new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{year:'numeric',month:'numeric',day:'numeric'});var o={};HFP.formatToParts(dt).forEach(function(p){if(p.type==='year'||p.type==='month'||p.type==='day')o[p.type]=parseInt(p.value)});return o}catch(e){return{year:0,month:0,day:0}}}
+function hParts(dt){try{HFP=HFP||new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{year:'numeric',month:'numeric',day:'numeric'});var o={};HFP.formatToParts(hAd(dt)).forEach(function(p){if(p.type==='year'||p.type==='month'||p.type==='day')o[p.type]=parseInt(p.value)});return o}catch(e){return{year:0,month:0,day:0}}}
 function bdDay(k){var rp=localStorage.getItem('prayers_'+k)||'',re=localStorage.getItem('extras_'+k)||'',sig=rp+'|'+re+'|'+(XU().goals||[]).join(','),c=BDC[k];if(c&&c.s===sig)return c.v;
  var dt=new Date(k+'T00:00:00'),dp={},ex={},h=hParts(dt),fi=fastInfo(dt);try{dp=JSON.parse(rp||'{}')}catch(e){}try{ex=JSON.parse(re||'{}')}catch(e){}var n=ex.n||{},ids=['fajr','dhuhr','asr','maghrib','isha'];
  var pr=function(i){var r=dp[i];return!!(r&&r.opt&&r.opt!=='missed'&&r.opt!=='late')},jm=function(i){var r=dp[i];return!!(r&&/^(mosque|group|imam_group)/.test(r.opt||''))},ms=function(i){var r=dp[i];return!!(r&&/^mosque/.test(r.opt||''))};
@@ -1733,7 +1804,7 @@ function lvlOf(t){var l=1;for(var i=0;i<LEVELS.length;i++)if(t>=LEVELS[i])l=i+1;
 function pvG(){return Object.assign({on:true,lvl:true,pts:false,stk:false},(XU()||{}).pv||{})}
 var SRC={},PVI=[['lvl','🏆','المستوى','Level'],['pts','⭐','إجمالي النقاط','Total points'],['wk','📈','نقاط آخر 7 أيام','Points, last 7 days'],['stk','🔥','ستريك الصلوات','Prayer streak'],['full','🕌','أيام الصلوات الخمس كاملة (آخر 30 يوم)','Full-prayer days (30d)'],['bdg','🎖️','عدد البادجات','Badges earned'],['fast','🌙','أيام الصيام (آخر 30 يوم)','Fasting days (30d)'],['qr','📖','أيام وردك من القرآن (آخر 30 يوم)','Quran days (30d)'],['city','📍','المدينة','City'],['since','📅','تاريخ الانضمام','Joined']];
 function srEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function pubDir(){if(!fbOK())return;var u=XU(),p=pvG(),uid=FB.auth.currentUser.uid,o={name:u.name||'',nl:(u.name||'').trim().toLowerCase(),code:u.code||null,age:+u.age||0,on:!!p.on,ts:Date.now()};
+function pubDir(){if(!fbOK())return;var u=XU(),p=pvG(),uid=FB.auth.currentUser.uid,o={name:u.name||'',nl:(u.name||'').trim().toLowerCase(),code:u.code||null,on:!!p.on,ts:Date.now()};
  try{if(p.lvl)o.lvl=lvlOf(totalAllDays());if(p.pts)o.pts=totalAllDays();if(p.stk)o.stk=stkInfo('p').n;if(p.wk)o.wk=statRange(7).pts;
   if(p.full||p.fast||p.qr){var r=statRange(30);if(p.full)o.full=r.full;if(p.fast)o.fast=r.fC;if(p.qr)o.qr=r.qC}
   if(p.bdg)o.bdg=Object.keys(u.bd||{}).filter(function(k){return(u.bd[k]||{}).earned}).length;
@@ -1742,12 +1813,12 @@ function pubDir(){if(!fbOK())return;var u=XU(),p=pvG(),uid=FB.auth.currentUser.u
 function pubSched(){clearTimeout(pvT);pvT=setTimeout(pubDir,8000)}
 function pvSet(k){XUP(function(x){x.pv=Object.assign({on:true,lvl:true,pts:false,stk:false},x.pv||{});x.pv[k]=!x.pv[k]});pvRender();pubDir()}
 function pvRender(){var p=pvG(),b=function(k,l){return '<div class="xr"><span>'+l+'</span><button class="xb" onclick="pvSet(\''+k+'\')">'+(p[k]?'✅ '+tl('ظاهر','Shown'):'🚫 '+tl('مخفي','Hidden'))+'</button></div>'};
- $('pvBox').innerHTML='<div class="xs">'+tl('اختار إيه اللي يظهر للي يفتح حسابك (الاسم والعمر بيظهروا دايمًا لو ظهورك في البحث شغال):','Choose what people see when they open your profile (name and age always show if search visibility is on):')+'</div>'+b('on',tl('🔍 أظهر في البحث','🔍 Appear in search'))+PVI.map(function(x){return b(x[0],x[1]+' '+tl(x[2],x[3]))}).join('')}
+ $('pvBox').innerHTML='<div class="xs">'+tl('اختار إيه اللي يظهر للي يفتح حسابك (الاسم بيظهر دايمًا لو ظهورك في البحث شغال):','Choose what people see when they open your profile (your name always shows if search visibility is on):')+'</div>'+b('on',tl('🔍 أظهر في البحث','🔍 Appear in search'))+PVI.map(function(x){return b(x[0],x[1]+' '+tl(x[2],x[3]))}).join('')}
 function srShow(id){var z=SRC[id];if(!z)return;var v=z[0][1],el=$('srProf');if(!el){el=document.createElement('div');el.id='srProf';el.style.cssText='position:fixed;inset:0;z-index:60;overflow:auto;padding:16px 16px 40px;background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));color:var(--tx)';document.body.appendChild(el)}
  var n=0,rows=PVI.map(function(x){var val=v[x[0]],sh=val!==undefined&&val!==null;if(sh){n++;if(x[0]==='since')val=new Date(val).toLocaleDateString('en-GB');else if(x[0]==='stk'||x[0]==='full'||x[0]==='fast'||x[0]==='qr')val=val+tl(' يوم',' d')}
   return '<div class="xr" style="padding:10px 0;border-bottom:1px solid rgba(var(--fg),.1);'+(sh?'':'opacity:.45')+'"><span>'+x[1]+' '+tl(x[2],x[3])+'</span><b>'+(sh?srEsc(val):'🔒 '+tl('مخفي','Hidden'))+'</b></div>'}).join('');
  var bt=(z[1]==='a'||z[2]==='a')?'<div class="xs">✅ '+tl('أصدقاء','Friends')+'</div>':z[1]==='p'?'<div class="xs">⏳ '+tl('تم إرسال الطلب','Request sent')+'</div>':z[2]==='p'?'<div class="xs">🔔 '+tl('عنده طلب منك؟ رد عليه من الإشعارات','Reply to their request in notifications')+'</div>':'<button class="xb" style="width:100%" onclick="srAdd(\''+id+'\')">➕ '+tl('إضافة صديق','Add friend')+'</button>';
- el.innerHTML='<button class="mini-btn" onclick="$(\'srProf\').remove()">✕ '+tl('رجوع','Back')+'</button><div style="text-align:center;margin:18px 0"><div style="width:72px;height:72px;border-radius:50%;background:rgba(var(--fg),.15);font-size:32px;line-height:72px;margin:0 auto 8px">'+srEsc((v.name||'?').charAt(0))+'</div><h2>'+srEsc(v.name)+'</h2><div class="xs">🆔 '+srEsc(v.code||'—')+' · '+srEsc(v.age)+tl(' سنة',' y')+' · '+n+'/'+PVI.length+' '+tl('معلومة ظاهرة','shown')+'</div></div><div class="card">'+rows+'</div>'+bt}
+ el.innerHTML='<button class="mini-btn" onclick="$(\'srProf\').remove()">✕ '+tl('رجوع','Back')+'</button><div style="text-align:center;margin:18px 0"><div style="width:72px;height:72px;border-radius:50%;background:rgba(var(--fg),.15);font-size:32px;line-height:72px;margin:0 auto 8px">'+srEsc((v.name||'?').charAt(0))+'</div><h2>'+srEsc(v.name)+'</h2><div class="xs">🆔 '+srEsc(v.code||'—')+' · '+n+'/'+PVI.length+' '+tl('معلومة ظاهرة','shown')+'</div></div><div class="card">'+rows+'</div>'+bt}
 function srInit(){pvRender();pubDir();try{ensureCode()}catch(e){}$('srCount').textContent='';srTotal=null;
  if(!fbOK()){$('srRes').innerHTML='<div class="xs">'+tl('سجّل دخول الأول.','Please log in first.')+'</div>';return}
  dirAll().then(function(s){srTotal=s.size;$('srCount').textContent=tl('يوجد ','There are ')+srTotal+tl(' حساب',' accounts')}).catch(function(){})}
@@ -1759,8 +1830,8 @@ function srGo(){var n=srNorm($('srName').value),c=($('srCode').value||'').replac
   if(!L.length){$('srRes').innerHTML='<div class="xs">'+tot+'<br>'+(self?tl('ده حسابك إنت 🙂 ابحث عن شخص تاني.','That is your own account 🙂 Search for someone else.'):tl('مفيش حساب بالاسم ده (أو ظهوره في البحث مقفول).','No account with this name (or their search visibility is off).'))+'</div>';return}
   var rg=function(id){return FB.db.collection('requests').doc(id).get().catch(function(){return{exists:false}})};
   return Promise.all(L.map(function(x){return Promise.all([rg(me+'_'+x[0]),rg(x[0]+'_'+me)]).then(function(r){return[x,r[0].exists?r[0].data().st:null,r[1].exists?r[1].data().st:null]})})).then(function(R){
-   $('srRes').innerHTML='<div class="xs">'+tot+'</div>'+R.map(function(z){var v=z[0][1],id=z[0][0];SRC[id]=z;return '<div class="xc" onclick="srShow(\''+id+'\')" style="cursor:pointer"><b>'+srEsc(v.name)+'</b> · #'+srEsc(v.code||'—')+' · '+srEsc(v.age)+tl(' سنة',' y')+'<div class="xs">👤 '+tl('عرض الحساب','View profile')+' ›'+(z[1]==='a'||z[2]==='a'?' · ✅':z[1]==='p'?' · ⏳':z[2]==='p'?' · 🔔':'')+'</div></div>'}).join('')})}).catch(function(){$('srRes').innerHTML='<div class="xs">'+tl('تعذّر البحث. تأكد من تحديث قواعد Firestore.','Search failed. Make sure Firestore rules are updated.')+'</div>'})}
-function srAdd(id){var me=FB.auth.currentUser.uid,u=XU();FB.db.collection('requests').doc(me+'_'+id).set({from:me,to:id,fn:u.name||'',fa:+u.age||0,st:'p',at:Date.now()}).then(function(){toast(tl('اتبعت طلب الصداقة ✅','Friend request sent ✅'));if(SRC[id]){SRC[id][1]='p';srShow(id)}}).catch(function(){toast(tl('تعذّر الإرسال','Could not send'))})}
+   $('srRes').innerHTML='<div class="xs">'+tot+'</div>'+R.map(function(z){var v=z[0][1],id=z[0][0];SRC[id]=z;return '<div class="xc" onclick="srShow(\''+id+'\')" style="cursor:pointer"><b>'+srEsc(v.name)+'</b> · #'+srEsc(v.code||'—')+'<div class="xs">👤 '+tl('عرض الحساب','View profile')+' ›'+(z[1]==='a'||z[2]==='a'?' · ✅':z[1]==='p'?' · ⏳':z[2]==='p'?' · 🔔':'')+'</div></div>'}).join('')})}).catch(function(){$('srRes').innerHTML='<div class="xs">'+tl('تعذّر البحث. تأكد من تحديث قواعد Firestore.','Search failed. Make sure Firestore rules are updated.')+'</div>'})}
+function srAdd(id){var me=FB.auth.currentUser.uid,u=XU();FB.db.collection('requests').doc(me+'_'+id).set({from:me,to:id,fn:u.name||'',st:'p',at:Date.now()}).then(function(){toast(tl('اتبعت طلب الصداقة ✅','Friend request sent ✅'));if(SRC[id]){SRC[id][1]='p';srShow(id)}}).catch(function(){toast(tl('تعذّر الإرسال','Could not send'))})}
 function ntLoad(){if(!fbOK())return;FB.db.collection('requests').where('to','==',FB.auth.currentUser.uid).where('st','==','p').get().then(function(s){NT=[];s.forEach(function(d){NT.push([d.id,d.data()])});var b=$('bellN');b.textContent=NT.length;b.style.display=NT.length?'block':'none'}).catch(function(){})}
 function ntOpen(){ntLoad();setTimeout(ntRender,400);$('ntOv').classList.add('open');ntRender()}
 function ntRender(){$('ntSheet').innerHTML='<h2>🔔 '+tl('الإشعارات','Notifications')+'</h2>'+(NT.length?NT.filter(function(x){return /^[\w-]+$/.test(x[0])}).map(function(x){return '<div class="xc"><b>'+srEsc(x[1].fn)+'</b> '+tl('يريد إضافتك كصديق','wants to add you as a friend')+'<div class="xr"><button class="xb" onclick="ntAns(\''+x[0]+'\',\'a\')">'+tl('نعم','Yes')+'</button><button class="xb" onclick="ntAns(\''+x[0]+'\',\'d\')">'+tl('لا','No')+'</button></div></div>'}).join(''):'<div class="xs">'+tl('مفيش إشعارات.','No notifications.')+'</div>')}
