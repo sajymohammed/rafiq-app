@@ -142,6 +142,15 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   </div>
 
   <div class="card"><h3 id="timesTitle">🕐 مواقيت الصلاة</h3><div id="timesList"></div></div>
+  <div class="card" id="qbCard"><h3>🧭 اتجاه القبلة</h3>
+    <svg id="qbSvg" viewBox="0 0 220 220" style="width:230px;max-width:75%;display:block;margin:6px auto">
+      <circle cx="110" cy="110" r="98" id="qbRing" style="fill:none;stroke:rgba(var(--fg),.25);stroke-width:3"/>
+      <polygon points="110,4 102,20 118,20" style="fill:#ffd54f"/>
+      <g id="qbRot"><g style="fill:rgba(var(--fg),.7);font-size:15px;font-weight:700;text-anchor:middle"><text x="110" y="40">N</text><text x="188" y="116">E</text><text x="110" y="196">S</text><text x="32" y="116">W</text></g>
+        <g id="qbK"><line x1="110" y1="110" x2="110" y2="58" style="stroke:#ffd54f;stroke-width:3;stroke-linecap:round"/><text x="110" y="54" style="font-size:26px;text-anchor:middle">🕋</text></g></g>
+      <circle cx="110" cy="110" r="5" style="fill:#ffd54f"/></svg>
+    <div class="xs" id="qbTxt" style="text-align:center;min-height:36px"></div>
+    <button class="xb" id="qbBtn" style="width:100%;margin-top:8px" onclick="qbStart()">🧭 تشغيل البوصلة</button></div>
   <div class="third-box" id="thirdBox" style="display:none"><span class="tl">🌙 الثلث الأخير يبدأ</span> <span class="tv" id="thirdTime"></span><div class="tl" id="thirdSub" style="display:block;margin-top:2px"></div></div>
   <div class="stk-strip" id="homeStk"><div class="stk-fire" id="stkFire"><span class="sf-i">🔥</span><b id="stkFireN">0</b><small id="stkFireL"></small></div><div class="stk-bdg" id="homeBdg"></div></div>
 
@@ -221,6 +230,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 </div>
 
 <!-- الإعدادات -->
+<div class="page" id="page-tasbih"><header><h1>📿 المسبحة</h1></header><div id="tsbBox"></div></div>
 <div class="page" id="page-hifz"><header><h1>🧠 الحفظ</h1></header><div id="hfBox"></div></div>
 <div class="page" id="page-groups"><header><h1>👥 الجروبات</h1></header><div id="gpBox"></div></div>
 <div class="page" id="page-settings">
@@ -273,6 +283,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <button class="tab sec" data-page="adhkar"><span class="ti">📿</span>الأذكار</button>
   <button class="tab" data-page="stats"><span class="ti">📊</span>الإحصائيات</button>
   <button class="tab sec" data-page="qada" id="tabQada" style="display:none"></button>
+  <button class="tab sec" data-page="tasbih"><span class="ti">📿</span>المسبحة</button>
   <button class="tab sec" data-page="hifz"><span class="ti">🧠</span>الحفظ</button>
   <button class="tab sec" data-page="groups"><span class="ti">👥</span>الجروبات</button>
   <button class="tab sec" data-page="settings"><span class="ti">⚙️</span>الإعدادات</button>
@@ -633,7 +644,7 @@ $('remMinBtn').onclick=()=>{let i=REM_MINS.indexOf(remindMin());localStorage.set
 function dayStats0(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed'&&r.opt!=='late')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
 function renderBars(el,items){let max=Math.max(...items.map(i=>i.v),1);el.innerHTML='';items.forEach(i=>{let w=document.createElement('div');w.className='bar-w';w.innerHTML=`<div class="bar-v">${i.v||''}</div><div class="bar" style="height:${Math.round(i.v/max*100)}%"></div><div class="bar-l">${i.l}</div>`;el.appendChild(w)})}
 
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats();if(pg==='hifz')hfRender();if(pg==='groups')gpRender()});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats();if(pg==='hifz')hfRender();if(pg==='tasbih')tsbRender();if(pg==='groups')gpRender()});
 
 function showGender(){$('genderOv').style.display='flex'}
 document.querySelectorAll('.g-btn').forEach(b=>b.onclick=()=>{setGender(b.dataset.g);{let s=localStorage.getItem('rafiq_session'),us=USERS();if(s&&us[s]){us[s].gender=b.dataset.g;saveUsers(us)}}$('genderOv').style.display='none';renderTracking();toast('تم حفظ الإعداد ✅')});
@@ -2003,11 +2014,64 @@ function hfPlayC(){if(HF_A){HF_A.pause();HF_A=null;HF_Q=[];return}HF_Q=[];var c=
  var nx=function(){if(!HF_Q.length){HF_A=null;return}var u=HF_Q.shift();qSetSrc(HF_A,u).then(function(){var p=HF_A&&HF_A.play();if(p&&p.catch)p.catch(function(){HF_A=null;HF_Q=[]})})};HF_A.addEventListener('ended',nx);nx()}
 /* ===== قايمة "المزيد" في الشريط السفلي ===== */
 (function(){var mb=$('tabMore');if(!mb)return;var sh=document.createElement('div');sh.id='moreSh';document.body.appendChild(sh);
- var items=[['adhkar','📿','الأذكار','Adhkar'],['hifz','🧠','الحفظ','Memorize'],['groups','👥','الجروبات','Groups'],['qada','🤲','القضاء','Qada'],['settings','⚙️','الإعدادات','Settings']];
+ var items=[['adhkar','📿','الأذكار','Adhkar'],['tasbih','📿','المسبحة','Tasbih'],['hifz','🧠','الحفظ','Memorize'],['groups','👥','الجروبات','Groups'],['qada','🤲','القضاء','Qada'],['settings','⚙️','الإعدادات','Settings']];
  function build(){sh.innerHTML='<div class="mbox">'+items.filter(function(x){return x[0]!=='qada'||$('tabQada').style.display!=='none'}).map(function(x){return'<button onclick="moreGo(\''+x[0]+'\')">'+x[1]+' '+tl(x[2],x[3])+(x[0]==='groups'&&gpUnread()?'<span style="position:absolute;top:8px;right:10px;width:9px;height:9px;border-radius:50%;background:#e53935"></span>':'')+'</button>'}).join('')+'</div>'}
  mb.onclick=function(){build();sh.classList.add('open')};sh.onclick=function(e){if(e.target===sh)sh.classList.remove('open')};
  window.moreGo=function(p){sh.classList.remove('open');var t=document.querySelector('.tab[data-page='+p+']');if(t)t.click()};
  [].forEach.call(document.querySelectorAll('.tab'),function(t){t.addEventListener('click',function(){setTimeout(function(){var a=document.querySelector('.tab.on');mb.classList.toggle('on',!!a&&a.classList.contains('sec'))},0)})})})();
+/* ===== القبلة (على الرئيسية): بوصلة بحساب دقيق + بديل لو الجهاز مفيهوش حساس ===== */
+var QB={b:null,h:null,on:false,t:0,al:false};
+function qbBearing(lat,lon){var r=Math.PI/180,p1=lat*r,p2=21.4225*r,dl=(39.8262-lon)*r,y=Math.sin(dl)*Math.cos(p2),x=Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl);return(Math.atan2(y,x)*180/Math.PI+360)%360}
+function qbDirName(b){var n=[['شمال','north'],['شمال شرق','north-east'],['شرق','east'],['جنوب شرق','south-east'],['جنوب','south'],['جنوب غرب','south-west'],['غرب','west'],['شمال غرب','north-west']],x=n[Math.round(b/45)%8];return tl(x[0],x[1])}
+function qbCached(){try{var c=loadTimesCache();if(c&&typeof c.lat==='number'&&typeof c.lon==='number')return{lat:c.lat,lon:c.lon}}catch(e){}return null}
+function qbCoords(){var c=qbCached();if(c)return Promise.resolve(c);if(!navigator.geolocation)return Promise.resolve(null);return geolocate().catch(function(){return null})}
+function qbDraw(){var g=$('qbRot'),k=$('qbK'),tx=$('qbTxt');if(!g)return;var h=QB.h===null?0:QB.h;g.setAttribute('transform','rotate('+(-h)+' 110 110)');
+ if(QB.b===null)return;k.setAttribute('transform','rotate('+QB.b.toFixed(1)+' 110 110)');
+ var ok=QB.h!==null&&Math.abs(((QB.b-QB.h+540)%360)-180)<=5;$('qbRing').style.stroke=ok?'#4caf50':'';
+ if(ok&&!QB.al&&navigator.vibrate)try{navigator.vibrate(60)}catch(e){}QB.al=ok;
+ tx.innerHTML=(ok?'✅ <b>'+tl('انت مواجه القبلة','You are facing the Qibla')+'</b><br>':'')+tl('القبلة ','Qibla is ')+Math.round(QB.b)+'° '+tl('من الشمال ('+qbDirName(QB.b)+')','from north ('+qbDirName(QB.b)+')')+(QB.h===null?'':'<br><span style="opacity:.7">'+tl('لف جسمك لحد ما 🕋 يطلع فوق جنب المثلث.','Turn until 🕋 is at the top beside the triangle.')+'</span>')}
+function qbOri(e){var h=null;if(typeof e.webkitCompassHeading==='number')h=e.webkitCompassHeading;else if(e.alpha!==null&&e.alpha!==undefined&&(e.absolute===true||e.type==='deviceorientationabsolute'))h=(360-e.alpha)%360;if(h===null||isNaN(h))return;QB.t=Date.now();
+ if(QB.h===null)QB.h=h;else{var d=((h-QB.h+540)%360)-180;QB.h=(QB.h+d*.25+360)%360}qbDraw()}
+function qbStop(){window.removeEventListener('deviceorientationabsolute',qbOri,true);window.removeEventListener('deviceorientation',qbOri,true);QB.on=false;var b=$('qbBtn');if(b)b.textContent='🧭 '+tl('تشغيل البوصلة','Start compass')}
+function qbStart(){var tx=$('qbTxt'),b=$('qbBtn');if(QB.on){qbStop();return}
+ var perm=(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function')?DeviceOrientationEvent.requestPermission():Promise.resolve('granted');
+ tx.textContent=tl('جاري تحديد موقعك...','Locating you...');
+ perm.then(function(r){if(r!=='granted'){tx.textContent=tl('لازم تسمح بالوصول لحساسات الحركة عشان البوصلة تشتغل.','Allow motion sensor access for the compass.');return null}return qbCoords()}).then(function(p){if(p===null&&!QB.b)return;
+  if(!p&&QB.b===null){tx.textContent=tl('مقدرتش أعرف موقعك — اسمح بالموقع، أو اكتب مدينتك من "تغيير" فوق وارجع جرّب تاني.','Could not get your location — allow location or set your city above, then retry.');return}
+  if(p)QB.b=qbBearing(p.lat,p.lon);QB.h=null;QB.t=0;QB.on=true;qbDraw();b.textContent='⏹ '+tl('إيقاف البوصلة','Stop compass');
+  window.addEventListener('deviceorientationabsolute',qbOri,true);window.addEventListener('deviceorientation',qbOri,true);
+  setTimeout(function(){if(QB.on&&!QB.t){qbStop();tx.innerHTML=tl('جهازك أو المتصفح مش بيدعم البوصلة (جرّب Chrome، وحرّك الموبايل على شكل 8 للمعايرة).<br>القبلة ','Your device/browser has no compass (try Chrome and move the phone in a figure 8).<br>Qibla is ')+Math.round(QB.b)+'° '+tl('من الشمال ('+qbDirName(QB.b)+') — اضبط بوصلة تانية على الزاوية دي.','from north ('+qbDirName(QB.b)+').')}},3500)}).catch(function(){tx.textContent=tl('تعذّر تشغيل البوصلة.','Could not start the compass.')})}
+document.addEventListener('visibilitychange',function(){if(document.hidden&&QB.on)qbStop()});
+function qbInit(){var tx=$('qbTxt'),b=$('qbBtn');if(!tx)return;b.textContent='🧭 '+tl('تشغيل البوصلة','Start compass');var c=qbCached();if(c&&QB.b===null)QB.b=qbBearing(c.lat,c.lon);
+ if(QB.b!==null)qbDraw();else tx.textContent=tl('اضغط تشغيل البوصلة وهنحدد موقعك.','Tap Start compass and we will locate you.')}
+setTimeout(qbInit,3000);setTimeout(qbInit,9000);
+
+/* ===== المسبحة: اختار الذكر والعدد، أو ضيف ذكر جديد ===== */
+var TSB_P=[['سبحان الله',33],['الحمد لله',33],['الله أكبر',34],['لا إله إلا الله',100],['أستغفر الله',100],['لا حول ولا قوة إلا بالله',100],['سبحان الله وبحمده',100],['سبحان الله وبحمده، سبحان الله العظيم',100],['اللهم صلّ وسلّم على نبينا محمد',100]];
+function tsbGet(){try{var s=JSON.parse(localStorage.getItem('tsb'));if(s&&s.t)return s}catch(e){}return{t:TSB_P[0][0],n:TSB_P[0][1],c:0}}
+function tsbSet(s){localStorage.setItem('tsb',JSON.stringify(s))}
+function tsbCust(){try{return JSON.parse(localStorage.getItem('tsbCust'))||[]}catch(e){return[]}}
+function tsbList(){var L=[],seen={};var add=function(t,n,g){var k=adNorm(t);if(seen[k])return;seen[k]=1;L.push({t:t,n:n,g:g})};
+ tsbCust().forEach(function(x){add(x.t,x.n,tl('أذكاري','My dhikr'))});TSB_P.forEach(function(x){add(x[0],x[1],tl('أذكار شائعة','Common dhikr'))});
+ try{ADS.forEach(function(s){s[5].forEach(function(it){if(it.t&&!it.q&&it.t.length<=70)add(it.t,it.n||1,tl('من أذكار التطبيق','From the app adhkar'))})})}catch(e){}return L}
+function tsbRing(s){var f=Math.min(1,s.c/s.n);return'conic-gradient(#ffd54f '+(f*360)+'deg,rgba(var(--fg),.14) 0)'}
+function tsbRender(){var b=$('tsbBox');if(!b)return;var s=tsbGet(),L=tsbList(),gs={},order=[],o='';
+ L.forEach(function(x,i){if(!gs[x.g]){gs[x.g]=[];order.push(x.g)}gs[x.g].push('<option value="'+i+'"'+(x.t===s.t?' selected':'')+'>'+srEsc(x.t.length>45?x.t.slice(0,45)+'…':x.t)+' ('+x.n+')</option>')});
+ order.forEach(function(g){o+='<optgroup label="'+srEsc(g)+'">'+gs[g].join('')+'</optgroup>'});
+ var isC=tsbCust().some(function(x){return x.t===s.t});
+ b.innerHTML='<div class="card"><select class="ai" onchange="tsbPick(+this.value)">'+o+'</select>'
+ +'<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span class="xs" style="flex:1">'+tl('العدد المطلوب','Target count')+'</span><input class="ai" type="number" inputmode="numeric" min="1" max="10000" value="'+s.n+'" style="width:110px;margin:0" onchange="tsbN(this.value)"></div>'
+ +'<div id="tsbT" style="font-size:22px;line-height:1.9;text-align:center;margin:10px 0">'+srEsc(s.t)+'</div>'
+ +'<div id="tsbRing" onclick="tsbTap()" style="width:230px;height:230px;max-width:80%;border-radius:50%;margin:8px auto;display:flex;align-items:center;justify-content:center;background:'+tsbRing(s)+';cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none"><div style="width:86%;height:86%;border-radius:50%;background:#16242b;display:flex;flex-direction:column;align-items:center;justify-content:center"><div id="tsbC" style="font-size:64px;font-weight:700">'+s.c+'</div><div class="xs" id="tsbL">/ '+s.n+(s.c>=s.n?' ✅':'')+'</div></div></div>'
+ +'<div class="xr"><button class="xb" onclick="tsbReset()">↺ '+tl('تصفير','Reset')+'</button><button class="xb" onclick="$(\'tsbNew\').style.display=\'block\'">➕ '+tl('ذكر جديد','New dhikr')+'</button>'+(isC?'<button class="xb" onclick="tsbDel()">🗑 '+tl('حذف ده','Delete')+'</button>':'')+'</div>'
+ +'<div id="tsbNew" style="display:none;margin-top:10px"><input class="ai" id="tsbNT" maxlength="200" placeholder="'+tl('نص الذكر','Dhikr text')+'"><input class="ai" id="tsbNN" type="number" inputmode="numeric" min="1" max="10000" value="33" placeholder="'+tl('العدد','Count')+'"><button class="xb" style="width:100%" onclick="tsbAdd()">'+tl('إضافة وبدء','Add & start')+'</button></div></div>'}
+function tsbTap(){var s=tsbGet();s.c++;tsbSet(s);var c=$('tsbC');if(c){c.textContent=s.c;$('tsbL').textContent='/ '+s.n+(s.c>=s.n?' ✅':'');$('tsbRing').style.background=tsbRing(s)}
+ if(navigator.vibrate)try{navigator.vibrate(s.c===s.n?[80,40,80]:12)}catch(e){}if(s.c===s.n)toast('✅ '+tl('اكتمل العدد','Target reached'))}
+function tsbPick(i){var x=tsbList()[i];if(!x)return;tsbSet({t:x.t,n:x.n,c:0});tsbRender()}
+function tsbN(v){var s=tsbGet();s.n=Math.max(1,Math.min(10000,parseInt(v)||33));tsbSet(s);tsbRender()}
+function tsbReset(){var s=tsbGet();s.c=0;tsbSet(s);tsbRender()}
+function tsbAdd(){var t=($('tsbNT').value||'').trim().slice(0,200),n=Math.max(1,Math.min(10000,parseInt($('tsbNN').value)||33));if(!t)return toast(tl('اكتب نص الذكر','Enter the dhikr text'));var c=tsbCust().filter(function(x){return x.t!==t});c.unshift({t:t,n:n});localStorage.setItem('tsbCust',JSON.stringify(c.slice(0,50)));tsbSet({t:t,n:n,c:0});tsbRender()}
+function tsbDel(){var s=tsbGet();localStorage.setItem('tsbCust',JSON.stringify(tsbCust().filter(function(x){return x.t!==s.t})));tsbSet({t:TSB_P[0][0],n:TSB_P[0][1],c:0});tsbRender()}
 function ntOpen(){ntLoad();setTimeout(ntRender,400);$('ntOv').classList.add('open');ntRender()}
 function ntRender(){$('ntSheet').innerHTML='<h2>🔔 '+tl('الإشعارات','Notifications')+'</h2>'+wkNtHtml()+gpNtHtml()+(NT.length?NT.filter(function(x){return /^[\w-]+$/.test(x[0])}).map(function(x){return '<div class="xc"><b>'+srEsc(x[1].fn)+'</b> '+tl('يريد إضافتك كصديق','wants to add you as a friend')+'<div class="xr"><button class="xb" onclick="ntAns(\''+x[0]+'\',\'a\')">'+tl('نعم','Yes')+'</button><button class="xb" onclick="ntAns(\''+x[0]+'\',\'d\')">'+tl('لا','No')+'</button></div></div>'}).join(''):((wkNtHtml()||gpNtHtml())?'':'<div class="xs">'+tl('مفيش إشعارات.','No notifications.')+'</div>'))}
 function ntAns(id,s){FB.db.collection('requests').doc(id).update({st:s}).then(function(){NT=NT.filter(function(x){return x[0]!==id});ntRender();ntLoad();toast(s==='a'?tl('بقيتوا أصدقاء 🤝','You are now friends 🤝'):tl('تم الرفض','Declined'))}).catch(function(){toast(tl('تعذّر التنفيذ','Failed'))})}
