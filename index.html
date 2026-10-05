@@ -209,6 +209,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 <!-- الأذكار -->
 <div class="page" id="page-adhkar">
   <header><h1>📿 الأذكار</h1></header>
+  <div id="tsbBox"></div>
   <div id="adhkarPage"></div>
 </div>
 
@@ -230,7 +231,6 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 </div>
 
 <!-- الإعدادات -->
-<div class="page" id="page-tasbih"><header><h1>📿 المسبحة</h1></header><div id="tsbBox"></div></div>
 <div class="page" id="page-hifz"><header><h1>🧠 الحفظ</h1></header><div id="hfBox"></div></div>
 <div class="page" id="page-groups"><header><h1>👥 الجروبات</h1></header><div id="gpBox"></div></div>
 <div class="page" id="page-settings">
@@ -283,7 +283,6 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <button class="tab sec" data-page="adhkar"><span class="ti">📿</span>الأذكار</button>
   <button class="tab" data-page="stats"><span class="ti">📊</span>الإحصائيات</button>
   <button class="tab sec" data-page="qada" id="tabQada" style="display:none"></button>
-  <button class="tab sec" data-page="tasbih"><span class="ti">📿</span>المسبحة</button>
   <button class="tab sec" data-page="hifz"><span class="ti">🧠</span>الحفظ</button>
   <button class="tab sec" data-page="groups"><span class="ti">👥</span>الجروبات</button>
   <button class="tab sec" data-page="settings"><span class="ti">⚙️</span>الإعدادات</button>
@@ -644,7 +643,7 @@ $('remMinBtn').onclick=()=>{let i=REM_MINS.indexOf(remindMin());localStorage.set
 function dayStats0(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed'&&r.opt!=='late')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
 function renderBars(el,items){let max=Math.max(...items.map(i=>i.v),1);el.innerHTML='';items.forEach(i=>{let w=document.createElement('div');w.className='bar-w';w.innerHTML=`<div class="bar-v">${i.v||''}</div><div class="bar" style="height:${Math.round(i.v/max*100)}%"></div><div class="bar-l">${i.l}</div>`;el.appendChild(w)})}
 
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats();if(pg==='hifz')hfRender();if(pg==='tasbih')tsbRender();if(pg==='groups')gpRender()});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats();if(pg==='hifz')hfRender();if(pg==='adhkar')tsbRender();if(pg==='groups')gpRender()});
 
 function showGender(){$('genderOv').style.display='flex'}
 document.querySelectorAll('.g-btn').forEach(b=>b.onclick=()=>{setGender(b.dataset.g);{let s=localStorage.getItem('rafiq_session'),us=USERS();if(s&&us[s]){us[s].gender=b.dataset.g;saveUsers(us)}}$('genderOv').style.display='none';renderTracking();toast('تم حفظ الإعداد ✅')});
@@ -2014,7 +2013,7 @@ function hfPlayC(){if(HF_A){HF_A.pause();HF_A=null;HF_Q=[];return}HF_Q=[];var c=
  var nx=function(){if(!HF_Q.length){HF_A=null;return}var u=HF_Q.shift();qSetSrc(HF_A,u).then(function(){var p=HF_A&&HF_A.play();if(p&&p.catch)p.catch(function(){HF_A=null;HF_Q=[]})})};HF_A.addEventListener('ended',nx);nx()}
 /* ===== قايمة "المزيد" في الشريط السفلي ===== */
 (function(){var mb=$('tabMore');if(!mb)return;var sh=document.createElement('div');sh.id='moreSh';document.body.appendChild(sh);
- var items=[['adhkar','📿','الأذكار','Adhkar'],['tasbih','📿','المسبحة','Tasbih'],['hifz','🧠','الحفظ','Memorize'],['groups','👥','الجروبات','Groups'],['qada','🤲','القضاء','Qada'],['settings','⚙️','الإعدادات','Settings']];
+ var items=[['adhkar','📿','الأذكار','Adhkar'],['hifz','🧠','الحفظ','Memorize'],['groups','👥','الجروبات','Groups'],['qada','🤲','القضاء','Qada'],['settings','⚙️','الإعدادات','Settings']];
  function build(){sh.innerHTML='<div class="mbox">'+items.filter(function(x){return x[0]!=='qada'||$('tabQada').style.display!=='none'}).map(function(x){return'<button onclick="moreGo(\''+x[0]+'\')">'+x[1]+' '+tl(x[2],x[3])+(x[0]==='groups'&&gpUnread()?'<span style="position:absolute;top:8px;right:10px;width:9px;height:9px;border-radius:50%;background:#e53935"></span>':'')+'</button>'}).join('')+'</div>'}
  mb.onclick=function(){build();sh.classList.add('open')};sh.onclick=function(e){if(e.target===sh)sh.classList.remove('open')};
  window.moreGo=function(p){sh.classList.remove('open');var t=document.querySelector('.tab[data-page='+p+']');if(t)t.click()};
@@ -2046,32 +2045,35 @@ function qbInit(){var tx=$('qbTxt'),b=$('qbBtn');if(!tx)return;b.textContent='�
  if(QB.b!==null)qbDraw();else tx.textContent=tl('اضغط تشغيل البوصلة وهنحدد موقعك.','Tap Start compass and we will locate you.')}
 setTimeout(qbInit,3000);setTimeout(qbInit,9000);
 
-/* ===== المسبحة: اختار الذكر والعدد، أو ضيف ذكر جديد ===== */
-var TSB_P=[['سبحان الله',33],['الحمد لله',33],['الله أكبر',34],['لا إله إلا الله',100],['أستغفر الله',100],['لا حول ولا قوة إلا بالله',100],['سبحان الله وبحمده',100],['سبحان الله وبحمده، سبحان الله العظيم',100],['اللهم صلّ وسلّم على نبينا محمد',100]];
-function tsbGet(){try{var s=JSON.parse(localStorage.getItem('tsb'));if(s&&s.t)return s}catch(e){}return{t:TSB_P[0][0],n:TSB_P[0][1],c:0}}
-function tsbSet(s){localStorage.setItem('tsb',JSON.stringify(s))}
-function tsbCust(){try{return JSON.parse(localStorage.getItem('tsbCust'))||[]}catch(e){return[]}}
-function tsbList(){var L=[],seen={};var add=function(t,n,g){var k=adNorm(t);if(seen[k])return;seen[k]=1;L.push({t:t,n:n,g:g})};
- tsbCust().forEach(function(x){add(x.t,x.n,tl('أذكاري','My dhikr'))});TSB_P.forEach(function(x){add(x[0],x[1],tl('أذكار شائعة','Common dhikr'))});
- try{ADS.forEach(function(s){s[5].forEach(function(it){if(it.t&&!it.q&&it.t.length<=70)add(it.t,it.n||1,tl('من أذكار التطبيق','From the app adhkar'))})})}catch(e){}return L}
-function tsbRing(s){var f=Math.min(1,s.c/s.n);return'conic-gradient(#ffd54f '+(f*360)+'deg,rgba(var(--fg),.14) 0)'}
+/* ===== المسبحة (جوه صفحة الأذكار): بدون حد أو بعدد انت اللي تحدده ===== */
+var TSB_P=['سبحان الله','الحمد لله','الله أكبر','لا إله إلا الله','أستغفر الله','لا حول ولا قوة إلا بالله','سبحان الله وبحمده','سبحان الله وبحمده، سبحان الله العظيم','اللهم صلّ وسلّم على نبينا محمد'];
+function tsbGet(){try{var s=JSON.parse(localStorage.getItem('tsb'));if(s&&s.t){if(s.v!==2){s.n=0;s.v=2}return s}}catch(e){}return{t:TSB_P[0],n:0,c:0,v:2}}
+function tsbSet(s){s.v=2;localStorage.setItem('tsb',JSON.stringify(s))}
+function tsbCust(){try{return(JSON.parse(localStorage.getItem('tsbCust'))||[]).map(function(x){return typeof x==='string'?x:x.t})}catch(e){return[]}}
+function tsbList(){var L=[],seen={};var add=function(t,g){var k=adNorm(t);if(seen[k])return;seen[k]=1;L.push({t:t,g:g})};
+ tsbCust().forEach(function(x){add(x,tl('أذكاري','My dhikr'))});TSB_P.forEach(function(x){add(x,tl('أذكار شائعة','Common dhikr'))});
+ try{ADS.forEach(function(s){s[5].forEach(function(it){if(it.t&&!it.q&&it.t.length<=70)add(it.t,tl('من أذكار التطبيق','From the app adhkar'))})})}catch(e){}return L}
+function tsbRing(s){return s.n?'conic-gradient(#ffd54f '+(Math.min(1,s.c/s.n)*360)+'deg,rgba(var(--fg),.14) 0)':'rgba(255,213,79,.35)'}
 function tsbRender(){var b=$('tsbBox');if(!b)return;var s=tsbGet(),L=tsbList(),gs={},order=[],o='';
- L.forEach(function(x,i){if(!gs[x.g]){gs[x.g]=[];order.push(x.g)}gs[x.g].push('<option value="'+i+'"'+(x.t===s.t?' selected':'')+'>'+srEsc(x.t.length>45?x.t.slice(0,45)+'…':x.t)+' ('+x.n+')</option>')});
+ L.forEach(function(x,i){if(!gs[x.g]){gs[x.g]=[];order.push(x.g)}gs[x.g].push('<option value="'+i+'"'+(x.t===s.t?' selected':'')+'>'+srEsc(x.t.length>50?x.t.slice(0,50)+'…':x.t)+'</option>')});
  order.forEach(function(g){o+='<optgroup label="'+srEsc(g)+'">'+gs[g].join('')+'</optgroup>'});
- var isC=tsbCust().some(function(x){return x.t===s.t});
- b.innerHTML='<div class="card"><select class="ai" onchange="tsbPick(+this.value)">'+o+'</select>'
- +'<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span class="xs" style="flex:1">'+tl('العدد المطلوب','Target count')+'</span><input class="ai" type="number" inputmode="numeric" min="1" max="10000" value="'+s.n+'" style="width:110px;margin:0" onchange="tsbN(this.value)"></div>'
- +'<div id="tsbT" style="font-size:22px;line-height:1.9;text-align:center;margin:10px 0">'+srEsc(s.t)+'</div>'
- +'<div id="tsbRing" onclick="tsbTap()" style="width:230px;height:230px;max-width:80%;border-radius:50%;margin:8px auto;display:flex;align-items:center;justify-content:center;background:'+tsbRing(s)+';cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none"><div style="width:86%;height:86%;border-radius:50%;background:#16242b;display:flex;flex-direction:column;align-items:center;justify-content:center"><div id="tsbC" style="font-size:64px;font-weight:700">'+s.c+'</div><div class="xs" id="tsbL">/ '+s.n+(s.c>=s.n?' ✅':'')+'</div></div></div>'
+ var isC=tsbCust().indexOf(s.t)>-1,lim=+localStorage.getItem('tsbLim')||33;
+ b.innerHTML='<div class="card"><h3>📿 '+tl('المسبحة','Tasbih')+'</h3><select class="ai" onchange="tsbPick(+this.value)">'+o+'</select>'
+ +'<div class="seg"><button class="'+(s.n?'':'on')+'" onclick="tsbMode(0)">♾ '+tl('بدون حد','Unlimited')+'</button><button class="'+(s.n?'on':'')+'" onclick="tsbMode(1)">🎯 '+tl('عدد محدد','Set target')+'</button></div>'
+ +(s.n?'<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span class="xs" style="flex:1">'+tl('العدد المطلوب','Target count')+'</span><input class="ai" type="number" inputmode="numeric" min="1" max="100000" value="'+s.n+'" style="width:110px;margin:0" onchange="tsbN(this.value)"></div>':'')
+ +'<div style="font-size:22px;line-height:1.9;text-align:center;margin:10px 0">'+srEsc(s.t)+'</div>'
+ +'<div id="tsbRing" onclick="tsbTap()" style="width:230px;height:230px;max-width:80%;border-radius:50%;margin:8px auto;display:flex;align-items:center;justify-content:center;background:'+tsbRing(s)+';cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none"><div style="width:86%;height:86%;border-radius:50%;background:#16242b;display:flex;flex-direction:column;align-items:center;justify-content:center"><div id="tsbC" style="font-size:64px;font-weight:700">'+s.c+'</div><div class="xs" id="tsbL">'+(s.n?'/ '+s.n+(s.c>=s.n?' ✅':''):'♾')+'</div></div></div>'
  +'<div class="xr"><button class="xb" onclick="tsbReset()">↺ '+tl('تصفير','Reset')+'</button><button class="xb" onclick="$(\'tsbNew\').style.display=\'block\'">➕ '+tl('ذكر جديد','New dhikr')+'</button>'+(isC?'<button class="xb" onclick="tsbDel()">🗑 '+tl('حذف ده','Delete')+'</button>':'')+'</div>'
- +'<div id="tsbNew" style="display:none;margin-top:10px"><input class="ai" id="tsbNT" maxlength="200" placeholder="'+tl('نص الذكر','Dhikr text')+'"><input class="ai" id="tsbNN" type="number" inputmode="numeric" min="1" max="10000" value="33" placeholder="'+tl('العدد','Count')+'"><button class="xb" style="width:100%" onclick="tsbAdd()">'+tl('إضافة وبدء','Add & start')+'</button></div></div>'}
-function tsbTap(){var s=tsbGet();s.c++;tsbSet(s);var c=$('tsbC');if(c){c.textContent=s.c;$('tsbL').textContent='/ '+s.n+(s.c>=s.n?' ✅':'');$('tsbRing').style.background=tsbRing(s)}
- if(navigator.vibrate)try{navigator.vibrate(s.c===s.n?[80,40,80]:12)}catch(e){}if(s.c===s.n)toast('✅ '+tl('اكتمل العدد','Target reached'))}
-function tsbPick(i){var x=tsbList()[i];if(!x)return;tsbSet({t:x.t,n:x.n,c:0});tsbRender()}
-function tsbN(v){var s=tsbGet();s.n=Math.max(1,Math.min(10000,parseInt(v)||33));tsbSet(s);tsbRender()}
+ +'<div id="tsbNew" style="display:none;margin-top:10px"><input class="ai" id="tsbNT" maxlength="200" placeholder="'+tl('اكتب الذكر','Type the dhikr')+'"><button class="xb" style="width:100%" onclick="tsbAdd()">'+tl('إضافة وبدء','Add & start')+'</button></div></div>'}
+function tsbTap(){var s=tsbGet();s.c++;tsbSet(s);var c=$('tsbC');if(c){c.textContent=s.c;$('tsbL').textContent=s.n?'/ '+s.n+(s.c>=s.n?' ✅':''):'♾';$('tsbRing').style.background=tsbRing(s)}
+ if(navigator.vibrate)try{navigator.vibrate(s.n&&s.c===s.n?[80,40,80]:12)}catch(e){}if(s.n&&s.c===s.n)toast('✅ '+tl('اكتمل العدد','Target reached'))}
+function tsbPick(i){var x=tsbList()[i];if(!x)return;var s=tsbGet();tsbSet({t:x.t,n:s.n,c:0});tsbRender()}
+function tsbMode(m){var s=tsbGet();s.n=m?(+localStorage.getItem('tsbLim')||33):0;tsbSet(s);tsbRender()}
+function tsbN(v){var s=tsbGet(),n=Math.max(1,Math.min(100000,parseInt(v)||33));s.n=n;localStorage.setItem('tsbLim',String(n));tsbSet(s);tsbRender()}
 function tsbReset(){var s=tsbGet();s.c=0;tsbSet(s);tsbRender()}
-function tsbAdd(){var t=($('tsbNT').value||'').trim().slice(0,200),n=Math.max(1,Math.min(10000,parseInt($('tsbNN').value)||33));if(!t)return toast(tl('اكتب نص الذكر','Enter the dhikr text'));var c=tsbCust().filter(function(x){return x.t!==t});c.unshift({t:t,n:n});localStorage.setItem('tsbCust',JSON.stringify(c.slice(0,50)));tsbSet({t:t,n:n,c:0});tsbRender()}
-function tsbDel(){var s=tsbGet();localStorage.setItem('tsbCust',JSON.stringify(tsbCust().filter(function(x){return x.t!==s.t})));tsbSet({t:TSB_P[0][0],n:TSB_P[0][1],c:0});tsbRender()}
+function tsbAdd(){var t=($('tsbNT').value||'').trim().slice(0,200);if(!t)return toast(tl('اكتب الذكر','Enter the dhikr'));var c=tsbCust().filter(function(x){return x!==t});c.unshift(t);localStorage.setItem('tsbCust',JSON.stringify(c.slice(0,50)));var s=tsbGet();tsbSet({t:t,n:s.n,c:0});tsbRender()}
+function tsbDel(){var s=tsbGet();localStorage.setItem('tsbCust',JSON.stringify(tsbCust().filter(function(x){return x!==s.t})));tsbSet({t:TSB_P[0],n:s.n,c:0});tsbRender()}
+setTimeout(tsbRender,1200);
 function ntOpen(){ntLoad();setTimeout(ntRender,400);$('ntOv').classList.add('open');ntRender()}
 function ntRender(){$('ntSheet').innerHTML='<h2>🔔 '+tl('الإشعارات','Notifications')+'</h2>'+wkNtHtml()+gpNtHtml()+(NT.length?NT.filter(function(x){return /^[\w-]+$/.test(x[0])}).map(function(x){return '<div class="xc"><b>'+srEsc(x[1].fn)+'</b> '+tl('يريد إضافتك كصديق','wants to add you as a friend')+'<div class="xr"><button class="xb" onclick="ntAns(\''+x[0]+'\',\'a\')">'+tl('نعم','Yes')+'</button><button class="xb" onclick="ntAns(\''+x[0]+'\',\'d\')">'+tl('لا','No')+'</button></div></div>'}).join(''):((wkNtHtml()||gpNtHtml())?'':'<div class="xs">'+tl('مفيش إشعارات.','No notifications.')+'</div>'))}
 function ntAns(id,s){FB.db.collection('requests').doc(id).update({st:s}).then(function(){NT=NT.filter(function(x){return x[0]!==id});ntRender();ntLoad();toast(s==='a'?tl('بقيتوا أصدقاء 🤝','You are now friends 🤝'):tl('تم الرفض','Declined'))}).catch(function(){toast(tl('تعذّر التنفيذ','Failed'))})}
