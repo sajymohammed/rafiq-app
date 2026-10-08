@@ -109,6 +109,40 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .hfw.er{background:rgba(229,57,53,.55);color:transparent;border-radius:6px}.hfw.er.rv{color:#ff8a80;background:none}
 .tab.sec{display:none!important}.tab.dot{position:relative}.tab.dot::after{content:'';position:absolute;top:6px;right:calc(50% - 20px);width:9px;height:9px;border-radius:50%;background:#e53935}#moreSh{position:fixed;inset:0;z-index:60;display:none;background:rgba(0,0,0,.55);align-items:flex-end;justify-content:center}#moreSh.open{display:flex}#moreSh .mbox{width:100%;max-width:480px;background:#16242b;border-radius:18px 18px 0 0;padding:16px 16px 86px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}#moreSh button{position:relative;padding:18px 8px;border:0;border-radius:14px;background:rgba(var(--fg),.1);color:inherit;font:inherit;font-size:15px}
 .xb.on{background:rgba(255,213,79,.28);border-color:#ffd54f}.lay-hide{display:none!important}
+/* ===== قوالب العبادات والأذكار + محررات الجداول ===== */
+.tpl-pick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+.tpl-pick button{display:flex;align-items:center;gap:6px;justify-content:center;padding:10px 6px;border-radius:12px;border:1.5px solid rgba(var(--fg),.2);background:transparent;color:var(--tx);font-family:inherit;font-size:13px;cursor:pointer}
+.tpl-pick button.on{background:var(--ac3);border-color:var(--ac3);font-weight:700}
+.ed-h,.ed-r{display:grid;gap:6px;align-items:start}
+.ed-h{font-size:12px;opacity:.7;padding:0 4px;margin-top:6px}
+.ed-r{margin:6px 0}.ed-r .ai{margin:0}.ed-r textarea{resize:vertical;min-height:54px}
+.ed-ad{grid-template-columns:1fr 66px 40px}.ed-op{grid-template-columns:1fr 78px 40px}
+.ed-r .mini-btn{padding:10px 0;width:40px}
+.cfd-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}
+.cfd-g label{display:flex;gap:6px;align-items:center;justify-content:center;padding:10px 4px;border:1px solid rgba(var(--fg),.25);border-radius:12px;font-size:14px;cursor:pointer}
+.cfd-g label:has(input:checked){background:var(--ac3);border-color:var(--ac3);font-weight:700}
+.lx-tw{overflow-x:auto}.lx-t{width:100%;border-collapse:collapse;font-size:15px}
+.lx-t th{font-size:12px;opacity:.7;padding:6px 4px;text-align:right;border-bottom:1px solid rgba(var(--fg),.2)}
+.lx-t td{padding:10px 6px;border-bottom:1px solid rgba(var(--fg),.08);vertical-align:top}
+.lx-t td.t{line-height:1.9;font-size:17px}.lx-t td.c{white-space:nowrap;text-align:center;font-weight:700;color:var(--ac)}
+.lx-t tr[onclick]{cursor:pointer}.lx-t tr.ok{opacity:.5}.lx-t tr.sel td{background:rgba(var(--fg),.1)}
+.lx-cp{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 4px;border-bottom:1px solid rgba(var(--fg),.08);font-size:14px;line-height:1.8;cursor:pointer}
+.lx-cp.ok{opacity:.5}.lx-cp b{flex-shrink:0;min-width:56px;text-align:center;background:rgba(var(--fg),.12);border-radius:999px;padding:3px 8px;font-size:12px;color:var(--ac)}
+.lx-ft{font-size:21px;line-height:2.2;text-align:center;padding:14px 6px;cursor:pointer;min-height:110px}
+.lx-bar{height:8px;background:rgba(var(--fg),.15);border-radius:99px;overflow:hidden}.lx-bar i{display:block;height:100%;background:var(--ac)}
+.lx-fc{text-align:center;font-size:28px;font-weight:800;color:var(--ac);margin:10px 0;cursor:pointer}
+.cw-chk{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;border:1.5px solid rgba(var(--fg),.25);cursor:pointer;font-size:16px;font-weight:700}
+.cw-chk .bx{width:28px;height:28px;border-radius:8px;border:2px solid rgba(var(--fg),.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cw-chk.on{background:rgba(46,158,79,.2);border-color:var(--ac)}.cw-chk.on .bx{background:var(--ac2);border-color:var(--ac2)}
+.cw-big{width:100%;padding:22px;border-radius:18px;border:2px dashed rgba(var(--fg),.35);background:transparent;color:var(--tx);font-family:inherit;font-size:20px;font-weight:800;cursor:pointer}
+.cw-big.on{border-style:solid;background:rgba(46,158,79,.25);border-color:var(--ac)}
+.cw-st{display:flex;gap:8px;align-items:center}.cw-st .ai{margin:0;text-align:center;font-size:20px}.cw-st .xb{width:54px;height:48px;font-size:22px;flex-shrink:0;margin:0}
+.cw-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.cw-chips .xb{margin:0}
+.cw-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.cw-grid .xb{margin:0;padding:14px 6px;display:flex;flex-direction:column;gap:4px;align-items:center;font-size:15px}.cw-grid small{opacity:.8;font-size:12px}
+.cw-row{display:flex;align-items:center;gap:10px;padding:12px 8px;border-bottom:1px solid rgba(var(--fg),.08);cursor:pointer;font-size:15px}
+.cw-row .rd{width:20px;height:20px;border-radius:50%;border:2px solid rgba(var(--fg),.4);flex-shrink:0}.cw-row.on .rd{background:var(--ac2);border-color:var(--ac2);box-shadow:inset 0 0 0 3px rgba(0,0,0,.35)}
+.cw-row span.p{margin-right:auto;font-weight:700;color:var(--ac)}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -232,7 +266,6 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 </div>
 
 <!-- الإعدادات -->
-<div class="page" id="page-maps"><header><h1>🗺 الخرائط</h1></header><div id="mpBox"></div></div>
 <div class="page" id="page-hifz"><header><h1>🧠 الحفظ</h1></header><div id="hfBox"></div></div>
 <div class="page" id="page-groups"><header><h1>👥 الجروبات</h1></header><div id="gpBox"></div></div>
 <div class="page" id="page-settings">
@@ -285,7 +318,6 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <button class="tab sec" data-page="adhkar"><span class="ti">📿</span>الأذكار</button>
   <button class="tab" data-page="stats"><span class="ti">📊</span>الإحصائيات</button>
   <button class="tab sec" data-page="qada" id="tabQada" style="display:none"></button>
-  <button class="tab sec" data-page="maps"><span class="ti">🗺</span>الخرائط</button>
   <button class="tab sec" data-page="hifz"><span class="ti">🧠</span>الحفظ</button>
   <button class="tab sec" data-page="groups"><span class="ti">👥</span>الجروبات</button>
   <button class="tab sec" data-page="settings"><span class="ti">⚙️</span>الإعدادات</button>
@@ -646,7 +678,7 @@ $('remMinBtn').onclick=()=>{let i=REM_MINS.indexOf(remindMin());localStorage.set
 function dayStats0(k){try{let d=JSON.parse(localStorage.getItem('prayers_'+k)||'{}'),pts=0,cnt=0;Object.values(d).forEach(r=>{pts+=r.points||0;if(r.opt!=='missed'&&r.opt!=='late')cnt++});return{pts,cnt}}catch(e){return{pts:0,cnt:0}}}
 function renderBars(el,items){let max=Math.max(...items.map(i=>i.v),1);el.innerHTML='';items.forEach(i=>{let w=document.createElement('div');w.className='bar-w';w.innerHTML=`<div class="bar-v">${i.v||''}</div><div class="bar" style="height:${Math.round(i.v/max*100)}%"></div><div class="bar-l">${i.l}</div>`;el.appendChild(w)})}
 
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats();if(pg==='hifz')hfRender();if(pg==='maps')mpRender();if(pg==='adhkar')tsbRender();if(pg==='groups')gpRender()});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let pg=t.dataset.page;$('page-'+pg).classList.add('active');$('gearBtn').style.display=pg==='settings'?'none':'block';$('resetDay').style.display=pg==='tracking'?'block':'none';if(pg==='home')ensureTimes();if(pg==='tracking')renderTracking();if(pg==='quran')renderQuran();if(pg==='stats')renderStats();if(pg==='hifz')hfRender();if(pg==='adhkar')tsbRender();if(pg==='groups')gpRender()});
 
 function showGender(){$('genderOv').style.display='flex'}
 document.querySelectorAll('.g-btn').forEach(b=>b.onclick=()=>{setGender(b.dataset.g);{let s=localStorage.getItem('rafiq_session'),us=USERS();if(s&&us[s]){us[s].gender=b.dataset.g;saveUsers(us)}}$('genderOv').style.display='none';renderTracking();toast('تم حفظ الإعداد ✅')});
@@ -2028,7 +2060,7 @@ function hfPlayC(){if(HF_A){HF_A.pause();HF_A=null;HF_Q=[];return}HF_Q=[];var c=
  var nx=function(){if(!HF_Q.length){HF_A=null;return}var u=HF_Q.shift();qSetSrc(HF_A,u).then(function(){var p=HF_A&&HF_A.play();if(p&&p.catch)p.catch(function(){HF_A=null;HF_Q=[]})})};HF_A.addEventListener('ended',nx);nx()}
 /* ===== قايمة "المزيد" في الشريط السفلي ===== */
 (function(){var mb=$('tabMore');if(!mb)return;var sh=document.createElement('div');sh.id='moreSh';document.body.appendChild(sh);
- var items=[['adhkar','📿','الأذكار','Adhkar'],['hifz','🧠','الحفظ','Memorize'],['groups','👥','الجروبات','Groups'],['maps','🗺','الخرائط','Maps'],['qada','🤲','القضاء','Qada'],['settings','⚙️','الإعدادات','Settings']];
+ var items=[['adhkar','📿','الأذكار','Adhkar'],['hifz','🧠','الحفظ','Memorize'],['groups','👥','الجروبات','Groups'],['qada','🤲','القضاء','Qada'],['settings','⚙️','الإعدادات','Settings']];
  function build(){sh.innerHTML='<div class="mbox">'+items.filter(function(x){return x[0]!=='qada'||$('tabQada').style.display!=='none'}).map(function(x){return'<button onclick="moreGo(\''+x[0]+'\')">'+x[1]+' '+tl(x[2],x[3])+(x[0]==='groups'&&gpUnread()?'<span style="position:absolute;top:8px;right:10px;width:9px;height:9px;border-radius:50%;background:#e53935"></span>':'')+'</button>'}).join('')+'</div>'}
  mb.onclick=function(){build();sh.classList.add('open')};sh.onclick=function(e){if(e.target===sh)sh.classList.remove('open')};
  window.moreGo=function(p){sh.classList.remove('open');var t=document.querySelector('.tab[data-page='+p+']');if(t)t.click()};
@@ -2088,41 +2120,17 @@ function tsbReset(){var s=tsbGet();s.c=0;tsbSet(s);tsbRender()}
 function tsbAdd(){var t=($('tsbNT').value||'').trim().slice(0,200);if(!t)return toast(tl('اكتب الذكر','Enter the dhikr'));var c=tsbCust().filter(function(x){return x!==t});c.unshift(t);localStorage.setItem('tsbCust',JSON.stringify(c.slice(0,50)));var s=tsbGet();tsbSet({t:t,n:s.n,c:0});tsbRender()}
 function tsbDel(){var s=tsbGet();localStorage.setItem('tsbCust',JSON.stringify(tsbCust().filter(function(x){return x!==s.t})));tsbSet({t:'__free',n:s.n,c:0});tsbRender()}
 setTimeout(tsbRender,1200);
-/* ===== الخرائط: أقرب مساجد ومطاعم حلال وأماكن إسلامية (OpenStreetMap) ===== */
-var MP={pos:null,items:[],cat:'mosque',r:5000,map:null,lay:null,built:false,busy:false,ld:null};
-var MP_RS=[2000,5000,15000,40000],MP_EP=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
-function mpLeaflet(cb){if(window.L){cb(true);return}if(MP.ld){MP.ld.push(cb);return}MP.ld=[cb];var l=document.createElement('link');l.rel='stylesheet';l.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';document.head.appendChild(l);var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
- s.onload=function(){var q=MP.ld;MP.ld=null;q.forEach(function(f){f(true)})};s.onerror=function(){var q=MP.ld;MP.ld=null;q.forEach(function(f){f(false)})};document.head.appendChild(s)}
-function mpDist(a,b,c,d){var r=Math.PI/180,x=Math.sin((c-a)*r/2),y=Math.sin((d-b)*r/2),h=x*x+Math.cos(a*r)*Math.cos(c*r)*y*y;return 12742000*Math.asin(Math.sqrt(h))}
-function mpFmt(m){return m<1000?Math.round(m/10)*10+' '+tl('م','m'):(m/1000).toFixed(1)+' '+tl('كم','km')}
-function mpQuery(lat,lon,r){var a='(around:'+r+','+lat+','+lon+')';return'[out:json][timeout:25];(nwr'+a+'["amenity"="place_of_worship"]["religion"="muslim"];nwr'+a+'["diet:halal"~"^(yes|only)$"];nwr'+a+'["cuisine"~"halal"];nwr'+a+'["shop"="halal"];nwr'+a+'["religion"="muslim"]["amenity"!="place_of_worship"];);out center 250;'}
-function mpClass(tg){if(tg.amenity==='place_of_worship'&&tg.religion==='muslim')return['mosque',tg.building==='mosque'||/mosque|مسجد|جامع/i.test((tg.name||'')+(tg['name:ar']||''))?tl('مسجد','Mosque'):tl('مصلّى','Prayer room')];
- if(/^(yes|only)$/.test(tg['diet:halal']||'')||/halal/i.test(tg.cuisine||'')||tg.shop==='halal'){var f={restaurant:['مطعم','Restaurant'],fast_food:['وجبات سريعة','Fast food'],cafe:['كافيه','Cafe'],food_court:['فود كورت','Food court']}[tg.amenity],s={butcher:['ملحمة حلال','Halal butcher'],supermarket:['سوبرماركت','Supermarket'],convenience:['بقالة','Grocery'],halal:['متجر حلال','Halal shop']}[tg.shop];var x=f||s||['مكان حلال','Halal place'];return['food',tl(x[0],x[1])]}
- var o={community_centre:['مركز إسلامي','Islamic centre'],school:['مدرسة إسلامية','Islamic school'],college:['معهد إسلامي','Islamic institute'],grave_yard:['مقبرة إسلامية','Muslim cemetery'],library:['مكتبة إسلامية','Islamic library']}[tg.amenity]||['مكان إسلامي','Islamic place'];return['islamic',tl(o[0],o[1])]}
-function mpParse(j,lat,lon){var out=[],seen={};(j.elements||[]).forEach(function(e){var la=e.lat!==undefined?e.lat:e.center&&e.center.lat,lo=e.lon!==undefined?e.lon:e.center&&e.center.lon;if(la===undefined||lo===undefined)return;var tg=e.tags||{},c=mpClass(tg),id=e.type+e.id;if(seen[id])return;seen[id]=1;
- out.push({id:id,lat:la,lon:lo,cat:c[0],type:c[1],name:tg['name:ar']||tg.name||tg['name:en']||'',hrs:tg.opening_hours||'',d:mpDist(lat,lon,la,lo)})});return out.sort(function(a,b){return a.d-b.d})}
-function mpFetch(lat,lon,r){var q='data='+encodeURIComponent(mpQuery(lat,lon,r)),tryEp=function(i){if(i>=MP_EP.length)return Promise.reject(new Error('net'));var ac=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(ac)ac.abort()},28000);
-  return fetch(MP_EP[i],{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:q,signal:ac?ac.signal:undefined}).then(function(r){clearTimeout(tm);if(!r.ok)throw new Error('http');return r.json()}).catch(function(){clearTimeout(tm);return tryEp(i+1)})};
- return tryEp(0).then(function(j){return mpParse(j,lat,lon)})}
-function mpBuild(){var b=$('mpBox');b.innerHTML='<div class="card"><button class="xb" style="width:100%;padding:12px" onclick="mpGo()">📍 '+tl('دوّر حواليا','Search near me')+'</button><div class="xs" id="mpSt" style="margin-top:8px">'+tl('هنستخدم موقعك الحالي، والبيانات من OpenStreetMap (متطوعين)، فممكن تكون ناقصة في بعض المناطق.','Uses your current location. Data comes from OpenStreetMap contributors and may be incomplete in some areas.')+'</div>'
- +'<div class="seg" style="margin-top:8px">'+[['mosque','🕌 '+tl('مساجد','Mosques')],['food','🍽 '+tl('مطاعم حلال','Halal food')],['islamic','🏛 '+tl('أماكن إسلامية','Islamic places')],['all',tl('الكل','All')]].map(function(c){return'<button data-c="'+c[0]+'" class="'+(c[0]===MP.cat?'on':'')+'" onclick="mpCat(\''+c[0]+'\')">'+c[1]+'</button>'}).join('')+'</div></div>'
- +'<div id="mpMapW" style="display:none;height:260px;border-radius:14px;overflow:hidden;margin:8px 0"><div id="mpMap" style="height:100%"></div></div><div id="mpList"></div>';MP.built=true}
-function mpRender(){if(!MP.built)mpBuild();if(MP.map)setTimeout(function(){MP.map.invalidateSize()},150)}
-function mpGo(){if(MP.busy)return;var st=$('mpSt');if(!navigator.geolocation){st.textContent=tl('الجهاز مش بيدعم تحديد الموقع.','Geolocation is not supported.');return}
- MP.busy=true;st.textContent=tl('جاري تحديد موقعك...','Locating you...');
- navigator.geolocation.getCurrentPosition(function(p){MP.pos={lat:p.coords.latitude,lon:p.coords.longitude};MP.r=MP_RS[0];mpSearch()},function(){MP.busy=false;var c=(typeof qbCached==='function')&&qbCached();if(c){MP.pos=c;MP.r=MP_RS[0];st.textContent=tl('مقدرتش أحدد موقعك بدقة، هستخدم موقع مواقيت الصلاة المحفوظ.','Could not get a precise location, using your saved prayer-times location.');MP.busy=true;mpSearch()}else st.textContent=tl('اسمح للتطبيق بالوصول للموقع من إعدادات المتصفح وجرّب تاني.','Allow location access in your browser settings and retry.')},{enableHighAccuracy:true,timeout:12000,maximumAge:60000})}
-function mpSearch(){var st=$('mpSt'),p=MP.pos;st.textContent=tl('جاري البحث في دايرة ','Searching within ')+(MP.r/1000)+tl(' كم...',' km...');
- mpFetch(p.lat,p.lon,MP.r).then(function(items){MP.items=items;var any=items.length>0;if(!any&&MP_RS.indexOf(MP.r)<MP_RS.length-1){MP.r=MP_RS[MP_RS.indexOf(MP.r)+1];return mpSearch()}MP.busy=false;st.textContent=any?tl('لقينا ','Found ')+items.length+tl(' مكان في دايرة ',' places within ')+(MP.r/1000)+tl(' كم.',' km.'):tl('مفيش نتايج حتى في دايرة 40 كم — البيانات هناك ممكن تكون ناقصة.','No results even within 40 km — data may be missing there.');mpShow()})
- .catch(function(){MP.busy=false;st.textContent=tl('تعذّر الاتصال بخدمة الخرائط — اتأكد من النت وجرّب تاني.','Could not reach the map service — check your connection and retry.')})}
-function mpCat(c){MP.cat=c;[].forEach.call(document.querySelectorAll('#mpBox .seg button'),function(b){b.classList.toggle('on',b.dataset.c===c)});if(MP.pos)mpShow()}
-function mpShow(){var its=MP.items.filter(function(x){return MP.cat==='all'||x.cat===MP.cat}).slice(0,40),ic={mosque:'🕌',food:'🍽',islamic:'🏛'},el=$('mpList');
- el.innerHTML=its.length?its.map(function(x,i){return'<div class="xc"><b>'+ic[x.cat]+' '+srEsc(x.name||x.type)+'</b><div class="xs">'+srEsc(x.type)+' · '+mpFmt(x.d)+(x.hrs?' · 🕐 '+srEsc(x.hrs):'')+'</div><div class="xr"><button class="xb" onclick="mpFocus('+i+')">📍 '+tl('على الخريطة','On map')+'</button><a class="xb" style="text-decoration:none;text-align:center" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination='+x.lat+','+x.lon+'">🧭 '+tl('اتجاهات','Directions')+'</a></div></div>'}).join(''):(MP.items.length?'<div class="xs" style="margin-top:8px">'+tl('مفيش من النوع ده في النطاق ده — جرّب نوع تاني.','None of this type nearby — try another type.')+'</div>':'');
- MP.cur=its;mpLeaflet(function(ok){var w=$('mpMapW');if(!ok||!MP.pos){if(w)w.style.display='none';return}w.style.display='block';
-  if(!MP.map){MP.map=L.map('mpMap');L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(MP.map);MP.lay=L.layerGroup().addTo(MP.map)}
-  MP.lay.clearLayers();L.circleMarker([MP.pos.lat,MP.pos.lon],{radius:8,color:'#fff',weight:2,fillColor:'#2196f3',fillOpacity:1}).addTo(MP.lay).bindPopup(tl('انت هنا','You are here'));var pts=[[MP.pos.lat,MP.pos.lon]];
-  its.forEach(function(x){pts.push([x.lat,x.lon]);L.marker([x.lat,x.lon],{icon:L.divIcon({className:'',html:'<div style="font-size:24px;line-height:24px">'+ic[x.cat]+'</div>',iconSize:[24,24],iconAnchor:[12,12]})}).addTo(MP.lay).bindPopup(srEsc(x.name||x.type))});
-  MP.map.fitBounds(pts.slice(0,Math.min(pts.length,6)),{padding:[30,30],maxZoom:16});setTimeout(function(){MP.map.invalidateSize()},150)})}
-function mpFocus(i){var x=(MP.cur||[])[i];if(!x||!MP.map)return;MP.map.setView([x.lat,x.lon],17);var w=$('mpMapW');if(w)w.scrollIntoView({behavior:'smooth',block:'center'})}
+/* ===== أدوات القوالب (منتقي القالب + صفوف الجداول) ===== */
+var ADL_TPL=[['cards','🃏','بطاقات','Cards'],['table','📊','جدول','Table'],['compact','📃','مختصر','Compact'],['focus','🎯','ذكر ذكر','One by one']],
+ CW_TPL={yn:[['buttons','🔘','أزرار','Buttons'],['check','☑️','مربع اختيار','Checkbox'],['big','🟢','زر كبير','Big button']],
+  num:[['input','⌨️','إدخال','Input'],['stepper','➕','عدّاد +/−','Stepper'],['quick','⚡','إضافة سريعة','Quick add']],
+  opt:[['chips','🏷','أزرار','Chips'],['grid','🔳','شبكة','Grid'],['list','📋','قائمة','List'],['table','📊','جدول','Table']]};
+function tplPick(id,list,cur){if(!list.some(function(x){return x[0]===cur}))cur=list[0][0];return'<input type="hidden" id="'+id+'" value="'+cur+'"><div class="tpl-pick" data-for="'+id+'">'+list.map(function(x){return'<button type="button" data-v="'+x[0]+'" class="'+(x[0]===cur?'on':'')+'" onclick="tplSet(this)">'+x[1]+' '+tl(x[2],x[3])+'</button>'}).join('')+'</div>'}
+function tplSet(b){var w=b.parentNode;$(w.dataset.for).value=b.dataset.v;[].forEach.call(w.children,function(x){x.classList.toggle('on',x===b)})}
+function adfRow(t,n){return'<div class="ed-r ed-ad"><textarea class="ai adf-t" rows="2" placeholder="'+tl('نص الذكر','Dhikr text')+'">'+srEsc(t||'')+'</textarea><input class="ai adf-n" type="number" inputmode="numeric" min="1" max="10000" value="'+(n||1)+'"><button type="button" class="mini-btn" onclick="this.parentNode.remove()">🗑</button></div>'}
+function adfAdd(){var b=$('afRows');b.insertAdjacentHTML('beforeend',adfRow('',1));var t=b.querySelectorAll('.adf-t');t[t.length-1].focus()}
+function cfoRow(l,p){return'<div class="ed-r ed-op"><input class="ai cfo-l" maxlength="40" placeholder="'+tl('اسم الاختيار','Option name')+'" value="'+srEsc(l||'')+'"><input class="ai cfo-p" type="number" placeholder="'+tl('النقاط','Pts')+'" value="'+(p===undefined||p===''?'':p)+'"><button type="button" class="mini-btn" onclick="this.parentNode.remove()">🗑</button></div>'}
+function cfoAdd(){$('cfoRows').insertAdjacentHTML('beforeend',cfoRow('',''))}
 /* ===== عبادات مخصصة: نعم/لا، رقم، أو اختيارات — بنقاط وشروط تحددها ===== */
 var CW_R=null,CW_C=[];
 function cwDefs(){var r=localStorage.getItem('cw');if(r!==CW_R){CW_R=r;try{CW_C=JSON.parse(r)||[]}catch(e){CW_C=[]}}return CW_C}
@@ -2130,25 +2138,53 @@ function cwDay(k){try{return JSON.parse(localStorage.getItem('cwd_'+k))||{}}catc
 function cwActive(d,k){if(!d.days||!d.days.length)return true;return d.days.indexOf(new Date(k+'T00:00:00').getDay())>-1}
 function cwPtsOne(d,v){if(v===undefined||v===null||v==='')return 0;if(d.type==='yn')return v==='y'?d.pts:-(d.pen||0);if(d.type==='num'){v=+v||0;return(v>0&&v>=(d.min||0))?Math.floor(v/(d.step||1))*d.pts:-(d.pen||0)}var o=(d.opts||[])[+v];return o?o.p:0}
 function cwPts(k){var D=cwDay(k),s=0;cwDefs().forEach(function(d){if(cwActive(d,k))s+=cwPtsOne(d,D[d.id])});return s}
-function cwInner(d,k,D){var v=D[d.id],c='',q=function(x){return'\''+d.id+'\','+x};
- if(d.type==='yn')c='<div class="xr"><button class="xb'+(v==='y'?' on':'')+'" onclick="cwPut('+q("'y'")+')">✅ '+tl('نعم','Yes')+' (+'+d.pts+')</button><button class="xb'+(v==='n'?' on':'')+'" onclick="cwPut('+q("'n'")+')">❌ '+tl('لا','No')+(d.pen?' (−'+d.pen+')':'')+'</button></div>';
- else if(d.type==='num')c='<input class="ai" type="number" inputmode="decimal" min="0" value="'+(v===undefined?'':srEsc(v))+'" placeholder="'+srEsc(d.unit||tl('المقدار','Amount'))+'" onchange="cwPut('+q('this.value')+')" style="margin:0"><div class="xs">'+tl('كل ','Every ')+(d.step||1)+' '+srEsc(d.unit||'')+' = '+d.pts+tl(' نقطة',' pts')+(d.min?' · '+tl('الحد الأدنى ','min ')+d.min:'')+'</div>';
- else c='<div class="xr">'+(d.opts||[]).map(function(o,i){return'<button class="xb'+(String(v)===String(i)?' on':'')+'" onclick="cwPut('+q(i)+')">'+srEsc(o.l)+' ('+(o.p>0?'+':'')+o.p+')</button>'}).join('')+'</div>';
+function cwInner(d,k,D){var v=D[d.id],c='',id=d.id,tpl=d.tpl||({yn:'buttons',num:'input',opt:'chips'})[d.type],q=function(x){return'\''+id+'\','+x},pt=function(o){return(o.p>0?'+':'')+o.p};
+ if(d.type==='yn'){var ys=v==='y',ns=v==='n',no=d.pen?'<button class="xb'+(ns?' on':'')+'" style="width:100%;margin:8px 0 0" onclick="cwPut('+q("'n'")+')">❌ '+tl('لا','No')+' (−'+d.pen+')</button>':'';
+  if(tpl==='check')c='<div class="cw-chk'+(ys?' on':'')+'" onclick="cwPut('+q(ys?"''":"'y'")+')"><span class="bx">'+(ys?'✔':'')+'</span><span>'+tl('تمّت','Done')+' (+'+d.pts+')</span></div>'+no;
+  else if(tpl==='big')c='<button class="cw-big'+(ys?' on':'')+'" onclick="cwPut('+q(ys?"''":"'y'")+')">'+(ys?'✅ '+tl('تمّت','Done'):'⭕ '+tl('اضغط للتسجيل','Tap to log'))+' (+'+d.pts+')</button>'+no;
+  else c='<div class="xr"><button class="xb'+(ys?' on':'')+'" onclick="cwPut('+q("'y'")+')">✅ '+tl('نعم','Yes')+' (+'+d.pts+')</button><button class="xb'+(ns?' on':'')+'" onclick="cwPut('+q("'n'")+')">❌ '+tl('لا','No')+(d.pen?' (−'+d.pen+')':'')+'</button></div>'}
+ else if(d.type==='num'){var inp='<input class="ai" type="number" inputmode="decimal" min="0" value="'+(v===undefined?'':srEsc(v))+'" placeholder="'+srEsc(d.unit||tl('المقدار','Amount'))+'" onchange="cwPut('+q('this.value')+')" style="margin:0">',st=d.step||1;
+  if(tpl==='stepper')c='<div class="cw-st"><button class="xb" onclick="cwStep(\''+id+'\',1)">+</button>'+inp+'<button class="xb" onclick="cwStep(\''+id+'\',-1)">−</button></div>';
+  else if(tpl==='quick')c=inp+'<div class="cw-chips">'+[1,2,5,10].map(function(m){return'<button class="xb" onclick="cwAdd(\''+id+'\','+(m*st)+')">+'+(m*st)+'</button>'}).join('')+'<button class="xb" onclick="cwPut('+q("''")+')">↺</button></div>';
+  else c=inp;
+  c+='<div class="xs">'+tl('كل ','Every ')+st+' '+srEsc(d.unit||'')+' = '+d.pts+tl(' نقطة',' pts')+(d.min?' · '+tl('الحد الأدنى ','min ')+d.min:'')+'</div>'}
+ else{var os=d.opts||[],on=function(i){return String(v)===String(i)},go=function(i){return'onclick="cwPut('+q(i)+')"'};
+  if(tpl==='grid')c='<div class="cw-grid">'+os.map(function(o,i){return'<button class="xb'+(on(i)?' on':'')+'" '+go(i)+'>'+srEsc(o.l)+'<small>'+pt(o)+'</small></button>'}).join('')+'</div>';
+  else if(tpl==='list')c=os.map(function(o,i){return'<div class="cw-row'+(on(i)?' on':'')+'" '+go(i)+'><span class="rd"></span><span>'+srEsc(o.l)+'</span><span class="p">'+pt(o)+'</span></div>'}).join('');
+  else if(tpl==='table')c='<div class="lx-tw"><table class="lx-t"><thead><tr><th>'+tl('الاختيار','Option')+'</th><th>'+tl('النقاط','Points')+'</th><th></th></tr></thead><tbody>'+os.map(function(o,i){return'<tr '+go(i)+' class="'+(on(i)?'sel':'')+'"><td class="t" style="font-size:16px">'+srEsc(o.l)+'</td><td class="c">'+pt(o)+'</td><td class="c">'+(on(i)?'✅':'○')+'</td></tr>'}).join('')+'</tbody></table></div>';
+  else c='<div class="cw-chips">'+os.map(function(o,i){return'<button class="xb'+(on(i)?' on':'')+'" '+go(i)+'>'+srEsc(o.l)+' ('+pt(o)+')</button>'}).join('')+'</div>'}
  return'<h3>'+srEsc(d.icon||'⭐')+' '+srEsc(d.name)+'</h3>'+c+(v!==undefined?'<div class="xs">'+tl('نقاطها النهارده: ','Points today: ')+cwPtsOne(d,v)+'</div>':'')}
+function cwStep(id,dir){var d=cwDefs().filter(function(x){return x.id===id})[0];if(!d)return;var D=cwDay(dayKey(currentDate)),nv=Math.max(0,Math.round(((+D[id]||0)+dir*(d.step||1))*100)/100);cwPut(id,nv>0?nv:'')}
+function cwAdd(id,n){var D=cwDay(dayKey(currentDate));cwPut(id,Math.round(((+D[id]||0)+n)*100)/100)}
 function cwRender(){var el=$('cwBox');if(el){var k=dayKey(currentDate),D=cwDay(k),h='';cwDefs().forEach(function(d){if(cwActive(d,k))h+='<div class="card">'+cwInner(d,k,D)+'</div>'});el.innerHTML=h}lxAll()}
 /* ===== قوائم أذكاري (ضيف ذكر) ===== */
 var AL_R=null,AL_C=[];
 function adlDefs(){var r=localStorage.getItem('adl');if(r!==AL_R){AL_R=r;try{AL_C=JSON.parse(r)||[]}catch(e){AL_C=[]}}return AL_C}
 function adlProg(k){try{return JSON.parse(localStorage.getItem('adlp_'+k))||{}}catch(e){return{}}}
-function adlInner(d){var P=adlProg(dayKey(new Date()))[d.id]||{},done=0,rows=d.items.map(function(it,i){var c=P[i]||0,ok=c>=it.n;if(ok)done++;return'<div class="xc" onclick="adlTap(\''+d.id+'\','+i+')" style="cursor:pointer;'+(ok?'opacity:.55':'')+'"><div style="font-size:17px;line-height:1.9">'+srEsc(it.t)+'</div><div class="xs">'+(ok?'✅ ':'')+c+' / '+it.n+'</div></div>'}).join('');
- return'<h3>'+srEsc(d.icon||'📿')+' '+srEsc(d.name)+' <small style="opacity:.6">('+done+'/'+d.items.length+')</small></h3>'+rows+'<button class="xb" style="width:100%" onclick="adlReset(\''+d.id+'\')">↺ '+tl('تصفير اليوم','Reset today')+'</button>'}
+var ADL_CUR={};
+function adlInner(d){var id=d.id,P=adlProg(dayKey(new Date()))[id]||{},done=0,tpl=d.tpl||'cards',its=d.items,body='';
+ its.forEach(function(it,i){if((P[i]||0)>=it.n)done++});
+ var head='<h3>'+srEsc(d.icon||'📿')+' '+srEsc(d.name)+' <small style="opacity:.6">('+done+'/'+its.length+')</small></h3>',tap=function(i){return'onclick="adlTap(\''+id+'\','+i+')"'};
+ if(tpl==='table'){body='<div class="lx-tw"><table class="lx-t"><thead><tr><th>#</th><th>'+tl('الذكر','Dhikr')+'</th><th>'+tl('العدد','Count')+'</th></tr></thead><tbody>'+its.map(function(it,i){var c=P[i]||0,ok=c>=it.n;return'<tr '+tap(i)+' class="'+(ok?'ok':'')+'"><td>'+(i+1)+'</td><td class="t">'+srEsc(it.t)+'</td><td class="c">'+(ok?'✅':c+' / '+it.n)+'</td></tr>'}).join('')+'</tbody></table></div>'}
+ else if(tpl==='compact'){body=its.map(function(it,i){var c=P[i]||0,ok=c>=it.n;return'<div class="lx-cp'+(ok?' ok':'')+'" '+tap(i)+'><span>'+srEsc(it.t)+'</span><b>'+(ok?'✅ ':'')+c+'/'+it.n+'</b></div>'}).join('')}
+ else if(tpl==='focus'){var cur=ADL_CUR[id];if(cur===undefined||!its[cur]){cur=0;for(var j=0;j<its.length;j++){if((P[j]||0)<its[j].n){cur=j;break}}}
+  var it=its[cur],c=P[cur]||0,ok=c>=it.n,pct=Math.min(100,Math.round(c/it.n*100)),f='onclick="adlFTap(\''+id+'\','+cur+')"';
+  body='<div class="xs" style="text-align:center">'+(cur+1)+' / '+its.length+'</div><div class="lx-ft" '+f+'>'+srEsc(it.t)+'</div><div class="lx-bar"><i style="width:'+pct+'%"></i></div><div class="lx-fc" '+f+'>'+(ok?'✅ ':'')+c+' / '+it.n+'</div><div class="xs" style="text-align:center">'+tl('اضغط على الذكر للعدّ','Tap the text to count')+'</div><div class="xr"><button class="xb" '+(cur<=0?'disabled style="opacity:.4"':'')+' onclick="adlNav(\''+id+'\','+(cur-1)+')">→ '+tl('السابق','Prev')+'</button><button class="xb" '+(cur>=its.length-1?'disabled style="opacity:.4"':'')+' onclick="adlNav(\''+id+'\','+(cur+1)+')">'+tl('التالي','Next')+' ←</button></div>'}
+ else{body=its.map(function(it,i){var c=P[i]||0,ok=c>=it.n;return'<div class="xc" '+tap(i)+' style="cursor:pointer;'+(ok?'opacity:.55':'')+'"><div style="font-size:17px;line-height:1.9">'+srEsc(it.t)+'</div><div class="xs">'+(ok?'✅ ':'')+c+' / '+it.n+'</div></div>'}).join('')}
+ return head+body+'<button class="xb" style="width:100%" onclick="adlReset(\''+id+'\')">↺ '+tl('تصفير اليوم','Reset today')+'</button>'}
+function adlFTap(id,i){var d=adlDefs().filter(function(x){return x.id===id})[0];if(!d||!d.items[i])return;var c=(adlProg(dayKey(new Date()))[id]||{})[i]||0;ADL_CUR[id]=(c<d.items[i].n&&c+1>=d.items[i].n&&i<d.items.length-1)?i+1:i;adlTap(id,i)}
+function adlNav(id,j){ADL_CUR[id]=j;lxAll()}
 function adlTap(id,i){var k=dayKey(new Date()),A=adlProg(k),d=adlDefs().filter(function(x){return x.id===id})[0];if(!d||!d.items[i])return;var P=A[id]||(A[id]={}),n=d.items[i].n,c=P[i]||0;P[i]=c>=n?0:c+1;localStorage.setItem('adlp_'+k,JSON.stringify(A));if(navigator.vibrate)try{navigator.vibrate(P[i]>=n?[30,30,30]:10)}catch(e){}lxAll()}
 function adlReset(id){var k=dayKey(new Date()),A=adlProg(k);delete A[id];localStorage.setItem('adlp_'+k,JSON.stringify(A));lxAll()}
 function adlList(){var el=$('adSet');if(!el)return;var L=adlDefs();el.innerHTML='<h3>📿 '+tl('قوائم أذكاري','My dhikr lists')+'</h3>'+(L.length?L.map(function(d){return'<div class="trow"><span class="pn">'+srEsc(d.icon||'📿')+' '+srEsc(d.name)+'<br><small style="opacity:.6;font-weight:400">'+d.items.length+tl(' ذكر',' items')+'</small></span><span><button class="mini-btn" onclick="adlForm(\''+d.id+'\')">✏️</button> <button class="mini-btn" onclick="adlDel(\''+d.id+'\')">🗑</button></span></div>'}).join(''):'<div class="xs">'+tl('لسه مفيش — اعمل قايمة زي أذكار النوم أو بعد الصلاة.','None yet — make a list like bedtime or after-prayer adhkar.')+'</div>')+'<button class="xb" style="width:100%;margin-top:8px" onclick="adlForm()">➕ '+tl('ضيف ذكر (قايمة)','Add dhikr list')+'</button><div id="adFm"></div>'}
-function adlForm(id){var d=adlDefs().filter(function(x){return x.id===id})[0]||{name:'',icon:'',items:[]};$('adFm').innerHTML='<div style="margin-top:10px"><input type="hidden" id="afId" value="'+(d.id||'')+'"><input class="ai" id="afN" maxlength="40" placeholder="'+tl('اسم القايمة (مثال: أذكار النوم)','List name')+'" value="'+srEsc(d.name)+'"><input class="ai" id="afI" maxlength="4" placeholder="'+tl('رمز (إيموجي)','Icon (emoji)')+'" value="'+srEsc(d.icon||'')+'"><textarea class="ai" id="afT" rows="6" placeholder="'+tl('كل ذكر في سطر، وبعده | والعدد (لو سبته يبقى مرة)\nمثال:\nسبحان الله | 33\nآية الكرسي | 1','One dhikr per line, then | and the count (default 1)')+'">'+srEsc(d.items.map(function(i){return i.t+' | '+i.n}).join('\n'))+'</textarea><button class="xb" style="width:100%;padding:12px" onclick="adlSave()">'+tl('حفظ','Save')+'</button></div>'}
-function adlSave(){var n=($('afN').value||'').trim().slice(0,40),its=($('afT').value||'').split('\n').map(function(l){l=l.trim();if(!l)return null;var i=l.lastIndexOf('|'),c=1,tx=l;if(i>0&&/^\d+$/.test(l.slice(i+1).trim())){c=Math.max(1,Math.min(10000,parseInt(l.slice(i+1))));tx=l.slice(0,i).trim()}return tx?{t:tx.slice(0,400),n:c}:null}).filter(Boolean);
+function adlForm(id){var d=adlDefs().filter(function(x){return x.id===id})[0]||{name:'',icon:'',items:[{t:'',n:1}]};
+ $('adFm').innerHTML='<div style="margin-top:10px"><input type="hidden" id="afId" value="'+(d.id||'')+'"><input class="ai" id="afN" maxlength="40" placeholder="'+tl('اسم القايمة (مثال: أذكار النوم)','List name')+'" value="'+srEsc(d.name)+'"><input class="ai" id="afI" maxlength="4" placeholder="'+tl('رمز (إيموجي)','Icon (emoji)')+'" value="'+srEsc(d.icon||'')+'">'
+ +'<div class="xs">'+tl('شكل العرض (القالب):','Display template:')+'</div>'+tplPick('afTpl',ADL_TPL,d.tpl||'cards')
+ +'<div class="xs" style="margin-top:8px">'+tl('الأذكار (كل ذكر في صف، ينفع يكون طويل):','Dhikr items (one per row, long text is fine):')+'</div><div class="ed-h ed-ad"><span>'+tl('الذكر','Dhikr')+'</span><span>'+tl('العدد','Count')+'</span><span></span></div><div id="afRows">'+d.items.map(function(i){return adfRow(i.t,i.n)}).join('')+'</div>'
+ +'<button type="button" class="xb" style="width:100%;margin:6px 0" onclick="adfAdd()">➕ '+tl('إضافة ذكر','Add dhikr')+'</button><button class="xb" style="width:100%;padding:12px" onclick="adlSave()">'+tl('حفظ','Save')+'</button></div>'}
+function adlSave(){var n=($('afN').value||'').trim().slice(0,40),its=[].slice.call(document.querySelectorAll('#afRows .ed-r')).map(function(r){var t=r.querySelector('.adf-t').value.trim(),c=parseInt(r.querySelector('.adf-n').value)||1;return t?{t:t.slice(0,800),n:Math.max(1,Math.min(10000,c))}:null}).filter(Boolean);
  if(!n)return toast(tl('اكتب اسم القايمة','Enter a list name'));if(!its.length)return toast(tl('اكتب ذكر واحد على الأقل','Enter at least one dhikr'));
- var d={id:$('afId').value||('a'+Date.now().toString(36)),name:n,icon:($('afI').value||'').trim().slice(0,4)||'📿',items:its},L=adlDefs().slice(),i=L.map(function(x){return x.id}).indexOf(d.id),isNew=i<0;if(!isNew)L[i]=d;else L.push(d);localStorage.setItem('adl',JSON.stringify(L));
+ var d={id:$('afId').value||('a'+Date.now().toString(36)),name:n,icon:($('afI').value||'').trim().slice(0,4)||'📿',tpl:$('afTpl').value||'cards',items:its},L=adlDefs().slice(),i=L.map(function(x){return x.id}).indexOf(d.id),isNew=i<0;if(!isNew)L[i]=d;else L.push(d);localStorage.setItem('adl',JSON.stringify(L));
  if(isNew)layAddX('adhkar','ad',d.id);toast('✅'+(isNew?' '+tl('اتضافت في صفحة الأذكار','Added to the Adhkar page'):''));adlList();lxAll();layEdit()}
 function adlDel(id){if(!confirm(tl('تمسح القايمة دي؟','Delete this list?')))return;localStorage.setItem('adl',JSON.stringify(adlDefs().filter(function(x){return x.id!==id})));adlList();lxAll();layEdit()}
 /* ===== كروت إضافية على الصفحات ===== */
@@ -2164,19 +2200,21 @@ function cwPut(id,v){var k=dayKey(currentDate),D=cwDay(k);if(v===''||v===null)de
 var _rtC=renderTracking;renderTracking=function(){_rtC.apply(this,arguments);try{cwRender()}catch(e){}};
 function cwList(){var el=$('cwSet');if(!el)return;var L=cwDefs(),T={yn:tl('نعم/لا','Yes/No'),num:tl('رقم','Number'),opt:tl('اختيارات','Options')};
  el.innerHTML='<h3>⭐ '+tl('عباداتي المخصصة','My custom worships')+'</h3>'+(L.length?L.map(function(d){return'<div class="trow"><span class="pn">'+srEsc(d.icon||'⭐')+' '+srEsc(d.name)+'<br><small style="opacity:.6;font-weight:400">'+T[d.type]+(d.pts?' · +'+d.pts:'')+(d.pen?' · −'+d.pen:'')+'</small></span><span><button class="mini-btn" onclick="cwForm(\''+d.id+'\')">✏️</button> <button class="mini-btn" onclick="cwDel(\''+d.id+'\')">🗑</button></span></div>'}).join(''):'<div class="xs">'+tl('لسه مفيش — ضيف عبادة بتتتبعها بنقاطك وشروطك.','None yet — add a worship with your own points and rules.')+'</div>')+'<button class="xb" style="width:100%;margin-top:8px" onclick="cwForm()">➕ '+tl('ضيف عبادة','Add worship')+'</button><div id="cwFm"></div>'}
-function cwForm(id){var d=cwDefs().filter(function(x){return x.id===id})[0]||{type:'yn',pts:10,pen:0,step:1,min:0,days:[],opts:[]},f=$('cwFm'),dn=[tl('أحد','Sun'),tl('اثنين','Mon'),tl('ثلاثاء','Tue'),tl('أربعاء','Wed'),tl('خميس','Thu'),tl('جمعة','Fri'),tl('سبت','Sat')];
+function cwForm(id){var d=cwDefs().filter(function(x){return x.id===id})[0]||{type:'yn',pts:10,pen:0,step:1,min:0,days:[],opts:[]},f=$('cwFm'),dn=[tl('أحد','Sun'),tl('اثنين','Mon'),tl('ثلاثاء','Tue'),tl('أربعاء','Wed'),tl('خميس','Thu'),tl('جمعة','Fri'),tl('سبت','Sat')],ord=[5,6,0,1,2,3,4],os=(d.opts&&d.opts.length)?d.opts:[{l:'',p:''},{l:'',p:''}];
+ f.dataset.tpl=d.tpl||'';
  f.innerHTML='<div style="margin-top:10px"><input type="hidden" id="cfId" value="'+(d.id||'')+'"><input class="ai" id="cfN" maxlength="40" placeholder="'+tl('اسم العبادة','Worship name')+'" value="'+srEsc(d.name||'')+'"><input class="ai" id="cfI" maxlength="4" placeholder="'+tl('رمز (إيموجي)','Icon (emoji)')+'" value="'+srEsc(d.icon||'')+'">'
  +'<select class="ai" id="cfT" onchange="cwShow()"><option value="yn"'+(d.type==='yn'?' selected':'')+'>'+tl('نعم / لا','Yes / No')+'</option><option value="num"'+(d.type==='num'?' selected':'')+'>'+tl('إدخال رقم (زي الصدقة)','Enter a number (like charity)')+'</option><option value="opt"'+(d.type==='opt'?' selected':'')+'>'+tl('اختيارات (زي الصلاة)','Options (like prayer)')+'</option></select>'
+ +'<div class="xs">'+tl('شكل العرض (القالب):','Display template:')+'</div><div id="cfTplBox"></div>'
  +'<div id="cfYN"><input class="ai" id="cfP" type="number" inputmode="numeric" placeholder="'+tl('النقاط','Points')+'" value="'+(d.pts||'')+'"><input class="ai" id="cfPen" type="number" inputmode="numeric" min="0" placeholder="'+tl('خصم عند «لا» / عدم الوصول للحد (اتركه فاضي لو مفيش خصم)','Deduction on «No» / below minimum (empty = none)')+'" value="'+(d.pen||'')+'"></div>'
  +'<div id="cfNUM"><input class="ai" id="cfU" maxlength="20" placeholder="'+tl('الوحدة (جنيه، صفحة...)','Unit')+'" value="'+srEsc(d.unit||'')+'"><input class="ai" id="cfS" type="number" inputmode="decimal" min="0" placeholder="'+tl('كل كام وحدة = النقاط','Every how many units = points')+'" value="'+(d.step||'')+'"><input class="ai" id="cfM" type="number" inputmode="decimal" min="0" placeholder="'+tl('الحد الأدنى (شرط)','Minimum (condition)')+'" value="'+(d.min||'')+'"></div>'
- +'<div id="cfOPT"><textarea class="ai" id="cfO" rows="4" placeholder="'+tl('كل اختيار في سطر بالشكل: الاسم:النقاط\nمثال:\nفي المسجد:30\nفي البيت:10\nفاتتني:-20','One option per line: name:points')+'">'+srEsc((d.opts||[]).map(function(o){return o.l+':'+o.p}).join('\n'))+'</textarea></div>'
- +'<div class="xs">'+tl('تظهر في أيام (سيبها فاضية = كل يوم):','Shown on days (none = every day):')+'</div><div class="xr">'+dn.map(function(n,i){return'<label class="xb" style="display:flex;gap:4px;align-items:center"><input type="checkbox" class="cfD" value="'+i+'"'+((d.days||[]).indexOf(i)>-1?' checked':'')+'>'+n+'</label>'}).join('')+'</div>'
+ +'<div id="cfOPT"><div class="xs">'+tl('الاختيارات (اسم + نقاط، والنقاط ممكن تكون بالسالب):','Options (name + points, negative allowed):')+'</div><div class="ed-h ed-op"><span>'+tl('الاختيار','Option')+'</span><span>'+tl('النقاط','Points')+'</span><span></span></div><div id="cfoRows">'+os.map(function(o){return cfoRow(o.l,o.p)}).join('')+'</div><button type="button" class="xb" style="width:100%;margin:6px 0" onclick="cfoAdd()">➕ '+tl('إضافة اختيار','Add option')+'</button></div>'
+ +'<div class="xs">'+tl('تظهر في أيام (سيبها فاضية = كل يوم):','Shown on days (none = every day):')+'</div><div class="cfd-g">'+ord.map(function(i){return'<label><input type="checkbox" class="cfD" value="'+i+'"'+((d.days||[]).indexOf(i)>-1?' checked':'')+'>'+dn[i]+'</label>'}).join('')+'</div>'
  +'<button class="xb" style="width:100%;padding:12px;margin-top:8px" onclick="cwSave()">'+tl('حفظ','Save')+'</button></div>';cwShow()}
-function cwShow(){var t=$('cfT').value;$('cfYN').style.display=t==='opt'?'none':'block';$('cfNUM').style.display=t==='num'?'block':'none';$('cfOPT').style.display=t==='opt'?'block':'none'}
+function cwShow(){var t=$('cfT').value,f=$('cwFm'),cur=($('cfTpl')||{}).value||f.dataset.tpl;$('cfYN').style.display=t==='opt'?'none':'block';$('cfNUM').style.display=t==='num'?'block':'none';$('cfOPT').style.display=t==='opt'?'block':'none';$('cfTplBox').innerHTML=tplPick('cfTpl',CW_TPL[t],cur)}
 function cwSave(){var n=($('cfN').value||'').trim().slice(0,40),ty=$('cfT').value;if(!n)return toast(tl('اكتب اسم العبادة','Enter a name'));
- var d={id:$('cfId').value||('c'+Date.now().toString(36)),name:n,icon:($('cfI').value||'').trim().slice(0,4)||'⭐',type:ty,pts:Math.round(+$('cfP').value)||0,pen:Math.max(0,Math.round(+$('cfPen').value)||0),days:[].slice.call(document.querySelectorAll('.cfD:checked')).map(function(x){return+x.value})};
+ var d={id:$('cfId').value||('c'+Date.now().toString(36)),name:n,icon:($('cfI').value||'').trim().slice(0,4)||'⭐',type:ty,tpl:$('cfTpl').value,pts:Math.round(+$('cfP').value)||0,pen:Math.max(0,Math.round(+$('cfPen').value)||0),days:[].slice.call(document.querySelectorAll('.cfD:checked')).map(function(x){return+x.value})};
  if(ty==='num'){d.unit=($('cfU').value||'').trim();d.step=Math.max(.01,+$('cfS').value||1);d.min=Math.max(0,+$('cfM').value||0);if(!d.pts)return toast(tl('اكتب النقاط','Enter the points'))}
- else if(ty==='opt'){d.opts=($('cfO').value||'').split('\n').map(function(l){var i=l.lastIndexOf(':');if(i<1)return null;var p=parseInt(l.slice(i+1));return isNaN(p)?null:{l:l.slice(0,i).trim().slice(0,40),p:p}}).filter(Boolean);if(d.opts.length<2)return toast(tl('اكتب اختيارين على الأقل بالشكل الاسم:النقاط','Enter at least two options as name:points'));d.pts=0}
+ else if(ty==='opt'){d.opts=[].slice.call(document.querySelectorAll('#cfoRows .ed-r')).map(function(r){var l=r.querySelector('.cfo-l').value.trim().slice(0,40),p=parseInt(r.querySelector('.cfo-p').value);return(l&&!isNaN(p))?{l:l,p:p}:null}).filter(Boolean);if(d.opts.length<2)return toast(tl('اكتب اختيارين على الأقل (اسم + نقاط)','Enter at least two options (name + points)'));d.pts=0}
  else if(!d.pts)return toast(tl('اكتب النقاط','Enter the points'));
  var L=cwDefs().slice(),i=L.map(function(x){return x.id}).indexOf(d.id);if(i>-1)L[i]=d;else L.push(d);localStorage.setItem('cw',JSON.stringify(L));toast('✅');cwList();cwRender();try{renderTracking()}catch(e){}}
 function cwDel(id){if(!confirm(tl('تمسح العبادة دي؟ (بياناتها القديمة بتفضل محفوظة بس مش بتتحسب)','Delete this worship? (old entries stay stored but stop counting)')))return;localStorage.setItem('cw',JSON.stringify(cwDefs().filter(function(x){return x.id!==id})));cwList();cwRender();try{renderTracking()}catch(e){}}
