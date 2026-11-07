@@ -234,6 +234,9 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .q-tafsir-status{font-size:13px;line-height:1.8;opacity:.8;padding:0 12px 8px}
 .q-tafsir-entry a{color:var(--ac);font-size:12px}
 
+.q-note-link{display:block}
+.q-note-preview{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}
+#qNoteText{resize:vertical;min-height:105px;user-select:text}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -316,7 +319,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
   <div id="khCard"></div>
   <div class="card"><h3>📚 السور</h3>
     <input class="ai" id="qSearch" placeholder="🔍 ابحث عن سورة (اسم أو رقم)" style="margin-top:0">
-    <div id="qBm"></div><div id="qMarksList" class="q-mark-list"></div><div id="qList"></div></div>
+    <div id="qBm"></div><div id="qMarksList" class="q-mark-list"></div><div id="qNotesList" class="q-mark-list"></div><div id="qList"></div></div>
   <div class="hint">نص المصحف (الرسم العثماني) من مشروع تنزيل — tanzil.net</div>
 </div>
 
@@ -492,8 +495,18 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
     <div class="q-inner-body">
       <div class="card">
         <h3 id="qActionRef"></h3><p class="qtxt" id="qActionVerse" style="font-size:24px"></p>
-        <div class="q-action-buttons"><button class="xb" type="button" onclick="qActionTafsir()">📖 تفسير الآية دي</button><button class="xb" type="button" onclick="qActionMarkPlace()">📍 وقفت هنا</button><button class="xb" type="button" onclick="Q_SEL=Q_ACTION_INDEX;qCloseAyahActions();qOpenTarteel()">🎤 ترتيل</button></div>
+        <div class="q-action-buttons"><button class="xb" type="button" onclick="qActionTafsir()">📖 تفسير الآية دي</button><button class="xb" type="button" onclick="qActionMarkPlace()">📍 وقفت هنا</button><button class="xb" type="button" onclick="qOpenAyahNote()">📝 دفتر الآيات</button><button class="xb" type="button" onclick="Q_SEL=Q_ACTION_INDEX;qCloseAyahActions();qOpenTarteel()">🎤 ترتيل</button></div>
       </div>
+      <form class="card" id="qNoteEditor" onsubmit="event.preventDefault();qSaveAyahNote()" hidden>
+        <h3>📝 دفتر الآيات</h3>
+        <label for="qNoteText">ملاحظتك على الآية دي</label>
+        <textarea class="ai" id="qNoteText" rows="4" maxlength="1500" placeholder="اكتب ملاحظتك هنا…"></textarea>
+        <div class="q-action-buttons">
+          <button class="xb" type="submit">حفظ الملاحظة</button>
+          <button class="xb" type="button" onclick="this.form.hidden=true">إلغاء</button>
+          <button class="xb" id="qNoteDelete" type="button" onclick="qSaveAyahNote(true)" hidden>حذف الملاحظة</button>
+        </div>
+      </form>
       <form class="card" onsubmit="event.preventDefault();qSaveColorMark()">
         <h3>🔖 علامة ملوّنة</h3>
         <label for="qMarkName">اسم العلامة</label><input class="ai" id="qMarkName" maxlength="60" placeholder="مثال: حفظ أو مراجعة">
@@ -1149,7 +1162,7 @@ function khContinue(){let k=khGet();qOpenIdx(k?Math.min(k.pos+1,6235):0)}
 function qRenderList(){let f=qNorm($('qSearch').value),h='',bm=localStorage.getItem('qBm');
  $('qBm').innerHTML=(bm!==null&&Q_A&&Q_A[+bm])?`<button class="xb" style="width:100%;margin:0 0 8px" onclick="qOpenIdx(${+bm})">📍 كمّل من علامتك: سورة ${Q_NAMES[Q_A[+bm][0]-1]} آية ${Q_A[+bm][1]}</button>`:'';
  Q_NAMES.forEach((n,i)=>{if(f&&qNorm(n).toLowerCase().indexOf(f.toLowerCase())<0&&String(i+1)!==f)return;h+=`<button class="qs" onclick="qOpen(${i+1})"><span class="qnum">${i+1}</span><span>سورة ${n}</span></button>`});
- $('qList').innerHTML=h||'<p class="xs">مفيش سورة بالاسم ده</p>';qRenderMarks()}
+ $('qList').innerHTML=h||'<p class="xs">مفيش سورة بالاسم ده</p>';qRenderMarks();qRenderAyahNotes()}
 function renderQuran(){qRenderK();qRenderList();qLoad().then(()=>{qRenderK();qRenderList()}).catch(()=>{})}
 function qPgOf(i){let lo=0,hi=603;while(lo<hi){let m=(lo+hi+1)>>1;if(Q_PS[m]<=i)lo=m;else hi=m-1}return lo+1}
 function qShow(){$('qReader').style.display='flex';document.body.style.overflow='hidden';qRefreshFloatingPlayer()}
@@ -1789,6 +1802,66 @@ function qApplyColoredMarks() {
     badge.title = mark.name;
   });
 }
+/* Notes are keyed by the same verse index used by bookmarks. */
+function qReadAyahNotes() {
+  try {
+    const notes = JSON.parse(localStorage.getItem('qAyahNotes') || '{}');
+    return notes && typeof notes === 'object' && !Array.isArray(notes) ? notes : {};
+  } catch { return {}; }
+}
+function qRenderAyahNotes() {
+  const list = $('qNotesList');
+  list.replaceChildren();
+  if (!Q_A) return;
+  const entries = Object.entries(qReadAyahNotes()).filter(([index,note]) =>
+    /^\d+$/.test(index) && Q_A[+index] && typeof note === 'string' && note.trim());
+  if (!entries.length) return;
+  const title = document.createElement('h3');
+  title.textContent = '📝 دفتر الآيات';
+  list.append(title);
+  entries.forEach(([index,note]) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'q-mark-link q-note-link';
+    const text = document.createElement('span');
+    text.className = 'q-note-preview';
+    text.textContent = note;
+    const location = document.createElement('small');
+    location.textContent = qVerseLocation(+index);
+    button.append(text,location);
+    button.onclick = () => {
+      qOpenIdx(+index);
+      qOpenAyahActions(+index);
+      qOpenAyahNote();
+    };
+    list.append(button);
+  });
+}
+function qOpenAyahNote() {
+  if (Q_ACTION_INDEX === null) return;
+  const note = qReadAyahNotes()[Q_ACTION_INDEX] || '';
+  $('qNoteText').value = note;
+  $('qNoteDelete').hidden = !note;
+  $('qNoteEditor').hidden = false;
+  $('qNoteText').focus();
+}
+function qSaveAyahNote(remove = false) {
+  if (Q_ACTION_INDEX === null) return;
+  const note = $('qNoteText').value.trim().slice(0,1500);
+  if (!remove && !note) {
+    toast('اكتب ملاحظة الأول.');
+    return;
+  }
+  const notes = qReadAyahNotes();
+  if (remove) delete notes[Q_ACTION_INDEX];
+  else notes[Q_ACTION_INDEX] = note;
+  try { localStorage.setItem('qAyahNotes',JSON.stringify(notes)); }
+  catch { toast('تعذّر حفظ الملاحظة. اتأكد إن مساحة الحفظ متاحة.'); return; }
+  $('qNoteEditor').hidden = true;
+  qRenderAyahNotes();
+  toast(remove ? 'تم حذف الملاحظة' : '📝 تم حفظ الملاحظة');
+}
+
 function qOpenAyahActions(index) {
   if (!Q_A?.[index]) return;
   Q_ACTION_INDEX = index;
@@ -1797,6 +1870,7 @@ function qOpenAyahActions(index) {
   $('qActionVerse').textContent = Q_A[index][2];
   $('qMarkName').value = mark?.name || '';
   $('qMarkRemove').hidden = !mark;
+  $('qNoteEditor').hidden = true;
   $('qAyahActions').hidden = false;
   qChooseMarkColor(mark?.color || Q_MARK_COLORS[0][0]);
 }
@@ -2774,7 +2848,8 @@ function hfSetup(id) {
       <label for="hfMode">${tl('نوع الاختبار','Quiz type')}</label>
       <select class="ai" id="hfMode" onchange="hfSetupLimits()">
         <option value="random">${tl('مقاطع عشوائية','Random passages')}</option>
-        <option value="similar">${tl('أسئلة المتشابهات','Similar verses')}</option>
+        <option value="similar">${tl('المتشابهات · اختيارات','Similar verses · choices')}</option>
+        <option value="similar-recital">${tl('المتشابهات · تسميع الموضعين','Similar verses · paired recital')}</option>
       </select>
       <label for="hfQuizCount" id="hfCountLabel"></label>
       <input class="ai" id="hfQuizCount" type="number" inputmode="numeric" min="1" required value="${Math.min(3, Math.floor(length / size))}">
@@ -2792,17 +2867,22 @@ function hfSetup(id) {
 }
 
 function hfSetupLimits() {
-  const similar = $('hfMode').value === 'similar';
+  const mode = $('hfMode').value;
+  const paired = mode === 'similar-recital';
+  const similar = mode !== 'random';
   const size = $('hfQuizSize');
   const count = $('hfQuizCount');
   $('hfSizeRow').hidden = size.disabled = similar;
-  $('hfCountLabel').textContent = similar ? tl('عدد الأسئلة','Number of questions') : tl('عدد المقاطع','Number of passages');
+  $('hfCountLabel').textContent = paired
+    ? tl('عدد أزواج المواضع المتشابهة (كل زوج موضعان)','Number of similar pairs (two passages each)')
+    : similar ? tl('عدد الأسئلة','Number of questions') : tl('عدد المقاطع','Number of passages');
   if (similar) {
     count.removeAttribute('max');
-    $('hfSetupHint').textContent = tl(
-      'اختار التكملة الصح، وبعدها سمّع الآية اللي بعدها بالكلمات المخفية.',
-      'Choose the correct continuation, then recite the following verse with hidden words.'
-    );
+    $('hfSetupHint').textContent = paired
+      ? tl('سمّع من البداية المعروضة. بعد ما تجيب ٩٠٪، هيظهر الموضع المتشابه، وممكن يكون في سورة تانية.',
+           'Recite from the opening. Reach 90% to see its matching passage, which may be in another surah.')
+      : tl('اختار التكملة الصح، وبعدها سمّع الآية اللي بعدها بالكلمات المخفية.',
+           'Choose the correct continuation, then recite the following verse with hidden words.');
     return;
   }
   const max = size.validity.valid ? Math.floor(+size.max / +size.value) : 0;
@@ -2834,23 +2914,27 @@ function hfBuildSimilarIndex() {
   return {words, keys, byOpening};
 }
 
-function hfSimilarQuestions(first, last) {
+function hfSimilarQuestions(first, last, paired = false) {
   if (!hfSimilarIndex) hfSimilarIndex = hfBuildSimilarIndex();
   const {words, keys, byOpening} = hfSimilarIndex;
   const questions = [];
+  const usedPairs = new Set();
   for (let index = first; index <= last; index++) {
     const surah = Q_A[index][0];
-    if (Q_A[index + 1]?.[0] !== surah) continue;
+    if (!paired && Q_A[index + 1]?.[0] !== surah) continue;
     const line = keys[index];
     const peers = byOpening.get(line.slice(0, 2).join(' ')) || [];
     const candidates = [];
     for (const peer of peers) {
       if (peer === index) continue;
+      const pairKey = Math.min(index,peer) + ':' + Math.max(index,peer);
+      if (paired && usedPairs.has(pairKey)) continue;
       const other = keys[peer];
       let shared = 0;
       while (shared < Math.min(line.length, other.length) && line[shared] === other[shared]) shared++;
       if (shared === line.length && shared === other.length) {
-        if (index === last || Q_A[index + 2]?.[0] !== surah || Q_A[peer + 1]?.[0] !== Q_A[peer][0]) continue;
+        if (Q_A[peer + 1]?.[0] !== Q_A[peer][0]) continue;
+        if (paired ? Q_A[index + 1]?.[0] !== surah : index === last || Q_A[index + 2]?.[0] !== surah) continue;
         if (!keys[index + 1].length || !keys[peer + 1].length ||
             keys[index + 1].join(' ') === keys[peer + 1].join(' ')) continue;
         candidates.push({
@@ -2868,7 +2952,8 @@ function hfSimilarQuestions(first, last) {
     const longest = Math.max(...candidates.map(candidate => candidate.shared));
     const best = candidates.filter(candidate => candidate.shared === longest);
     const question = best[Math.floor(Math.random() * best.length)];
-    question.options = hfShuffle([
+    if (paired) usedPairs.add(Math.min(question.index,question.peer) + ':' + Math.max(question.index,question.peer));
+    else question.options = hfShuffle([
       {text: question.right, correct: true},
       {text: question.wrong, correct: false}
     ]);
@@ -2882,7 +2967,9 @@ async function hfBegin(id) {
   if (!form.reportValidity()) return;
   const range = hfGet().u.find(item => item.id === id);
   if (!range) return;
-  const similar = $('hfMode').value === 'similar';
+  const mode = $('hfMode').value;
+  const paired = mode === 'similar-recital';
+  const similar = mode !== 'random';
   const count = +$('hfQuizCount').value;
   const size = +$('hfQuizSize').value;
   const button = $('hfBeginBtn');
@@ -2896,17 +2983,19 @@ async function hfBegin(id) {
       toast(tl('نطاق الحفظ غير صالح.','Invalid memorized range.'));
       return;
     }
-    const pool = similar ? hfSimilarQuestions(first, last) : hfRandomChunks(first, last, count, size);
+    const pool = similar ? hfSimilarQuestions(first, last, paired) : hfRandomChunks(first, last, count, size);
     if (pool.length < count) {
       const hint = $('hfSetupHint');
-      hint.textContent = pool.length
-        ? tl('المتاح هنا ' + qn(pool.length) + ' سؤال متشابهات. قلّل العدد وجرّب تاني.',
+      hint.textContent = paired && pool.length
+        ? tl('المتاح هنا ' + qn(pool.length) + ' من أزواج المتشابهات. قلّل العدد وجرّب تاني.',
+             'Only ' + pool.length + ' similar pairs are available here. Reduce the count.')
+        : pool.length ? tl('المتاح هنا ' + qn(pool.length) + ' سؤال متشابهات. قلّل العدد وجرّب تاني.',
              'Only ' + pool.length + ' similar-verse questions are available here. Reduce the count.')
         : tl('ملقتش متشابهات مناسبة في النطاق ده. جرّب نطاق حفظ تاني.',
              'No matching questions in this range. Try another saved range.');
       return;
     }
-    hfSession = {id, similar, questions: pool.slice(0, count), step: 0, score: 0, answer: null, recital: null};
+    hfSession = {id, similar, paired, pairSide:0, questions: pool.slice(0, count), step: 0, score: 0, answer: null, recital: null};
     hfOpenQuestion();
   } catch (error) {
     toast(tl('تعذّر تحميل الاختبار. اتأكد إن المصحف متاح.','Could not load the quiz. Check that the Quran text is available.'));
@@ -2938,7 +3027,7 @@ function hfWordMask(total, previous) {
   return mask;
 }
 
-function hfOpenRecital(start, end) {
+function hfOpenRecital(start, end, opening = null) {
   let total = 0;
   const verses = Q_A.slice(start, end + 1).map(verse => ({
     tokens: verse[2].trim().split(/\s+/).map(text => ({
@@ -2946,12 +3035,32 @@ function hfOpenRecital(start, end) {
     })),
     number: verse[1]
   }));
-  hfSession.recital = {start, end, verses, total, mask: hfWordMask(total), accuracy: null};
+  if (opening !== null) {
+    // Keep the given opening visible and count only the words the user must supply.
+    const shown = Math.min(opening, Math.max(0,total - 1));
+    verses.forEach(verse => verse.tokens.forEach(token => {
+      if (token.word !== null) token.word = token.word < shown ? null : token.word - shown;
+    }));
+    total -= shown;
+  }
+  const mask = opening === null ? hfWordMask(total) : Array(total).fill(true);
+  hfSession.recital = {start,end,verses,total,mask,opening,accuracy:null};
+}
+
+function hfOpenPairSide() {
+  const session = hfSession;
+  const question = session.questions[session.step];
+  const start = session.pairSide === 0 ? question.index : question.peer;
+  const opening = hfSimilarWords(Q_A[start][2]).slice(0,question.shared)
+    .filter(word => /\p{L}/u.test(hfSimilarKey(word))).length;
+  hfOpenRecital(start,start + Number(question.next),opening);
 }
 
 function hfOpenQuestion() {
   const session = hfSession;
-  if (!session.similar) {
+  session.pairSide = 0;
+  if (session.paired) hfOpenPairSide();
+  else if (!session.similar) {
     const {start, end} = session.questions[session.step];
     hfOpenRecital(start, end);
   }
@@ -2979,7 +3088,9 @@ function hfRecitalHtml(recital) {
   let retry = '';
   if (recital.accuracy !== null) {
     const accuracy = tl('دقتك ' + qn(recital.accuracy) + '٪. ', 'Accuracy: ' + recital.accuracy + '%. ');
-    retry = accuracy + (recital.total > 1
+    retry = accuracy + (recital.opening != null
+      ? tl('جرّب تسمّع نفس الموضع من البداية المعروضة.', 'Try the same passage from the displayed opening.')
+      : recital.total > 1
       ? tl('جرّب نفس الموضع بإخفاء جديد.', 'Try this passage again with different words hidden.')
       : tl('جرّب نفس الكلمة مرة تانية.', 'Try the same word again.'));
   }
@@ -3021,11 +3132,15 @@ function hfGradeRecital(form) {
   if (mistakes * 10 <= recital.total) {
     hfSession.lastResult = {accuracy, ref: hfVerseRef(recital.start)};
     toast(tl('✅ دقتك ' + qn(accuracy) + '٪', '✅ Accuracy: ' + accuracy + '%'));
-    hfNext(true);
+    if (hfSession.paired && hfSession.pairSide === 0) {
+      hfSession.pairSide = 1;
+      hfOpenPairSide();
+      hfShowQuestion();
+    } else hfNext(true);
     return;
   }
   recital.accuracy = accuracy;
-  recital.mask = hfWordMask(recital.total, recital.mask);
+  recital.mask = recital.opening == null ? hfWordMask(recital.total,recital.mask) : Array(recital.total).fill(true);
   hfShowQuestion();
 }
 
@@ -3044,7 +3159,11 @@ function hfShowQuestion() {
   const heading = (session.similar ? tl('متشابهات','Similar verses') : tl('تسميع','Recital')) +
     ' · ' + qn(session.step + 1) + '/' + qn(session.questions.length);
   let content;
-  if (session.similar && session.recital) {
+  if (session.paired) {
+    const title = session.pairSide === 0 ? tl('سمّع الموضع الأول','Recite the first passage') :
+      tl('سمّع الموضع المتشابه','Recite the matching passage');
+    content = '<h4>' + title + '</h4>' + hfRecitalHtml(session.recital);
+  } else if (session.similar && session.recital) {
     const rightRef = hfVerseRef(question.index + Number(question.next));
     const wrongRef = hfVerseRef(question.peer + Number(question.next));
     content = `<p class="xs">✅ ${tl('إجابة صحيحة','Correct')} · ${rightRef}</p>
@@ -3077,7 +3196,7 @@ function hfShowQuestion() {
 }
 
 function hfChoose(index) {
-  if (!hfSession?.similar || hfSession.answer !== null) return;
+  if (!hfSession?.similar || hfSession.paired || hfSession.answer !== null) return;
   const question = hfSession.questions[hfSession.step];
   hfSession.answer = question.options[index].correct;
   if (hfSession.answer) hfOpenRecital(question.follow, question.follow);
@@ -3097,7 +3216,7 @@ function hfNext(correct) {
   if (!session.similar) hfRate(session.id, session.score / total >= 0.9);
   $('hfTest').innerHTML = `<div class="card">
     <h3>📋 ${tl('نتيجة الاختبار','Quiz results')}</h3>${hfLastResultHtml(session)}
-    <p role="status">${qn(session.score)} / ${qn(total)} ${session.similar ? tl('إجابات صحيحة','correct answers') : tl('مقاطع سمّعتها صح','passages recited correctly')}</p>
+    <p role="status">${qn(session.score)} / ${qn(total)} ${session.paired ? tl('أزواج سمّعتها صح','pairs recited correctly') : session.similar ? tl('إجابات صحيحة','correct answers') : tl('مقاطع سمّعتها صح','passages recited correctly')}</p>
     <button class="xb" onclick="hfSetup(${session.id})">↻ ${tl('اختبار جديد','New quiz')}</button>
     <button class="xb" onclick="hfClose()">✕ ${tl('إغلاق','Close')}</button>
   </div>`;
