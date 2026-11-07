@@ -108,7 +108,13 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .tabbar{overflow-x:auto;scrollbar-width:none}.tabbar::-webkit-scrollbar{display:none}.tabbar .tab{min-width:56px}.hfw.h{color:transparent;background:rgba(var(--fg),.25);border-radius:6px;cursor:pointer}.hfw.h.rv{color:inherit;background:none}.gpm{max-width:82%;padding:8px 12px;border-radius:14px;margin:6px 0;background:rgba(var(--fg),.1);font-size:14px;line-height:1.6;word-break:break-word}.gpm.me{margin-inline-start:auto;background:rgba(255,215,0,.18)}.gpm small{display:block;opacity:.6;font-size:11px}
 .hfw.er{background:rgba(229,57,53,.55);color:transparent;border-radius:6px}.hfw.er.rv{color:#ff8a80;background:none}
 .tab.sec{display:none!important}.tab.dot{position:relative}.tab.dot::after{content:'';position:absolute;top:6px;right:calc(50% - 20px);width:9px;height:9px;border-radius:50%;background:#e53935}#moreSh{position:fixed;inset:0;z-index:60;display:none;background:rgba(0,0,0,.55);align-items:flex-end;justify-content:center}#moreSh.open{display:flex}#moreSh .mbox{width:100%;max-width:480px;background:#16242b;border-radius:18px 18px 0 0;padding:16px 16px 86px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}#moreSh button{position:relative;padding:18px 8px;border:0;border-radius:14px;background:rgba(var(--fg),.1);color:inherit;font:inherit;font-size:15px}
-.xb.on{background:rgba(255,213,79,.28);border-color:#ffd54f}.lay-hide{display:none!important}
+.xb.on{background:rgba(255,213,79,.28);border-color:#ffd54f}
+.hf-verse{font-size:21px;margin:8px 0}
+.hf-option{display:block;width:100%;text-align:start;line-height:1.8;margin:8px 0}
+.hf-option small{display:block;opacity:.85}
+.hf-answer{margin:12px 0}
+.hf-answer summary{cursor:pointer;color:var(--ac);padding:8px 0}
+
 /* ===== قوالب العبادات والأذكار + محررات الجداول ===== */
 .tpl-pick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
 .tpl-pick button{display:flex;align-items:center;gap:6px;justify-content:center;padding:10px 6px;border-radius:12px;border:1.5px solid rgba(var(--fg),.2);background:transparent;color:var(--tx);font-family:inherit;font-size:13px;cursor:pointer}
@@ -296,7 +302,7 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 
   </div>
 <div class="sset" id="ss-theme" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-theme"></b></div><div class="card"><h3>🎨 لون البرنامج</h3><div id="skyScope" style="margin-bottom:8px"></div><div id="thmRow"></div></div></div>
-<div class="sset" id="ss-screens" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-screens"></b></div><div class="card" id="cwSet"></div><div class="card" id="adSet"></div><div class="card" id="layBox"></div><div class="card"><div class="xc" id="tdSet"></div></div><div class="card"><div class="xc" id="qadaSet"></div></div><div class="card">
+<div class="sset" id="ss-screens" style="display:none"><div class="ssh"><button class="mini-btn" onclick="setBack()">✕ رجوع</button><b id="ssh-screens"></b></div><div class="card" id="cwSet"></div><div class="card" id="adSet"></div><div class="card"><div class="xc" id="tdSet"></div></div><div class="card"><div class="xc" id="qadaSet"></div></div><div class="card">
     <h3>🔔 التنبيهات</h3>
     <div class="trow"><span class="pn">تنبيه قبل كل صلاة</span><button class="tog" id="remToggle">مغلق</button></div>
     <div class="trow"><span class="pn">قبل الصلاة بـ</span><button class="tog on" id="remMinBtn">10 دقائق</button></div>
@@ -1967,23 +1973,18 @@ function hfIn(n){var d=new Date();d.setDate(d.getDate()+n);return dayKey(d)}
 function hfCount(h){var S={};h.u.forEach(function(x){for(var i=x.a;i<=x.b;i++)S[x.s*1000+i]=1});return Object.keys(S).length}
 function hfStreak(h){var n=0,d=new Date();if(!h.dl[dayKey(d)])d.setDate(d.getDate()-1);while(h.dl[dayKey(d)]){n++;d.setDate(d.getDate()-1)}return n}
 function hfName(x){return Q_NAMES[x.s-1]+' '+qn(x.a)+(x.b>x.a?'–'+qn(x.b):'')}
-function hfSz(){return +localStorage.getItem('hfSz')||35}
-function hfRender(){var b=$('hfBox');if(!b)return;var h=hfGet(),n=hfCount(h),td=dayKey(new Date()),due=h.u.filter(function(x){return x.due<=td}),o='';
+function hfRender(){hfSession=null;var b=$('hfBox');if(!b)return;var h=hfGet(),n=hfCount(h),td=dayKey(new Date()),due=h.u.filter(function(x){return x.due<=td}),o='';
  for(var i=1;i<=114;i++)o+='<option value="'+i+'">'+i+'. '+Q_NAMES[i-1]+'</option>';
- var sz=hfSz(),row=function(x,isDue){return'<div class="xc"><b>'+hfName(x)+'</b><div class="xs">'+tl('المستوى ','Level ')+x.box+'/6 · '+(isDue?tl('مستحقة النهارده','due today'):tl('الجاية: ','next: ')+x.due)+'</div><div class="xr"><button class="xb" onclick="hfListen('+x.id+')">🎧 ×3</button><button class="xb" onclick="hfStart('+x.id+',\'a\')">🧩 '+tl('تسميع بالأجزاء','Chunk recital')+'</button>'+(isDue?'<button class="xb" onclick="hfRate('+x.id+',1)">✅ '+tl('سهلة','Easy')+'</button><button class="xb" onclick="hfRate('+x.id+',0)">😕 '+tl('صعبة','Hard')+'</button>':'')+'<button class="xb" onclick="hfDel('+x.id+')">🗑</button></div></div>'};
+ var row=function(x,isDue){return'<div class="xc"><b>'+hfName(x)+'</b><div class="xs">'+tl('المستوى ','Level ')+x.box+'/6 · '+(isDue?tl('مستحقة النهارده','due today'):tl('الجاية: ','next: ')+x.due)+'</div><div class="xr"><button class="xb" onclick="hfListen('+x.id+')">🎧 ×3</button><button class="xb" onclick="hfSetup('+x.id+')">🧩 '+tl('اختبر حفظك','Test your memorization')+'</button>'+(isDue?'<button class="xb" onclick="hfRate('+x.id+',1)">✅ '+tl('سهلة','Easy')+'</button><button class="xb" onclick="hfRate('+x.id+',0)">😕 '+tl('صعبة','Hard')+'</button>':'')+'<button class="xb" onclick="hfDel('+x.id+')">🗑</button></div></div>'};
  b.innerHTML='<div class="card"><h3>📈 '+tl('تقدّمك','Progress')+'</h3><div class="sum-grid"><div class="stat"><div class="num">'+qn(n)+'</div><div class="lbl">'+tl('آية محفوظة','ayahs memorized')+'</div></div><div class="stat"><div class="num">'+(n*100/6236).toFixed(1)+'%</div><div class="lbl">'+tl('من المصحف','of the Quran')+'</div></div><div class="stat"><div class="num">🔥'+hfStreak(h)+'</div><div class="lbl">'+tl('أيام مراجعة','review days')+'</div></div></div></div>'
- +'<div class="card"><h3>📏 '+tl('حجم الجزء في التسميع','Chunk size')+'</h3><select class="ai" onchange="localStorage.setItem(\'hfSz\',this.value)"><option value="20"'+(sz===20?' selected':'')+'>'+tl('آية – آيتين','1–2 ayahs')+'</option><option value="35"'+(sz===35?' selected':'')+'>'+tl('ربع صفحة تقريبًا','~quarter page')+'</option><option value="70"'+(sz===70?' selected':'')+'>'+tl('نص صفحة تقريبًا','~half page')+'</option></select></div>'
  +'<div class="card"><h3>➕ '+tl('حفظت جديد','Add memorized')+'</h3><select class="ai" id="hfS">'+o+'</select><div style="display:flex;gap:8px"><input class="ai" id="hfA" type="number" inputmode="numeric" min="1" placeholder="'+tl('من آية','From ayah')+'"><input class="ai" id="hfB" type="number" inputmode="numeric" min="1" placeholder="'+tl('إلى آية','To ayah')+'"></div><button class="xb" style="width:100%;padding:12px" onclick="hfSave()">'+tl('حفظ','Save')+'</button><div class="xs">'+tl('هتتحط في جدول مراجعة متباعد: بكرة، بعده بيومين، 4، 7، 14، 30، 60 يوم.','Added to a spaced review schedule: 1, 2, 4, 7, 14, 30, 60 days.')+'</div></div>'
  +'<div id="hfTest"></div><div class="card"><h3>🔁 '+tl('مراجعة النهارده','Review today')+' ('+qn(due.length)+')</h3>'+(due.length?due.map(function(x){return row(x,1)}).join(''):'<div class="xs">'+tl('مفيش مراجعة مستحقة 👌','Nothing due 👌')+'</div>')+'</div>'
  +(h.u.length>due.length?'<div class="card"><h3>📚 '+tl('محفوظاتك','Your memorization')+'</h3>'+h.u.filter(function(x){return x.due>td}).map(function(x){return row(x,0)}).join('')+'</div>':'')}
-function hfSave(){var s=+$('hfS').value,a=+$('hfA').value,b=+$('hfB').value||a;if(!(a>=1)||b<a)return toast(tl('اكتب الآيات صح','Enter valid ayahs'));
+function hfSave(){var s=+$('hfS').value,a=+$('hfA').value,b=+$('hfB').value||a;if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<a)return toast(tl('اكتب الآيات صح','Enter valid ayahs'));
  qLoad().then(function(){var c=Q_ST[s+1]!==undefined?Q_ST[s+1]-Q_ST[s]:Q_A.length-Q_ST[s];if(b>c)return toast(tl('السورة فيها '+c+' آية بس','This surah has only '+c+' ayahs'));
   var h=hfGet();h.u.push({id:Date.now()%1e9+h.u.length,s:s,a:a,b:b,box:0,due:hfIn(1)});hfSet(h);toast('✅');hfRender()}).catch(function(){toast(tl('تعذّر تحميل المصحف','Could not load the Quran'))})}
 function hfRate(id,ok){var h=hfGet(),x=h.u.filter(function(y){return y.id===id})[0];if(!x)return;x.box=ok?Math.min(x.box+1,6):Math.max(x.box-2,0);x.due=hfIn(ok?HF_INT[x.box]:1);var k=dayKey(new Date());h.dl[k]=(h.dl[k]||0)+1;hfSet(h);hfRender()}
 function hfDel(id){if(!confirm(tl('تمسح الجزء ده؟','Delete this item?')))return;var h=hfGet();h.u=h.u.filter(function(y){return y.id!==id});hfSet(h);hfRender()}
-function hfTest(id){var x=hfGet().u.filter(function(y){return y.id===id})[0],el=$('hfTest');if(!x)return;
- qLoad().then(function(){var h='';for(var i=Q_ST[x.s]+x.a-1;i<=Q_ST[x.s]+x.b-1&&Q_A[i];i++){h+=Q_A[i][2].split(' ').map(function(w,j){return'<span class="hfw'+(j>0&&Math.random()<.45?' h':'')+'" onclick="this.classList.add(\'rv\')">'+srEsc(w)+'</span>'}).join(' ')+' ﴿'+qn(Q_A[i][1])+'﴾ '}
-  el.innerHTML='<div class="card"><h3>🧪 '+hfName(x)+'</h3><div style="font-size:22px;line-height:2.5;text-align:justify">'+h+'</div><div class="xs">'+tl('اضغط على الكلمة المخفية بعد ما تتذكرها.','Tap a hidden word after recalling it.')+'</div><div class="xr"><button class="xb" onclick="hfTest('+id+')">🔄 '+tl('إخفاء جديد','Re-hide')+'</button><button class="xb" onclick="document.querySelectorAll(\'#hfTest .hfw\').forEach(function(e){e.classList.add(\'rv\')})">👁 '+tl('إظهار الكل','Show all')+'</button><button class="xb" onclick="$(\'hfTest\').innerHTML=\'\'">✕</button></div></div>';el.scrollIntoView({behavior:'smooth'})}).catch(function(){toast(tl('تعذّر تحميل المصحف','Could not load the Quran'))})}
 function hfListen(id){var x=hfGet().u.filter(function(y){return y.id===id})[0];if(!x)return;if(HF_A){HF_A.pause();HF_A=null;HF_Q=[];toast('⏹');return}
  HF_Q=[];for(var i=x.a;i<=x.b;i++)for(var r=0;r<3;r++)HF_Q.push(qAudUrl(x.s,i));HF_A=new Audio();toast('🎧 '+hfName(x)+' ×3');
  var nx=function(){if(!HF_Q.length){HF_A=null;return}var u=HF_Q.shift();qSetSrc(HF_A,u).then(function(){var p=HF_A&&HF_A.play();if(p&&p.catch)p.catch(function(){HF_A=null;HF_Q=[];toast(tl('تعذّر تشغيل الصوت 😕','Audio failed'))})})};
@@ -2040,24 +2041,258 @@ function gpRepShow(any){var el=$('gpBody'),k=GP_RK,a=GP_RD.filter(function(x){re
  el.innerHTML='<div class="seg" style="flex-wrap:wrap;gap:4px">'+WK_ALL.filter(function(z){return z==='w'||GP_RD.some(function(x){return x[z]})}).map(function(z){return'<button style="flex:1 0 30%" class="'+(z===k?'on':'')+'" onclick="GP_RK=\''+z+'\';gpRepShow()">'+WK_KN[z][0]+' '+tl(WK_KN[z][3],WK_KN[z][2])+'</button>'}).join('')+'</div>'
  +(any===false?'<div class="xs">'+tl('مفيش تقارير عندك لسه — بتتعمل تلقائي (أسبوعي كل سبت، وشهري أول الشهر).','You have no reports yet — they are generated automatically.')+'</div>':'')
  +(a.length?'<div class="card"><div class="xs">'+tl('بيتشارك آخر تقاريرك مع الجروب لما تفتح الصفحة دي.','Your latest reports are shared with the group when you open this page.')+'</div>'+a.map(function(x,i){return'<div class="trow"><span class="pn">'+(i?'':'🥇 ')+srEsc(x.n)+'<br><small style="opacity:.6;font-weight:400">'+srEsc(x.d.sat)+' · 🕌 '+(x.d.it.pr||0)+'% · 📖 '+(x.d.it.q||0)+'% · 🌌 '+(x.d.it.qy||0)+'%</small></span><span class="pt">'+qn(x.d.pts)+'</span></div>'}).join('')+'</div>':'<div class="xs" style="margin-top:8px">'+tl('محدش شارك تقرير من النوع ده لسه.','Nobody has shared this kind yet.')+'</div>')}
-/* ===== تسميع بالأجزاء + تسميع بالمايك ===== */
-var HS=null;
-function hfChunks(x,words){var a=Q_ST[x.s]+x.a-1,b=Q_ST[x.s]+x.b-1,out=[],s=a,c=0;for(var i=a;i<=b;i++){c+=Q_A[i][2].split(' ').length;if(c>=words||i===b){out.push([s,i]);s=i+1;c=0}}return out}
-function hfLoadChunk(){var c=HS.ch[HS.k],W=[],mk={};for(var i=c[0];i<=c[1];i++){Q_A[i][2].split(' ').forEach(function(w){W.push(w)});mk[W.length-1]=Q_A[i][1]}HS.W=W;HS.mk=mk;HS.E={};HS.try=0;HS.M=null}
-function hfMask(prev){var M=HS.W.map(function(w,j){if(j===0)return false;return prev?(prev[j]?Math.random()<.3:Math.random()<.8):Math.random()<.55});if(M.every(function(v){return!v}))M[HS.W.length-1]=true;return M}
-function hfHtml(){return HS.W.map(function(w,j){return'<span class="hfw'+(HS.M[j]?' h':'')+(HS.E[j]?' er':'')+'" id="mw'+j+'" onclick="this.classList.add(\'rv\');this.classList.remove(\'h\')">'+srEsc(w)+'</span>'+(HS.mk[j]?' ﴿'+qn(HS.mk[j])+'﴾':'')}).join(' ')}
-function hfStart(id,m){var x=hfGet().u.filter(function(y){return y.id===id})[0];if(!x)return;
- qLoad().then(function(){hfClose();HS={id:id,x:x,ch:hfChunks(x,hfSz()),k:0,acc:[],mode:m};hfInit()}).catch(function(){toast(tl('تعذّر تحميل المصحف','Could not load the Quran'))})}
-function hfInit(){hfLoadChunk();HS.M=hfMask();hfAShow()}
-function hfClose(){if(HF_A){HF_A.pause();HF_A=null;HF_Q=[]}HS=null;var e=$('hfTest');if(e)e.innerHTML=''}
-function hfTitle(){return hfName(HS.x)+' · '+tl('جزء ','part ')+qn(HS.k+1)+'/'+qn(HS.ch.length)+(HS.try?' · 🔁 '+tl('إعادة تسميع ','retry ')+qn(HS.try):'')}
-function hfAShow(){var el=$('hfTest');el.innerHTML='<div class="card"><h3>🧩 '+hfTitle()+'</h3><div style="font-size:22px;line-height:2.5;text-align:justify">'+hfHtml()+'</div><div class="xr"><button class="xb" onclick="hfPlayC()">🎧 '+tl('اسمع الجزء','Listen')+'</button><button class="xb" onclick="document.querySelectorAll(\'#hfTest .hfw\').forEach(function(e){e.classList.add(\'rv\');e.classList.remove(\'h\')})">👁 '+tl('إظهار الكل','Show all')+'</button><button class="xb" onclick="hfClose()">✕</button></div><div class="xs" style="margin-top:8px">'+tl('سمّع الجزء بصوتك، وبعدين اختار عدد غلطاتك:','Recite it, then pick how many mistakes you made:')+'</div><div class="xr">'+[0,1,2,3,4,5,6].map(function(n){return'<button class="xb" onclick="hfErr('+n+')">'+qn(n)+'</button>'}).join('')+'</div></div>';el.scrollIntoView({behavior:'smooth'})}
-function hfErr(n){var tot=HS.W.length,acc=Math.max(0,Math.round(100*(1-n/tot)));
- if(acc>=90){HS.acc.push(acc);toast('✅ '+tl('دقتك ','Accuracy ')+acc+'%');HS.k++;if(HS.k>=HS.ch.length)return hfEnd();hfInit()}
- else{toast('🔁 '+tl('دقتك ','Accuracy ')+acc+'% — '+tl('إعادة تسميع بإخفاء مختلف','retry with a different mask'));HS.try++;HS.M=hfMask(HS.M);hfAShow()}}
-function hfEnd(){var a=HS.acc,avg=Math.round(a.reduce(function(s,v){return s+v},0)/a.length),id=HS.id;hfClose();toast('🎉 '+tl('خلّصت — متوسط دقتك ','Done — average accuracy ')+avg+'%');hfRate(id,avg>=90?1:0)}
-function hfPlayC(){if(HF_A){HF_A.pause();HF_A=null;HF_Q=[];return}HF_Q=[];var c=HS.ch[HS.k];for(var i=c[0];i<=c[1];i++)HF_Q.push(qAudUrl(Q_A[i][0],Q_A[i][1]));HF_A=new Audio();
- var nx=function(){if(!HF_Q.length){HF_A=null;return}var u=HF_Q.shift();qSetSrc(HF_A,u).then(function(){var p=HF_A&&HF_A.play();if(p&&p.catch)p.catch(function(){HF_A=null;HF_Q=[]})})};HF_A.addEventListener('ended',nx);nx()}
+/* ===== اختبار الحفظ بالمقاطع والمتشابهات ===== */
+let hfSession = null;
+let hfSimilarIndex = null;
+
+function hfShuffle(values) {
+  for (let i = values.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [values[i], values[j]] = [values[j], values[i]];
+  }
+  return values;
+}
+
+function hfRandomChunks(first, last, count, size) {
+  // Sample starts with the space occupied by earlier chunks compressed out.
+  const slots = last - first + 1 - count * (size - 1);
+  const starts = hfShuffle(Array.from({length: slots}, (_, i) => i))
+    .slice(0, count).sort((a, b) => a - b);
+  return hfShuffle(starts.map((slot, i) => {
+    const start = first + slot + i * (size - 1);
+    return {start, end: start + size - 1};
+  }));
+}
+
+function hfSetup(id) {
+  const range = hfGet().u.find(item => item.id === id);
+  if (!range) return;
+  hfSession = null;
+  const length = range.b - range.a + 1;
+  const size = Math.min(2, length);
+  const box = $('hfTest');
+  box.innerHTML = `<div class="card">
+    <h3>🧠 ${hfName(range)}</h3>
+    <form id="hfQuizForm" onsubmit="event.preventDefault();hfBegin(${id})">
+      <label for="hfMode">${tl('نوع الاختبار','Quiz type')}</label>
+      <select class="ai" id="hfMode" onchange="hfSetupLimits()">
+        <option value="random">${tl('مقاطع عشوائية','Random passages')}</option>
+        <option value="similar">${tl('أسئلة المتشابهات','Similar verses')}</option>
+      </select>
+      <label for="hfQuizCount" id="hfCountLabel"></label>
+      <input class="ai" id="hfQuizCount" type="number" inputmode="numeric" min="1" required value="${Math.min(3, Math.floor(length / size))}">
+      <div id="hfSizeRow">
+        <label for="hfQuizSize">${tl('عدد الآيات في كل مقطع','Verses per passage')}</label>
+        <input class="ai" id="hfQuizSize" type="number" inputmode="numeric" min="1" max="${length}" required value="${size}" oninput="hfSetupLimits()">
+      </div>
+      <p class="xs" id="hfSetupHint" aria-live="polite"></p>
+      <button class="xb" type="submit" id="hfBeginBtn">${tl('ابدأ الاختبار','Start quiz')}</button>
+      <button class="xb" type="button" onclick="hfClose()">✕ ${tl('إغلاق','Close')}</button>
+    </form>
+  </div>`;
+  hfSetupLimits();
+  box.scrollIntoView({behavior:'smooth'});
+}
+
+function hfSetupLimits() {
+  const similar = $('hfMode').value === 'similar';
+  const size = $('hfQuizSize');
+  const count = $('hfQuizCount');
+  $('hfSizeRow').hidden = size.disabled = similar;
+  $('hfCountLabel').textContent = similar ? tl('عدد الأسئلة','Number of questions') : tl('عدد المقاطع','Number of passages');
+  if (similar) {
+    count.removeAttribute('max');
+    $('hfSetupHint').textContent = tl(
+      'هيظهر موضع من حفظك، وتختار التكملة الصحيحة من تكملتين متشابهتين.',
+      'Choose the correct continuation for a verse in your saved range.'
+    );
+    return;
+  }
+  const max = size.validity.valid ? Math.floor(+size.max / +size.value) : 0;
+  count.max = Math.max(1, max);
+  $('hfSetupHint').textContent = max ? tl(
+    'بالطول ده تقدر تختار لحد ' + qn(max) + ' مقطع من غير تكرار آيات.',
+    'At this length you can choose up to ' + max + ' passages without repeating verses.'
+  ) : tl('اكتب عدد آيات مناسب للمقطع.','Enter a valid passage length.');
+}
+
+function hfSimilarWords(text) {
+  return text.trim().split(/\s+/).filter(word => hfSimilarKey(word));
+}
+
+function hfSimilarKey(word) {
+  return word.normalize('NFKC').replace(/[\p{M}\u0640]/gu, '').replace(/[أإآٱ]/g, 'ا');
+}
+
+function hfBuildSimilarIndex() {
+  const words = Q_A.map(verse => hfSimilarWords(verse[2]));
+  const keys = words.map(line => line.map(hfSimilarKey));
+  const byOpening = new Map();
+  keys.forEach((line, i) => {
+    if (line.length < 2) return;
+    const key = line.slice(0, 2).join(' ');
+    if (!byOpening.has(key)) byOpening.set(key, []);
+    byOpening.get(key).push(i);
+  });
+  return {words, keys, byOpening};
+}
+
+function hfSimilarQuestions(first, last) {
+  if (!hfSimilarIndex) hfSimilarIndex = hfBuildSimilarIndex();
+  const {words, keys, byOpening} = hfSimilarIndex;
+  const questions = [];
+  for (let index = first; index <= last; index++) {
+    const line = keys[index];
+    const peers = byOpening.get(line.slice(0, 2).join(' ')) || [];
+    const candidates = [];
+    for (const peer of peers) {
+      if (peer === index) continue;
+      const other = keys[peer];
+      let shared = 0;
+      while (shared < Math.min(line.length, other.length) && line[shared] === other[shared]) shared++;
+      if (shared === line.length && shared === other.length) {
+        if (index === last || Q_A[index + 1]?.[0] !== Q_A[index][0] || Q_A[peer + 1]?.[0] !== Q_A[peer][0]) continue;
+        if (!keys[index + 1].length || !keys[peer + 1].length ||
+            keys[index + 1].join(' ') === keys[peer + 1].join(' ')) continue;
+        candidates.push({
+          index, peer, shared, next: true, prompt: Q_A[index][2],
+          right: Q_A[index + 1][2], wrong: Q_A[peer + 1][2]
+        });
+      } else if (shared < Math.min(line.length, other.length)) {
+        candidates.push({
+          index, peer, shared, next: false, prompt: words[index].slice(0, shared).join(' '),
+          right: words[index].slice(shared).join(' '), wrong: words[peer].slice(shared).join(' ')
+        });
+      }
+    }
+    if (!candidates.length) continue;
+    const longest = Math.max(...candidates.map(candidate => candidate.shared));
+    const best = candidates.filter(candidate => candidate.shared === longest);
+    const question = best[Math.floor(Math.random() * best.length)];
+    question.options = hfShuffle([
+      {text: question.right, correct: true},
+      {text: question.wrong, correct: false}
+    ]);
+    questions.push(question);
+  }
+  return hfShuffle(questions);
+}
+
+async function hfBegin(id) {
+  const form = $('hfQuizForm');
+  if (!form.reportValidity()) return;
+  const range = hfGet().u.find(item => item.id === id);
+  if (!range) return;
+  const similar = $('hfMode').value === 'similar';
+  const count = +$('hfQuizCount').value;
+  const size = +$('hfQuizSize').value;
+  const button = $('hfBeginBtn');
+  button.disabled = true;
+  try {
+    await qLoad();
+    if ($('hfQuizForm') !== form) return;
+    const first = Q_ST[range.s] + range.a - 1;
+    const last = Q_ST[range.s] + range.b - 1;
+    if (Q_A[first]?.[0] !== range.s || Q_A[last]?.[0] !== range.s) {
+      toast(tl('نطاق الحفظ غير صالح.','Invalid memorized range.'));
+      return;
+    }
+    const pool = similar ? hfSimilarQuestions(first, last) : hfRandomChunks(first, last, count, size);
+    if (pool.length < count) {
+      const hint = $('hfSetupHint');
+      hint.textContent = pool.length
+        ? tl('المتاح هنا ' + qn(pool.length) + ' سؤال متشابهات. قلّل العدد وجرّب تاني.',
+             'Only ' + pool.length + ' similar-verse questions are available here. Reduce the count.')
+        : tl('ملقتش متشابهات مناسبة في النطاق ده. جرّب نطاق حفظ تاني.',
+             'No matching questions in this range. Try another saved range.');
+      return;
+    }
+    hfSession = {id, similar, questions: pool.slice(0, count), step: 0, score: 0, answer: null};
+    hfShowQuestion();
+  } catch (error) {
+    toast(tl('تعذّر تحميل الاختبار. اتأكد إن المصحف متاح.','Could not load the quiz. Check that the Quran text is available.'));
+  } finally {
+    button.disabled = false;
+  }
+}
+
+function hfVerseRef(index) {
+  const [surah, ayah] = Q_A[index];
+  return Q_NAMES[surah - 1] + ' · ' + qn(ayah);
+}
+
+function hfClose() {
+  hfSession = null;
+  $('hfTest').replaceChildren();
+}
+
+function hfShowQuestion() {
+  const session = hfSession;
+  const question = session.questions[session.step];
+  const answered = session.answer !== null;
+  const heading = (session.similar ? tl('متشابهات','Similar verses') : tl('تسميع','Recital')) +
+    ' · ' + qn(session.step + 1) + '/' + qn(session.questions.length);
+  let content;
+  if (session.similar) {
+    const rightRef = hfVerseRef(question.index + Number(question.next));
+    const wrongRef = hfVerseRef(question.peer + Number(question.next));
+    content = `<p class="xs">${hfVerseRef(question.index)}</p>
+      <p class="xs">${question.next ? tl('اختار الآية اللي بعدها في الموضع ده','Choose the verse that follows at this location') : tl('اختار تكملة الآية في الموضع ده','Choose the continuation at this location')}</p>
+      <p class="qtxt hf-verse" lang="ar" dir="rtl">${srEsc(question.prompt)}${question.next ? '' : ' …'}</p>` +
+      question.options.map((option, i) => `<button class="xb hf-option${answered && option.correct ? ' on2' : ''}"
+        onclick="hfChoose(${i})" ${answered ? 'disabled' : ''}><span lang="ar" dir="rtl">${srEsc(option.text)}</span>
+        ${answered ? '<small>' + (option.correct ? '✅ ' + rightRef : wrongRef) + '</small>' : ''}
+      </button>`).join('') +
+      (answered ? '<p class="xs" role="status">' + (session.answer ? tl('إجابة صحيحة','Correct') : tl('التكملة الصحيحة عليها علامة ✅','The correct continuation is marked ✅')) + '</p>' : '');
+  } else {
+    const first = Q_A[question.start];
+    const last = Q_A[question.end];
+    const words = hfSimilarWords(first[2]);
+    const cue = words.slice(0, Math.min(3, words.length - 1)).join(' ');
+    content = `<p class="xs">${hfVerseRef(question.start)}${last[1] !== first[1] ? '–' + qn(last[1]) : ''}</p>
+      <p>${tl('سمّع الآيات في المقطع، وبعدها اكشف الإجابة وراجع نفسك.','Recite the passage, then reveal the answer and check yourself.')}</p>
+      ${cue ? '<p class="qtxt hf-verse" lang="ar" dir="rtl">' + srEsc(cue) + ' …</p>' : ''}
+      <details class="hf-answer">
+        <summary>${tl('إظهار الإجابة','Reveal answer')}</summary>
+        <p class="qtxt hf-verse" lang="ar" dir="rtl">${Q_A.slice(question.start, question.end + 1)
+          .map(verse => srEsc(verse[2]) + ' ﴿' + qn(verse[1]) + '﴾').join(' ')}</p>
+        <button class="xb" onclick="hfNext(true)">✅ ${tl('سمّعتها صح','Got it right')}</button>
+        <button class="xb" onclick="hfNext(false)">↻ ${tl('محتاج أراجع','Needs review')}</button>
+      </details>`;
+  }
+  $('hfTest').innerHTML = `<div class="card">
+    <h3>${heading}</h3>${content}
+    ${answered ? '<button class="xb" onclick="hfNext(hfSession.answer)">' +
+      (session.step + 1 === session.questions.length ? tl('النتيجة','Results') : tl('السؤال التالي','Next question')) + '</button>' : ''}
+    <button class="xb" onclick="hfClose()">✕ ${tl('إغلاق','Close')}</button>
+  </div>`;
+  $('hfTest').scrollIntoView({behavior:'smooth'});
+}
+
+function hfChoose(index) {
+  if (!hfSession?.similar || hfSession.answer !== null) return;
+  hfSession.answer = hfSession.questions[hfSession.step].options[index].correct;
+  hfShowQuestion();
+}
+
+function hfNext(correct) {
+  const session = hfSession;
+  if (!session) return;
+  session.score += Number(correct);
+  session.step++;
+  session.answer = null;
+  if (session.step < session.questions.length) return hfShowQuestion();
+  const total = session.questions.length;
+  hfSession = null;
+  if (!session.similar) hfRate(session.id, session.score / total >= 0.9);
+  $('hfTest').innerHTML = `<div class="card">
+    <h3>📋 ${tl('نتيجة الاختبار','Quiz results')}</h3>
+    <p role="status">${qn(session.score)} / ${qn(total)} ${session.similar ? tl('إجابات صحيحة','correct answers') : tl('مقاطع سمّعتها صح','passages recited correctly')}</p>
+    <button class="xb" onclick="hfSetup(${session.id})">↻ ${tl('اختبار جديد','New quiz')}</button>
+    <button class="xb" onclick="hfClose()">✕ ${tl('إغلاق','Close')}</button>
+  </div>`;
+  $('hfTest').scrollIntoView({behavior:'smooth'});
+}
 /* ===== قايمة "المزيد" في الشريط السفلي ===== */
 (function(){var mb=$('tabMore');if(!mb)return;var sh=document.createElement('div');sh.id='moreSh';document.body.appendChild(sh);
  var items=[['adhkar','📿','الأذكار','Adhkar'],['hifz','🧠','الحفظ','Memorize'],['groups','👥','الجروبات','Groups'],['qada','🤲','القضاء','Qada'],['settings','⚙️','الإعدادات','Settings']];
@@ -2185,17 +2420,15 @@ function adlForm(id){var d=adlDefs().filter(function(x){return x.id===id})[0]||{
 function adlSave(){var n=($('afN').value||'').trim().slice(0,40),its=[].slice.call(document.querySelectorAll('#afRows .ed-r')).map(function(r){var t=r.querySelector('.adf-t').value.trim(),c=parseInt(r.querySelector('.adf-n').value)||1;return t?{t:t.slice(0,800),n:Math.max(1,Math.min(10000,c))}:null}).filter(Boolean);
  if(!n)return toast(tl('اكتب اسم القايمة','Enter a list name'));if(!its.length)return toast(tl('اكتب ذكر واحد على الأقل','Enter at least one dhikr'));
  var d={id:$('afId').value||('a'+Date.now().toString(36)),name:n,icon:($('afI').value||'').trim().slice(0,4)||'📿',tpl:$('afTpl').value||'cards',items:its},L=adlDefs().slice(),i=L.map(function(x){return x.id}).indexOf(d.id),isNew=i<0;if(!isNew)L[i]=d;else L.push(d);localStorage.setItem('adl',JSON.stringify(L));
- if(isNew)layAddX('adhkar','ad',d.id);toast('✅'+(isNew?' '+tl('اتضافت في صفحة الأذكار','Added to the Adhkar page'):''));adlList();lxAll();layEdit()}
-function adlDel(id){if(!confirm(tl('تمسح القايمة دي؟','Delete this list?')))return;localStorage.setItem('adl',JSON.stringify(adlDefs().filter(function(x){return x.id!==id})));adlList();lxAll();layEdit()}
+ if(isNew)layAddX('adhkar','ad',d.id);toast('✅'+(isNew?' '+tl('اتضافت في صفحة الأذكار','Added to the Adhkar page'):''));adlList();lxAll()}
+function adlDel(id){if(!confirm(tl('تمسح القايمة دي؟','Delete this list?')))return;localStorage.setItem('adl',JSON.stringify(adlDefs().filter(function(x){return x.id!==id})));adlList();lxAll()}
 /* ===== كروت إضافية على الصفحات ===== */
 function lxFill(el){var t=el.dataset.t,id=el.dataset.id,d=(t==='cw'?cwDefs():adlDefs()).filter(function(x){return x.id===id})[0];if(!d){el.remove();return}el.innerHTML=t==='cw'?cwInner(d,dayKey(currentDate),cwDay(dayKey(currentDate))):adlInner(d)}
 function lxAll(){[].forEach.call(document.querySelectorAll('.lx'),lxFill)}
 function lxEnsure(pg){var pe=$('page-'+pg),S=layGet()[pg]||{},x=S.x||[],want={};if(!pe)return;x.forEach(function(e){want['lx_'+e.t+'_'+e.id]=e});
  [].slice.call(pe.children).forEach(function(el){if(el.classList.contains('lx')&&!want[el.id])el.remove()});
  Object.keys(want).forEach(function(k){if(!document.getElementById(k)){var e=want[k],el=document.createElement('div');el.className='card lx';el.id=k;el.dataset.t=e.t;el.dataset.id=e.id;pe.appendChild(el);lxFill(el)}})}
-function layAddX(pg,t,id){var L=layGet(),S=L[pg]||(L[pg]={});S.x=S.x||[];if(!S.x.some(function(e){return e.t===t&&e.id===id}))S.x.push({t:t,id:id});localStorage.setItem('lay',JSON.stringify(L));try{layApply(pg)}catch(e){}}
-function layRm(t,id){var L=layGet(),S=L[LAY_CUR]||{},k='lx_'+t+'_'+id;S.x=(S.x||[]).filter(function(e){return!(e.t===t&&e.id===id)});S.o=(S.o||[]).filter(function(x){return x!==k});S.h=(S.h||[]).filter(function(x){return x!==k});L[LAY_CUR]=S;localStorage.setItem('lay',JSON.stringify(L));layApply(LAY_CUR);layEdit()}
-function layAdd(){var v=($('lxSel')||{}).value;if(!v)return;var a=v.split(':');layAddX(LAY_CUR,a[0],a[1]);layEdit()}
+function layAddX(pg,t,id){var L=layGet(),S=L[pg]||(L[pg]={});S.x=S.x||[];if(!S.x.some(function(e){return e.t===t&&e.id===id}))S.x.push({t:t,id:id});localStorage.setItem('lay',JSON.stringify(L));lxEnsure(pg)}
 function cwPut(id,v){var k=dayKey(currentDate),D=cwDay(k);if(v===''||v===null)delete D[id];else D[id]=v;localStorage.setItem('cwd_'+k,JSON.stringify(D));cwRender();try{renderTracking()}catch(e){}}
 var _rtC=renderTracking;renderTracking=function(){_rtC.apply(this,arguments);try{cwRender()}catch(e){}};
 function cwList(){var el=$('cwSet');if(!el)return;var L=cwDefs(),T={yn:tl('نعم/لا','Yes/No'),num:tl('رقم','Number'),opt:tl('اختيارات','Options')};
@@ -2219,24 +2452,15 @@ function cwSave(){var n=($('cfN').value||'').trim().slice(0,40),ty=$('cfT').valu
  var L=cwDefs().slice(),i=L.map(function(x){return x.id}).indexOf(d.id);if(i>-1)L[i]=d;else L.push(d);localStorage.setItem('cw',JSON.stringify(L));toast('✅');cwList();cwRender();try{renderTracking()}catch(e){}}
 function cwDel(id){if(!confirm(tl('تمسح العبادة دي؟ (بياناتها القديمة بتفضل محفوظة بس مش بتتحسب)','Delete this worship? (old entries stay stored but stop counting)')))return;localStorage.setItem('cw',JSON.stringify(cwDefs().filter(function(x){return x.id!==id})));cwList();cwRender();try{renderTracking()}catch(e){}}
 
-/* ===== ترتيب كروت الصفحات وإخفاؤها (الإعدادات ← الشاشات) ===== */
-var LAY_P=[['home','🏠','الرئيسية','Home'],['tracking','📋','التتبع','Tracking'],['quran','📖','القرآن','Quran'],['adhkar','📿','الأذكار','Adhkar'],['stats','📊','الإحصائيات','Stats']],LAY_CUR='home';
+/* Keep existing custom card placements and use the default page layout. */
 function layGet(){try{return JSON.parse(localStorage.getItem('lay'))||{}}catch(e){return{}}}
-function layCards(pg){var pe=$('page-'+pg),a=[];if(!pe)return a;[].forEach.call(pe.children,function(el,i){if(el.tagName==='HEADER'||el.tagName==='SCRIPT'||el.tagName==='STYLE')return;var l=el.querySelector('h3,h2,.lbl,b'),tx=((l&&l.textContent)||el.id||'').trim().slice(0,30);a.push({k:el.id||('i'+i),el:el,l:tx||(el.className||'').split(' ')[0]||'—'})});return a}
-function layApply(pg){lxEnsure(pg);var cs=layCards(pg),S=layGet()[pg]||{},o=S.o||[],h=S.h||[],pe=$('page-'+pg),m={};cs.forEach(function(c){m[c.k]=c});var ord=[];o.forEach(function(k){if(m[k]){ord.push(m[k]);delete m[k]}});cs.forEach(function(c){if(m[c.k])ord.push(c)});
- if(o.length)ord.forEach(function(c){pe.appendChild(c.el)});cs.forEach(function(c){c.el.classList.toggle('lay-hide',h.indexOf(c.k)>-1)})}
-function layApplyAll(){LAY_P.forEach(function(x){try{layApply(x[0])}catch(e){}})}
-function layEdit(){var el=$('layBox');if(!el)return;var cs=layCards(LAY_CUR),S=layGet()[LAY_CUR]||{},h=S.h||[],x=S.x||[],o=LAY_P.map(function(z){return'<option value="'+z[0]+'"'+(z[0]===LAY_CUR?' selected':'')+'>'+z[1]+' '+tl(z[2],z[3])+'</option>'}).join('');
- var opts=cwDefs().filter(function(d){return!x.some(function(e){return e.t==='cw'&&e.id===d.id})}).map(function(d){return'<option value="cw:'+d.id+'">⭐ '+srEsc(d.name)+'</option>'}).concat(adlDefs().filter(function(d){return!x.some(function(e){return e.t==='ad'&&e.id===d.id})}).map(function(d){return'<option value="ad:'+d.id+'">📿 '+srEsc(d.name)+'</option>'})).join('');
- el.innerHTML='<h3>🧩 '+tl('كروت الصفحات','Page cards')+'</h3><select class="ai" onchange="LAY_CUR=this.value;layEdit()">'+o+'</select>'+cs.map(function(c){var hd=h.indexOf(c.k)>-1,m=/^lx_(cw|ad)_(.+)$/.exec(c.k);return'<div class="trow"><span class="pn" style="'+(hd?'opacity:.45;text-decoration:line-through':'')+'">'+(m?'➕ ':'')+srEsc(c.l)+'</span><span><button class="mini-btn" onclick="layMv(\''+c.k+'\',-1)">▲</button> <button class="mini-btn" onclick="layMv(\''+c.k+'\',1)">▼</button> <button class="mini-btn" onclick="layHide(\''+c.k+'\')">'+(hd?'👁':'🚫')+'</button>'+(m?' <button class="mini-btn" onclick="layRm(\''+m[1]+'\',\''+m[2]+'\')">✕</button>':'')+'</span></div>'}).join('')
- +'<div class="xs" style="margin-top:10px">➕ '+tl('ضيف كارت للصفحة دي (عباداتك أو قوايم أذكارك):','Add a card to this page (your worships or dhikr lists):')+'</div>'+(opts?'<select class="ai" id="lxSel">'+opts+'</select><button class="xb" style="width:100%" onclick="layAdd()">➕ '+tl('إضافة الكارت','Add card')+'</button>':'<div class="xs">'+tl('مفيش حاجة تتضاف — اعمل عبادة أو قايمة أذكار فوق الأول.','Nothing to add — create a worship or dhikr list above first.')+'</div>')
- +'<button class="xb" style="width:100%;margin-top:8px" onclick="layReset()">↺ '+tl('رجّع الترتيب الأصلي','Restore default')+'</button>'}
-function laySave(S){var L=layGet();L[LAY_CUR]=S;localStorage.setItem('lay',JSON.stringify(L))}
-function layMv(k,dir){var cs=layCards(LAY_CUR),keys=cs.map(function(c){return c.k}),S=layGet()[LAY_CUR]||{h:[]},o=(S.o&&S.o.length?S.o.filter(function(x){return keys.indexOf(x)>-1}):[]);keys.forEach(function(x){if(o.indexOf(x)<0)o.push(x)});var i=o.indexOf(k),j=i+dir;if(i<0||j<0||j>=o.length)return;var tmp=o[i];o[i]=o[j];o[j]=tmp;S.o=o;laySave(S);layApply(LAY_CUR);layEdit()}
-function layHide(k){var S=layGet()[LAY_CUR]||{o:[]},h=S.h||[],i=h.indexOf(k);if(i>-1)h.splice(i,1);else h.push(k);S.h=h;laySave(S);layApply(LAY_CUR);layEdit()}
-function layReset(){var L=layGet();delete L[LAY_CUR];localStorage.setItem('lay',JSON.stringify(L));toast(tl('جاري التحديث...','Refreshing...'));setTimeout(function(){location.reload()},500)}
-[].forEach.call(document.querySelectorAll('.tab'),function(t){t.addEventListener('click',function(){setTimeout(layApplyAll,0)})});
-setTimeout(function(){cwList();adlList();layEdit();cwRender();layApplyAll()},1800);
+document.querySelectorAll('.tab[data-page]').forEach(tab => {
+  tab.addEventListener('click', () => lxEnsure(tab.dataset.page));
+});
+setTimeout(function(){
+  cwList();adlList();cwRender();
+  Object.keys(layGet()).forEach(lxEnsure);
+},1800);
 function ntOpen(){ntLoad();setTimeout(ntRender,400);$('ntOv').classList.add('open');ntRender()}
 function ntRender(){$('ntSheet').innerHTML='<h2>🔔 '+tl('الإشعارات','Notifications')+'</h2>'+wkNtHtml()+gpNtHtml()+(NT.length?NT.filter(function(x){return /^[\w-]+$/.test(x[0])}).map(function(x){return '<div class="xc"><b>'+srEsc(x[1].fn)+'</b> '+tl('يريد إضافتك كصديق','wants to add you as a friend')+'<div class="xr"><button class="xb" onclick="ntAns(\''+x[0]+'\',\'a\')">'+tl('نعم','Yes')+'</button><button class="xb" onclick="ntAns(\''+x[0]+'\',\'d\')">'+tl('لا','No')+'</button></div></div>'}).join(''):((wkNtHtml()||gpNtHtml())?'':'<div class="xs">'+tl('مفيش إشعارات.','No notifications.')+'</div>'))}
 function ntAns(id,s){FB.db.collection('requests').doc(id).update({st:s}).then(function(){NT=NT.filter(function(x){return x[0]!==id});ntRender();ntLoad();toast(s==='a'?tl('بقيتوا أصدقاء 🤝','You are now friends 🤝'):tl('تم الرفض','Declined'))}).catch(function(){toast(tl('تعذّر التنفيذ','Failed'))})}
