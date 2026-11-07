@@ -112,8 +112,10 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .hf-verse{font-size:21px;margin:8px 0}
 .hf-option{display:block;width:100%;text-align:start;line-height:1.8;margin:8px 0}
 .hf-option small{display:block;opacity:.85}
-.hf-answer{margin:12px 0}
-.hf-answer summary{cursor:pointer;color:var(--ac);padding:8px 0}
+.hf-word{font:inherit;line-height:inherit;padding:0 3px;border:0;border-radius:6px;color:inherit;background:transparent;vertical-align:baseline}
+.hf-word.is-hidden{background:rgba(var(--fg),.25);cursor:pointer}
+.hf-word.is-hidden span{visibility:hidden}
+.hf-retry{color:var(--ac);line-height:1.7;margin:8px 0}
 
 /* ===== قوالب العبادات والأذكار + محررات الجداول ===== */
 .tpl-pick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
@@ -2103,8 +2105,8 @@ function hfSetupLimits() {
   if (similar) {
     count.removeAttribute('max');
     $('hfSetupHint').textContent = tl(
-      'هيظهر موضع من حفظك، وتختار التكملة الصحيحة من تكملتين متشابهتين.',
-      'Choose the correct continuation for a verse in your saved range.'
+      'اختار التكملة الصح، وبعدها سمّع الآية اللي بعدها بالكلمات المخفية.',
+      'Choose the correct continuation, then recite the following verse with hidden words.'
     );
     return;
   }
@@ -2142,6 +2144,8 @@ function hfSimilarQuestions(first, last) {
   const {words, keys, byOpening} = hfSimilarIndex;
   const questions = [];
   for (let index = first; index <= last; index++) {
+    const surah = Q_A[index][0];
+    if (Q_A[index + 1]?.[0] !== surah) continue;
     const line = keys[index];
     const peers = byOpening.get(line.slice(0, 2).join(' ')) || [];
     const candidates = [];
@@ -2151,16 +2155,16 @@ function hfSimilarQuestions(first, last) {
       let shared = 0;
       while (shared < Math.min(line.length, other.length) && line[shared] === other[shared]) shared++;
       if (shared === line.length && shared === other.length) {
-        if (index === last || Q_A[index + 1]?.[0] !== Q_A[index][0] || Q_A[peer + 1]?.[0] !== Q_A[peer][0]) continue;
+        if (index === last || Q_A[index + 2]?.[0] !== surah || Q_A[peer + 1]?.[0] !== Q_A[peer][0]) continue;
         if (!keys[index + 1].length || !keys[peer + 1].length ||
             keys[index + 1].join(' ') === keys[peer + 1].join(' ')) continue;
         candidates.push({
-          index, peer, shared, next: true, prompt: Q_A[index][2],
+          index, peer, shared, next: true, follow: index + 2, prompt: Q_A[index][2],
           right: Q_A[index + 1][2], wrong: Q_A[peer + 1][2]
         });
       } else if (shared < Math.min(line.length, other.length)) {
         candidates.push({
-          index, peer, shared, next: false, prompt: words[index].slice(0, shared).join(' '),
+          index, peer, shared, next: false, follow: index + 1, prompt: words[index].slice(0, shared).join(' '),
           right: words[index].slice(shared).join(' '), wrong: words[peer].slice(shared).join(' ')
         });
       }
@@ -2207,8 +2211,8 @@ async function hfBegin(id) {
              'No matching questions in this range. Try another saved range.');
       return;
     }
-    hfSession = {id, similar, questions: pool.slice(0, count), step: 0, score: 0, answer: null};
-    hfShowQuestion();
+    hfSession = {id, similar, questions: pool.slice(0, count), step: 0, score: 0, answer: null, recital: null};
+    hfOpenQuestion();
   } catch (error) {
     toast(tl('تعذّر تحميل الاختبار. اتأكد إن المصحف متاح.','Could not load the quiz. Check that the Quran text is available.'));
   } finally {
@@ -2226,6 +2230,93 @@ function hfClose() {
   $('hfTest').replaceChildren();
 }
 
+function hfWordMask(total, previous) {
+  if (total === 1) return [true];
+  const hidden = Math.min(total - 1, Math.max(1, Math.round(total * 0.55)));
+  const slots = hfShuffle(Array.from({length: total}, (_, i) => i));
+  const mask = Array(total).fill(false);
+  for (const index of slots.slice(0, hidden)) mask[index] = true;
+  if (previous && mask.every((value, i) => value === previous[i])) {
+    mask[slots[0]] = false;
+    mask[slots[hidden]] = true;
+  }
+  return mask;
+}
+
+function hfOpenRecital(start, end) {
+  let total = 0;
+  const verses = Q_A.slice(start, end + 1).map(verse => ({
+    tokens: verse[2].trim().split(/\s+/).map(text => ({
+      text, word: /\p{L}/u.test(hfSimilarKey(text)) ? total++ : null
+    })),
+    number: verse[1]
+  }));
+  hfSession.recital = {start, end, verses, total, mask: hfWordMask(total), accuracy: null};
+}
+
+function hfOpenQuestion() {
+  const session = hfSession;
+  if (!session.similar) {
+    const {start, end} = session.questions[session.step];
+    hfOpenRecital(start, end);
+  }
+  hfShowQuestion();
+}
+
+function hfRevealWord(button) {
+  if (!button.classList.contains('is-hidden')) return;
+  button.classList.remove('is-hidden');
+  button.removeAttribute('aria-label');
+  button.firstElementChild.removeAttribute('aria-hidden');
+  button.setAttribute('aria-disabled', 'true');
+}
+
+function hfRecitalHtml(recital) {
+  const range = hfVerseRef(recital.start) + (recital.start === recital.end ? '' : '–' + qn(Q_A[recital.end][1]));
+  const verseText = recital.verses.map(verse => {
+    const words = verse.tokens.map(({text, word}) => {
+      if (word === null || !recital.mask[word]) return srEsc(text);
+      return `<button type="button" class="hf-word is-hidden" onclick="hfRevealWord(this)"
+        aria-label="${tl('اكشف الكلمة ','Reveal word ')}${qn(word + 1)}"><span aria-hidden="true">${srEsc(text)}</span></button>`;
+    }).join(' ');
+    return words + ' ﴿' + qn(verse.number) + '﴾';
+  }).join(' ');
+  let retry = '';
+  if (recital.accuracy !== null) {
+    const accuracy = tl('دقتك ' + qn(recital.accuracy) + '٪. ', 'Accuracy: ' + recital.accuracy + '%. ');
+    retry = accuracy + (recital.total > 1
+      ? tl('جرّب نفس الموضع بإخفاء جديد.', 'Try this passage again with different words hidden.')
+      : tl('جرّب نفس الكلمة مرة تانية.', 'Try the same word again.'));
+  }
+  return `<p class="xs">${range}</p>
+    <p class="xs">${tl('سمّع واضغط على أي كلمة مخفية عشان تظهر. بعد ما تخلص، اكتب عدد غلطاتك.',
+                         'Recite and tap any hidden word to reveal it. Enter your mistake count when you finish.')}</p>
+    <p class="qtxt hf-verse" lang="ar" dir="rtl">${verseText}</p>
+    <p class="hf-retry" role="status">${retry}</p>
+    <form onsubmit="event.preventDefault();hfGradeRecital(this)">
+      <label for="hfMistakes">${tl('غلطت كام غلطة؟','How many mistakes?')}</label>
+      <input class="ai" id="hfMistakes" name="mistakes" type="number" inputmode="numeric" min="0" max="${recital.total}"
+        step="1" required placeholder="${tl('اكتب ٠ لو سمّعت من غير غلط','Enter 0 if you made no mistakes')}">
+      <button class="xb" type="submit">${tl('تأكيد التسميع','Check recital')}</button>
+    </form>`;
+}
+
+function hfGradeRecital(form) {
+  const recital = hfSession?.recital;
+  if (!recital || !form.reportValidity()) return;
+  const mistakes = form.elements.mistakes.valueAsNumber;
+  if (!Number.isInteger(mistakes) || mistakes < 0 || mistakes > recital.total) return;
+  const accuracy = Math.floor(1000 * (recital.total - mistakes) / recital.total) / 10;
+  if (mistakes * 10 <= recital.total) {
+    toast(tl('✅ دقتك ' + qn(accuracy) + '٪', '✅ Accuracy: ' + accuracy + '%'));
+    hfNext(true);
+    return;
+  }
+  recital.accuracy = accuracy;
+  recital.mask = hfWordMask(recital.total, recital.mask);
+  hfShowQuestion();
+}
+
 function hfShowQuestion() {
   const session = hfSession;
   const question = session.questions[session.step];
@@ -2233,7 +2324,16 @@ function hfShowQuestion() {
   const heading = (session.similar ? tl('متشابهات','Similar verses') : tl('تسميع','Recital')) +
     ' · ' + qn(session.step + 1) + '/' + qn(session.questions.length);
   let content;
-  if (session.similar) {
+  if (session.similar && session.recital) {
+    const rightRef = hfVerseRef(question.index + Number(question.next));
+    const wrongRef = hfVerseRef(question.peer + Number(question.next));
+    content = `<p class="xs">✅ ${tl('إجابة صحيحة','Correct')} · ${rightRef}</p>
+      <details><summary>${tl('عرض الاختيارين ومواضعهما','Show both options and their locations')}</summary>
+        <p class="xs">✅ ${rightRef} · <span lang="ar" dir="rtl">${srEsc(question.right)}</span></p>
+        <p class="xs">${wrongRef} · <span lang="ar" dir="rtl">${srEsc(question.wrong)}</span></p>
+      </details>
+      <h4>${tl('سمّع الآية التالية','Recite the next verse')}</h4>` + hfRecitalHtml(session.recital);
+  } else if (session.similar) {
     const rightRef = hfVerseRef(question.index + Number(question.next));
     const wrongRef = hfVerseRef(question.peer + Number(question.next));
     content = `<p class="xs">${hfVerseRef(question.index)}</p>
@@ -2245,24 +2345,11 @@ function hfShowQuestion() {
       </button>`).join('') +
       (answered ? '<p class="xs" role="status">' + (session.answer ? tl('إجابة صحيحة','Correct') : tl('التكملة الصحيحة عليها علامة ✅','The correct continuation is marked ✅')) + '</p>' : '');
   } else {
-    const first = Q_A[question.start];
-    const last = Q_A[question.end];
-    const words = hfSimilarWords(first[2]);
-    const cue = words.slice(0, Math.min(3, words.length - 1)).join(' ');
-    content = `<p class="xs">${hfVerseRef(question.start)}${last[1] !== first[1] ? '–' + qn(last[1]) : ''}</p>
-      <p>${tl('سمّع الآيات في المقطع، وبعدها اكشف الإجابة وراجع نفسك.','Recite the passage, then reveal the answer and check yourself.')}</p>
-      ${cue ? '<p class="qtxt hf-verse" lang="ar" dir="rtl">' + srEsc(cue) + ' …</p>' : ''}
-      <details class="hf-answer">
-        <summary>${tl('إظهار الإجابة','Reveal answer')}</summary>
-        <p class="qtxt hf-verse" lang="ar" dir="rtl">${Q_A.slice(question.start, question.end + 1)
-          .map(verse => srEsc(verse[2]) + ' ﴿' + qn(verse[1]) + '﴾').join(' ')}</p>
-        <button class="xb" onclick="hfNext(true)">✅ ${tl('سمّعتها صح','Got it right')}</button>
-        <button class="xb" onclick="hfNext(false)">↻ ${tl('محتاج أراجع','Needs review')}</button>
-      </details>`;
+    content = hfRecitalHtml(session.recital);
   }
   $('hfTest').innerHTML = `<div class="card">
     <h3>${heading}</h3>${content}
-    ${answered ? '<button class="xb" onclick="hfNext(hfSession.answer)">' +
+    ${session.answer === false ? '<button class="xb" onclick="hfNext(false)">' +
       (session.step + 1 === session.questions.length ? tl('النتيجة','Results') : tl('السؤال التالي','Next question')) + '</button>' : ''}
     <button class="xb" onclick="hfClose()">✕ ${tl('إغلاق','Close')}</button>
   </div>`;
@@ -2271,7 +2358,9 @@ function hfShowQuestion() {
 
 function hfChoose(index) {
   if (!hfSession?.similar || hfSession.answer !== null) return;
-  hfSession.answer = hfSession.questions[hfSession.step].options[index].correct;
+  const question = hfSession.questions[hfSession.step];
+  hfSession.answer = question.options[index].correct;
+  if (hfSession.answer) hfOpenRecital(question.follow, question.follow);
   hfShowQuestion();
 }
 
@@ -2281,7 +2370,8 @@ function hfNext(correct) {
   session.score += Number(correct);
   session.step++;
   session.answer = null;
-  if (session.step < session.questions.length) return hfShowQuestion();
+  session.recital = null;
+  if (session.step < session.questions.length) return hfOpenQuestion();
   const total = session.questions.length;
   hfSession = null;
   if (!session.similar) hfRate(session.id, session.score / total >= 0.9);
