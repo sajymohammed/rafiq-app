@@ -112,9 +112,14 @@ header h1{font-size:25px}.bism{font-size:13px;opacity:.75;margin-top:4px}
 .hf-verse{font-size:21px;margin:8px 0}
 .hf-option{display:block;width:100%;text-align:start;line-height:1.8;margin:8px 0}
 .hf-option small{display:block;opacity:.85}
-.hf-word{font:inherit;line-height:inherit;padding:0 3px;border:0;border-radius:6px;color:inherit;background:transparent;vertical-align:baseline}
-.hf-word.is-hidden{background:rgba(var(--fg),.25);cursor:pointer}
-.hf-word.is-hidden span{visibility:hidden}
+.hf-word{appearance:none;display:inline-block;font:inherit;line-height:1.55;padding:0;margin:0;border:0;color:inherit;background:none;vertical-align:baseline;white-space:nowrap}
+.hf-word span{display:inline-block;line-height:inherit;border-radius:.18em}
+.hf-word.is-hidden{cursor:pointer}
+.hf-word.is-hidden span{color:transparent;background:rgba(var(--fg),.18);box-shadow:inset 0 -1px 0 rgba(var(--fg),.12)}
+.hf-word:focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:.18em}
+.hf-accuracy{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0;padding:10px 12px;border-radius:12px;background:rgba(var(--fg),.06);font-size:14px}
+.hf-accuracy output{font-size:23px;font-weight:800;color:var(--ac);font-variant-numeric:tabular-nums;white-space:nowrap}
+.hf-last{padding:9px 12px;margin:8px 0;border:1px solid rgba(var(--fg),.16);border-radius:12px;line-height:1.8}
 .hf-retry{color:var(--ac);line-height:1.7;margin:8px 0}
 
 /* ===== قوالب العبادات والأذكار + محررات الجداول ===== */
@@ -482,11 +487,31 @@ function $(id){return document.getElementById(id)}
 function toast(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
 
 const TCACHE=()=> 'ptimes_'+dayKey(new Date());
-const toMin=t=>{let s=t.slice(0,5).split(':');return +s[0]*60 + +s[1]};
-const fmt12=t=>{let [h,m]=t.slice(0,5).split(':').map(Number);let ap=h>=12?tl('م','PM'):tl('ص','AM');h=h%12||12;return h+':'+String(m).padStart(2,'0')+' '+ap};
+const toMin = time => {
+  const match = String(time).trim().match(/^(\d{1,2}):(\d{1,2})(?=\s|$)/);
+  if (!match || +match[1] > 23 || +match[2] > 59) return NaN;
+  return +match[1] * 60 + +match[2];
+};
+function formatTimeMinutes(minutes) {
+  if (!Number.isFinite(minutes)) return '—';
+  const normalized = ((Math.trunc(minutes) % 1440) + 1440) % 1440;
+  const hours = Math.floor(normalized / 60);
+  const suffix = hours >= 12 ? tl('م','PM') : tl('ص','AM');
+  return (hours % 12 || 12) + ':' + String(normalized % 60).padStart(2,'0') + ' ' + suffix;
+}
+const fmt12 = time => formatTimeMinutes(toMin(time));
 const getMethod=()=>localStorage.getItem('method')||'5';
 const getSchool=()=>localStorage.getItem('school')||'0';
-const loadOffsets=()=>{try{return JSON.parse(localStorage.getItem('poffsets')||'{}')}catch(e){return{}}};
+const loadOffsets = () => {
+  try {
+    const stored = JSON.parse(localStorage.getItem('poffsets') || '{}');
+    return Object.fromEntries(Object.entries(stored).map(([key, value]) => [
+      key, Number.isFinite(Number(value)) ? Math.trunc(Number(value)) : 0
+    ]));
+  } catch {
+    return {};
+  }
+};
 const manualOn=()=>localStorage.getItem('timesSource')==='manual';
 const getManualTimes=()=>{try{return JSON.parse(localStorage.getItem('manualTimes')||'{}')}catch(e){return{}}};
 function loadTimesCache(){try{return JSON.parse(localStorage.getItem(TCACHE()))}catch(e){return null}}
@@ -653,11 +678,16 @@ async function ensureTimes(force=false){
  try{if(geo)c=await fetchTimes(geo.lat,geo.lon);else{let city=localStorage.getItem('city'),country=localStorage.getItem('country');if(!city){$('cityForm').style.display='block';$('locName').textContent='محتاجين نعرف مدينتك';return}let d=await alJson(`https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country||'')}&method=${getMethod()}&school=${getSchool()}`);c=mkTimes(d,city+'، '+(country||''));localStorage.setItem(TCACHE(),JSON.stringify(c))}renderTimes(c)}catch(e){if(e&&e.message==='api'){$('locName').textContent='⚠️ مش قادر أجيب المواقيت — اتأكد من المدينة والدولة';$('cityForm').style.display='block'}else $('locName').textContent='مفيش نت 😢 حاول تاني'}}
 function renderTimes(c){
  $('cityForm').style.display='none';$('locName').textContent=c.place||'';$('timesTitle').textContent='🕐 مواقيت الصلاة'+(hijriStr(new Date())?' — '+hijriStr(new Date()):'');
- let offs=loadOffsets(),list=$('timesList');list.innerHTML='';const fmtMin=m=>fmt12(String(Math.floor(((m%1440)+1440)%1440/60)).padStart(2,'0')+':'+String(((m%1440)+1440)%1440%60).padStart(2,'0'));
- P_NAMES.forEach(([k,n])=>{let row=document.createElement('div');row.className='trow'+(k==='Sunrise'?' sun':'');let m=toMin(c.timings[k])+(offs[k]||0),right=fmtMin(m);if(editModeOn)right=`<button class="adj" style="width:30px" data-k="${k}" data-d="-1">−</button> ${right} <button class="adj" style="width:30px" data-k="${k}" data-d="1">+</button>`;row.innerHTML=`<span class="pn">${n}</span><span class="pt">${right}</span>`;list.appendChild(row)});
+ let offs=loadOffsets(),list=$('timesList');list.innerHTML='';const fmtMin=formatTimeMinutes;
+ P_NAMES.forEach(([k,n])=>{let row=document.createElement('div');row.className='trow'+(k==='Sunrise'?' sun':'');let m=toMin(c.timings[k])+(offs[k]||0),right=fmtMin(m);if(editModeOn)right=`<button class="adj" style="width:30px" data-k="${k}" data-d="-1">−</button> ${right} <button class="adj" style="width:30px" data-k="${k}" data-d="1">+</button>`;row.innerHTML=`<span class="pn">${n}</span><span class="pt" dir="ltr">${right}</span>`;list.appendChild(row)});
  list.querySelectorAll('.adj').forEach(b=>b.onclick=()=>{let o=loadOffsets();o[b.dataset.k]=(o[b.dataset.k]||0)+(+b.dataset.d);localStorage.setItem('poffsets',JSON.stringify(o));renderTimes(c)});
  let mag=toMin(c.timings.Maghrib)+(offs.Maghrib||0),faj=toMin(c.timings.Fajr)+(offs.Fajr||0)+1440,third=mag+Math.round((faj-mag)*2/3);$('thirdBox').style.display='block';$('thirdTime').textContent=fmt12(String(Math.floor(third/60)%24).padStart(2,'0')+':'+String(third%60).padStart(2,'0'));
- if(typeof c.lat==='number'){fetchMonth(c.lat,c.lon)}
+ if(typeof c.lat==='number' && typeof c.lon==='number'){
+   fetchMonth(c.lat,c.lon);
+ } else {
+   monthRequest++;
+   $('monthCard').style.display='none';
+ }
 }
 $('locChange').onclick=()=>{$('cityForm').style.display='block';forceCity=true};
 $('citySave').onclick=()=>{let c=$('inCity').value.trim();if(!c)return;localStorage.setItem('city',c);localStorage.setItem('country',$('inCountry').value.trim());ensureTimes(true)};
@@ -672,10 +702,55 @@ $('srcSel').onchange=()=>{localStorage.setItem('timesSource',$('srcSel').value==
 $('mtSave').onclick=()=>{let mt={},ok=true;['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].forEach(k=>{let v=$('mt_'+k).value;if(!v)ok=false;else mt[k]=v});if(!ok)return toast('كمّل الأوقات الستة الأول');localStorage.setItem('manualTimes',JSON.stringify(mt));ensureTimes(true);toast('تم حفظ المواقيت اليدوية ✅')};
 
 
-async function fetchMonth(lat,lon){
- let n=new Date(),key=`pcal_${n.getFullYear()}-${n.getMonth()+1}_${getMethod()}_${getSchool()}_${Number(lat).toFixed(3)}_${Number(lon).toFixed(3)}`,cal;try{cal=JSON.parse(localStorage.getItem(key))}catch(e){}
- if(!cal)try{let r=await fetch(`https://api.aladhan.com/v1/calendar/${n.getFullYear()}/${n.getMonth()+1}?latitude=${lat}&longitude=${lon}&method=${getMethod()}&school=${getSchool()}`),j=await r.json();cal=j.data.map(d=>({day:+d.date.gregorian.day,...Object.fromEntries(P_NAMES.map(x=>[x[0],d.timings[x[0]]]))}));localStorage.setItem(key,JSON.stringify(cal))}catch(e){return}
- $('monthCard').style.display='block';$('monthTitle').textContent='📅 جدول '+n.toLocaleDateString((LANG==='en'?'en-US':'ar-EG'),{month:'long',year:'numeric'});$('monthBody').innerHTML='';let offs=loadOffsets();cal.forEach(d=>{let tr=document.createElement('tr');if(d.day===n.getDate())tr.className='today';let a=k=>fmt12(d[k]);tr.innerHTML=`<td>${d.day}</td>${P_NAMES.map(x=>`<td>${a(x[0])}</td>`).join('')}`;$('monthBody').appendChild(tr)})
+let monthRequest = 0;
+async function fetchMonth(lat, lon) {
+  const request = ++monthRequest;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const method = getMethod();
+  const school = getSchool();
+  const key = `pcal_${year}-${month}_${method}_${school}_${Number(lat).toFixed(3)}_${Number(lon).toFixed(3)}`;
+  const days = new Date(year, month, 0).getDate();
+  const valid = calendar => Array.isArray(calendar) && calendar.length === days &&
+    calendar.every((day, i) => day.day === i + 1 &&
+      P_NAMES.every(([name]) => Number.isFinite(toMin(day[name]))));
+  let calendar;
+  try {
+    calendar = JSON.parse(localStorage.getItem(key));
+  } catch {}
+  $('monthCard').style.display = 'none';
+  if (!valid(calendar)) {
+    try {
+      const response = await fetch(`https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${lon}&method=${method}&school=${school}`);
+      const data = await response.json();
+      if (!response.ok || data.code !== 200 || !Array.isArray(data.data)) return;
+      calendar = data.data.map(day => ({
+        day: +day.date.gregorian.day,
+        ...Object.fromEntries(P_NAMES.map(([name]) => [name, day.timings[name]]))
+      }));
+      if (!valid(calendar)) return;
+      localStorage.setItem(key, JSON.stringify(calendar));
+    } catch {
+      return;
+    }
+  }
+  if (request !== monthRequest) return;
+  const offsets = loadOffsets();
+  $('monthTitle').textContent = '📅 ' + tl('جدول ', 'Calendar for ') +
+    now.toLocaleDateString(LANG === 'en' ? 'en-US' : 'ar-EG', {month:'long', year:'numeric'});
+  const body = $('monthBody');
+  body.replaceChildren();
+  calendar.forEach(day => {
+    const row = document.createElement('tr');
+    if (day.day === now.getDate()) row.className = 'today';
+    // Cache raw API times and apply current minute adjustments on every render.
+    row.innerHTML = `<td>${day.day}</td>` + P_NAMES.map(([name]) =>
+      `<td dir="ltr" style="white-space:nowrap">${formatTimeMinutes(toMin(day[name]) + (offsets[name] || 0))}</td>`
+    ).join('');
+    body.appendChild(row);
+  });
+  $('monthCard').style.display = 'block';
 }
 
 let notifiedToday={};const REM_MINS=[5,10,15,20,30];const remindOn=()=>localStorage.getItem('remindOn')==='1';const remindMin=()=>+(localStorage.getItem('remindMin')||10);
@@ -2294,11 +2369,27 @@ function hfRecitalHtml(recital) {
     <p class="qtxt hf-verse" lang="ar" dir="rtl">${verseText}</p>
     <p class="hf-retry" role="status">${retry}</p>
     <form onsubmit="event.preventDefault();hfGradeRecital(this)">
+      <div class="hf-accuracy">
+        <label for="hfMistakes">${tl('نسبة الدقة حسب عدد الغلطات','Accuracy for the entered mistakes')}</label>
+        <output id="hfAccuracy" for="hfMistakes" aria-live="polite">—٪</output>
+      </div>
       <label for="hfMistakes">${tl('غلطت كام غلطة؟','How many mistakes?')}</label>
-      <input class="ai" id="hfMistakes" name="mistakes" type="number" inputmode="numeric" min="0" max="${recital.total}"
+      <input class="ai" id="hfMistakes" name="mistakes" type="number" oninput="hfPreviewAccuracy(this)" inputmode="numeric" min="0" max="${recital.total}"
         step="1" required placeholder="${tl('اكتب ٠ لو سمّعت من غير غلط','Enter 0 if you made no mistakes')}">
       <button class="xb" type="submit">${tl('تأكيد التسميع','Check recital')}</button>
     </form>`;
+}
+
+function hfAccuracy(total, mistakes) {
+  return Math.floor(1000 * (total - mistakes) / total) / 10;
+}
+
+function hfPreviewAccuracy(input) {
+  const recital = hfSession?.recital;
+  if (!recital) return;
+  const mistakes = input.valueAsNumber;
+  const valid = input.validity.valid && Number.isInteger(mistakes);
+  $('hfAccuracy').textContent = valid ? qn(hfAccuracy(recital.total, mistakes)) + '٪' : '—٪';
 }
 
 function hfGradeRecital(form) {
@@ -2306,8 +2397,9 @@ function hfGradeRecital(form) {
   if (!recital || !form.reportValidity()) return;
   const mistakes = form.elements.mistakes.valueAsNumber;
   if (!Number.isInteger(mistakes) || mistakes < 0 || mistakes > recital.total) return;
-  const accuracy = Math.floor(1000 * (recital.total - mistakes) / recital.total) / 10;
+  const accuracy = hfAccuracy(recital.total, mistakes);
   if (mistakes * 10 <= recital.total) {
+    hfSession.lastResult = {accuracy, ref: hfVerseRef(recital.start)};
     toast(tl('✅ دقتك ' + qn(accuracy) + '٪', '✅ Accuracy: ' + accuracy + '%'));
     hfNext(true);
     return;
@@ -2315,6 +2407,14 @@ function hfGradeRecital(form) {
   recital.accuracy = accuracy;
   recital.mask = hfWordMask(recital.total, recital.mask);
   hfShowQuestion();
+}
+
+function hfLastResultHtml(session) {
+  if (!session.lastResult) return '';
+  const result = session.lastResult;
+  return '<p class="hf-last" role="status">✅ ' +
+    tl('آخر تسميع', 'Last recital') + ' · ' + result.ref + ' · <b>' +
+    qn(result.accuracy) + '٪</b></p>';
 }
 
 function hfShowQuestion() {
@@ -2348,7 +2448,7 @@ function hfShowQuestion() {
     content = hfRecitalHtml(session.recital);
   }
   $('hfTest').innerHTML = `<div class="card">
-    <h3>${heading}</h3>${content}
+    <h3>${heading}</h3>${hfLastResultHtml(session)}${content}
     ${session.answer === false ? '<button class="xb" onclick="hfNext(false)">' +
       (session.step + 1 === session.questions.length ? tl('النتيجة','Results') : tl('السؤال التالي','Next question')) + '</button>' : ''}
     <button class="xb" onclick="hfClose()">✕ ${tl('إغلاق','Close')}</button>
@@ -2376,7 +2476,7 @@ function hfNext(correct) {
   hfSession = null;
   if (!session.similar) hfRate(session.id, session.score / total >= 0.9);
   $('hfTest').innerHTML = `<div class="card">
-    <h3>📋 ${tl('نتيجة الاختبار','Quiz results')}</h3>
+    <h3>📋 ${tl('نتيجة الاختبار','Quiz results')}</h3>${hfLastResultHtml(session)}
     <p role="status">${qn(session.score)} / ${qn(total)} ${session.similar ? tl('إجابات صحيحة','correct answers') : tl('مقاطع سمّعتها صح','passages recited correctly')}</p>
     <button class="xb" onclick="hfSetup(${session.id})">↻ ${tl('اختبار جديد','New quiz')}</button>
     <button class="xb" onclick="hfClose()">✕ ${tl('إغلاق','Close')}</button>
